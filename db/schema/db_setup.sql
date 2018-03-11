@@ -1,9 +1,10 @@
 -- -----------------------------------------------------
--- Schema uno_db
+-- Schema uno
+-- Run this SQL to setup the schema
 -- -----------------------------------------------------
 CREATE SCHEMA  uno;
 -- -----------------------------------------------------
--- Table uno_db.games
+-- Table uno.games
 -- -----------------------------------------------------
 CREATE TABLE uno.games (
   game_id SERIAL NOT NULL PRIMARY KEY UNIQUE,
@@ -11,7 +12,7 @@ CREATE TABLE uno.games (
 
 
 -- -----------------------------------------------------
--- Table uno_db.users
+-- Table uno.users
 -- -----------------------------------------------------
 CREATE TABLE uno.users (
   user_id  SERIAL NOT NULL PRIMARY KEY UNIQUE,
