@@ -1,0 +1,7 @@
+***** Naming conventions for JS *****
+
+- Camel case 
+- Descriptive
+
+Example:
+con numOfCardsInHand;
