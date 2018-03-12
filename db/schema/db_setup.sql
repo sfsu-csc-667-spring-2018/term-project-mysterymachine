@@ -7,7 +7,9 @@ CREATE SCHEMA  uno;
 -- Table uno.games
 -- -----------------------------------------------------
 CREATE TABLE uno.games (
-  game_id SERIAL NOT NULL PRIMARY KEY UNIQUE,
+  game_id SERIAL NOT NULL PRIMARY KEY UNIQUE, 
+  game_status INT NOT NULL,
+  turn_order INT NOT NULL,
   game_start TIMESTAMP(0) NOT NULL);
 
 
@@ -54,8 +56,10 @@ CREATE TABLE uno.decks (
 -- -----------------------------------------------------
 CREATE TABLE uno.hands (
   hand_id SERIAL NOT NULL PRIMARY KEY UNIQUE,
-  player_id INT NOT NULL,
-  FOREIGN KEY (player_id) REFERENCES uno.users (user_id) ON DELETE CASCADE ON UPDATE CASCADE);
+  user_id INT NOT NULL,
+  game_id INT NOT NULL,    
+  FOREIGN KEY (user_id) REFERENCES uno.users (user_id) ON DELETE CASCADE ON UPDATE CASCADE)
+  FOREIGN KEY (game_id) REFERENCES uno.games (games_id) ON DELETE CASCADE ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -65,7 +69,6 @@ CREATE TABLE uno.records (
   game_id INT NOT NULL,
   user_id INT NOT NULL,
   score INT NOT NULL,
-  game_status VARCHAR(45) NOT NULL,
   FOREIGN KEY (user_id) REFERENCES uno.users (user_id) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (game_id) REFERENCES uno.games (game_id) ON DELETE CASCADE ON UPDATE CASCADE);
 
@@ -75,8 +78,8 @@ CREATE TABLE uno.records (
 -- -----------------------------------------------------
 CREATE TABLE  uno.chat_rooms (
   chat_room_id SERIAL NOT NULL PRIMARY KEY UNIQUE,
-  games_game_id INT NOT NULL,
-  FOREIGN KEY (games_game_id) REFERENCES uno.games (game_id) ON DELETE CASCADE ON UPDATE CASCADE);
+  game_id INT NOT NULL,
+  FOREIGN KEY (game_id) REFERENCES uno.games (game_id) ON DELETE CASCADE ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
