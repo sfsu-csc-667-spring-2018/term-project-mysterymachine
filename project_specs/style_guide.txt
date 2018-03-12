@@ -1,7 +1,21 @@
 ***** Naming conventions for JS *****
 
-- Camel case 
+- camelCase 
 - Descriptive
 
 Example:
 con numOfCardsInHand;
+
+**** Naming conventions for DB *****
+
+- Tables named in multiples 
+- Collums should be named in singles 
+- snake_case
+
+Example:
+
+The table 'cards' contains the collums 'card_id', 'description' and 'image_adress'
+
+***** Naming conventions *****
+
+- snake_case
