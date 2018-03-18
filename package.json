@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start:dev": "DEBUG=csc-667-spring-18-uno-game:* nodemon ./bin/www",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "db:create:migration": "sequelize migration:generate --name",
+    "db:migrate": "sequelize db:migrate",
+    "db:rollback": "sequelize db:migrate:undo"
   },
   "repository": {
     "type": "git",
@@ -18,7 +20,14 @@
   },
   "homepage": "https://github.com/sfsu-csc-667-spring-2018/term-project-mysterymachine#readme",
   "dependencies": {
+    "body-parser": "^1.18.2",
     "dotenv": "^5.0.1",
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "morgan": "^1.9.0",
+    "sequelize": "^4.37.1",
+    "sequelize-cli": "^4.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.2"
   }
 }
