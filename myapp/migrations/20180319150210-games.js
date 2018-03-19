@@ -1,0 +1,25 @@
+'use strict';
+module.exports = {
+  up: (queryInterface, Sequelize) => {
+    return queryInterface.createTable('games', {
+      game_id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER
+      },
+      game_status: {
+        type: Sequelize.INTEGER
+      },
+      turn_order: {
+        type: Sequelize.INTEGER
+      },
+      game_start: {
+        type: Sequelize.DATE
+      }
+    });
+  },
+  down: (queryInterface, Sequelize) => {
+    return queryInterface.dropTable('games');
+  }
+};
