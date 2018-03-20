@@ -16,6 +16,9 @@ module.exports = {
       },
       game_start: {
         type: Sequelize.DATE
+      },
+      top_card_id: {
+        type: Sequelize.INTEGER
       }
     });
   },
