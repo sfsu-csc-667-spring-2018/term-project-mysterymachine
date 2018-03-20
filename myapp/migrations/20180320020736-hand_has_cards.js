@@ -1,32 +1,28 @@
-
-  'use strict';
+'use strict';
   module.exports = {
     up: (queryInterface, Sequelize) => {
-      return queryInterface.createTable('records', {
-        user_id: {
+      return queryInterface.createTable('hand_has_cards', {
+        hand_id: {
           allowNull: false,
           primaryKey: true,
           type: Sequelize.INTEGER,
           references: {
-            model:'users',
-            key:'user_id' 
+            model:'game_has_hands',
+            key:'hand_id' 
           }
         },
-        game_id: {
+        card_id: {
           allowNull: false,
           primaryKey: true,
           type: Sequelize.INTEGER,
           references: {
-            model:'games',
-            key:'game_id' 
+            model:'cards',
+            key:'card_id' 
           }
-        },
-        score: {
-          type: Sequelize.INTEGER
         }
       });
     },
     down: (queryInterface, Sequelize) => {
-      return queryInterface.dropTable('records');
+      return queryInterface.dropTable('hand_has_cards');
     }
   };

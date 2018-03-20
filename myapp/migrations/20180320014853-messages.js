@@ -1,8 +1,7 @@
-
-  'use strict';
+'use strict';
   module.exports = {
     up: (queryInterface, Sequelize) => {
-      return queryInterface.createTable('records', {
+      return queryInterface.createTable('messages', {
         user_id: {
           allowNull: false,
           primaryKey: true,
@@ -14,19 +13,22 @@
         },
         game_id: {
           allowNull: false,
-          primaryKey: true,
           type: Sequelize.INTEGER,
           references: {
             model:'games',
             key:'game_id' 
           }
         },
-        score: {
-          type: Sequelize.INTEGER
+        text_message: {
+          type: Sequelize.TEXT
+        },
+        time_sent: {
+          type: Sequelize.DATE
         }
       });
     },
     down: (queryInterface, Sequelize) => {
-      return queryInterface.dropTable('records');
+      return queryInterface.dropTable('messages');
     }
   };
+  
