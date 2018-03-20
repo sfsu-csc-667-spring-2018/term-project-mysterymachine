@@ -15,3 +15,9 @@ Check out the source code, then run following commands to install:
 cd myapp
 
 npm install
+
+touch .env
+
+echo DATABASE_URL=postgres://`whoami`@localhost:5432/667termproject >> .env
+
+bin/resetDB.sh
