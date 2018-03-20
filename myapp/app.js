@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 // Set up the express app
 const app = express();
 
+
 // Log requests to the console.
 app.use(logger('dev'));
 
@@ -16,8 +17,10 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+var card = require('./routes/card');
+app.use('/card', card);
 // Setup a default catch-all route that sends back a welcome message.
-app.get('*', (req, res) => res.status(200).send(
+app.get('/', (req, res) => res.status(200).send(
   '<h1>Welcome to CSC667 MisteryMachine team</h1>'));
 
 module.exports = app;
