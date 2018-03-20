@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "DEBUG=csc-667-spring-18-uno-game:* nodemon ./bin/www",
+    "start:dev": "NODE_ENV='development' DEBUG=csc-667-spring-18-uno-game:* nodemon ./bin/www",
     "db:create:migration": "sequelize migration:generate --name",
     "db:migrate": "sequelize db:migrate",
     "db:rollback": "sequelize db:migrate:undo"
