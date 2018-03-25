@@ -18,6 +18,8 @@ npm install
 
 touch .env
 
-echo DATABASE_URL=postgres://`whoami`@localhost:5432/667termproject >> .env
+echo DATABASE_URL=postgres://\`whoami\`@localhost:5432/667termproject >> .env
 
 bin/resetDB.sh
+
+npm run start:dev
