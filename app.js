@@ -22,8 +22,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
-var card = require('./routes/card');
-app.use('/card', card);
+app.use('/cards', require('./routes/cards'));
+app.use('/tests', require('./routes/tests'));
 // Setup a default catch-all route that sends back a welcome message.
 app.get('/', (req, res) => res.status(200).send(
   '<h1>Welcome to CSC667 MisteryMachine team</h1>'));
