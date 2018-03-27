@@ -13,22 +13,33 @@
 ![alt text](https://github.com/sfsu-csc-667-spring-2018/term-project-mysterymachine/blob/master/public/images/database_schema.jpg "schema")
 # Install instructions
 ## On dev machine
-* Check out the *development* branch, 
-* Install
+* Install [PostgreSQL](https://www.postgresql.org/download/)
+* Install [Node.js](https://nodejs.org/en/download/)
+* Clone and create your own branch
 ```
-npm install
+ git clone https://github.com/sfsu-csc-667-spring-2018/term-project-mysterymachine.git
+ cd term-project-mysterymachine
+ git checkout -b your_branch
 ```
-* Set up database env, migrate database, and load intial data for cards table:
+* Create database env file
 ```
 touch .env
 echo DATABASE_URL=postgres://`whoami`@localhost:5432/667termproject >> .env
+```
+* Install required packages
+```
+npm install
+```
+* Set up database, and load intial data for cards table:
+```
 bin/resetDB.sh
 ```
 * Then start the web app:
 ```
 npm run start:dev
 ```
-* Create a pull request to merge your features into *master*
+* Make your changes and test them locally
+* When ready, create a pull request to merge your features into *master*
 ## On heroku
 ### Test
 * Heroku app test: https://cs667-uno.herokuapp.com/
