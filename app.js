@@ -5,6 +5,7 @@ if(process.env.NODE_ENV === 'development') {
 const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
+var path = require('path');
 
 // Set up the express app
 const app = express();
@@ -17,6 +18,10 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.use(express.static(path.join(__dirname, 'public')));
 var card = require('./routes/card');
 app.use('/card', card);
 // Setup a default catch-all route that sends back a welcome message.
