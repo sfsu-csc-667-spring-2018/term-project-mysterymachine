@@ -43,7 +43,8 @@ npm run start:dev
 ## On heroku
 ### Test
 * Heroku app test: https://cs667-uno.herokuapp.com/
-* Heroku database conection test: https://cs667-uno.herokuapp.com/card
+* Heroku database conection test: https://cs667-uno.herokuapp.com/tests or
+https://cs667-uno.herokuapp.com/cards
 ### Deploy new changes
 * Install [heroku-cli](https://devcenter.heroku.com/articles/heroku-cli).
 * Login 
