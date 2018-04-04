@@ -1,10 +1,14 @@
 {
   "name": "myapp",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "This is a Uno game",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "start:dev": "SET \"NODE_ENV=development\" SET DEBUG=myapp:* & npm start",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "db:create:migration": "sequelize migration:generate --name ",
+    "db:migrate": "sequelize db:migrate"
   },
   "repository": {
     "type": "git",
@@ -17,6 +21,14 @@
   },
   "homepage": "https://github.com/sfsu-csc-667-spring-2018/term-project-mysterymachine#readme",
   "dependencies": {
-    "express": "^4.16.3"
+    "dotenv": "^5.0.1",
+    "express": "^4.16.3",
+    "pg-promise": "^8.2.2",
+    "sequelize": "^4.37.4",
+    "sequelize-cli": "^4.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "nodemon": "^1.17.2"
   }
 }
