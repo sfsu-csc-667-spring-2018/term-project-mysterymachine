@@ -1,0 +1,167 @@
+#game_table{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#player_area{
+    position: absolute;
+    bottom: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 20%;
+}
+
+#player_hand {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 25%;
+    height: 80%;
+    
+}
+
+
+#opponent1_hand{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 25%;
+    height: 80%;
+    transform: rotate(90deg)
+}
+
+#opponent1{
+    left: 10%;
+    bottom: 20%;
+}
+
+#opponent2_hand{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 25%;
+    height: 80%;
+    transform: rotate(90deg)
+}
+
+#opponent2{
+    left: 0;
+    bottom: 40%;
+}
+
+#opponent3_hand{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 25%;
+    height: 80%;
+    transform: rotate(110deg)
+}
+
+#opponent3{
+    left: 15%;
+    bottom: 60%;
+}
+
+#opponent4_hand{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 25%;
+    height: 80%;
+    transform: rotate(270deg);   
+}
+
+#opponent4{
+    right: 10%;
+    bottom: 20%;
+}
+
+#opponent5_hand{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 25%;
+    height: 80%;
+    transform: rotate(270deg);    
+}
+
+#opponent5{
+    right: 0;
+    bottom: 40%;
+}
+
+#opponent6_hand{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 25%;
+    height: 80%;
+    transform: rotate(290deg)    
+}
+
+#opponent6{
+    right: 15%;
+    bottom: 60%;
+}
+
+#opponent7_hand{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 25%;
+    height: 80%;
+    transform: rotate(180deg)    
+}
+
+#opponent7{
+    right: 40%;
+    bottom: 70%;
+}
+
+.opponent_area p:hover{
+    font-size: 2em;
+    font-weight: bold;
+    border-color: rgba(82, 168, 236, 0.8);
+    text-shadow: 0px 0px 8px rgba(82, 168, 236, 0.6);
+}
+
+.opponent_area img:hover{
+    width: 60%;
+    height: 30%;    
+}
+
+.opponent_area{
+    position: absolute;
+    height: 20%;
+    width: 20%;
+    margin: 0;
+    padding: 0;
+}
+
+.opponent_area p{
+    display: block;
+    height: 20%;
+    width: 50%;
+    margin: auto;
+    padding: auto;
+    color: black;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    position: relative;
+}
+
+body {
+    background-image: url("../img/table_top.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
