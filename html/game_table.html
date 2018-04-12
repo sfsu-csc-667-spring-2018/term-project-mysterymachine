@@ -3,51 +3,88 @@
 
 <head lang='en'>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-     <link rel="stylesheet" href="../css/game_table.css">
+    <link rel="stylesheet" href="../css/game_table.css">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
+    <script src="../js/game_table.js"></script>
 </head>
 
 <body>
-    
-    
+
+
     <div id="game_table">
         <div class="opponent_area" id="opponent7">
             <p>I_Love_The_Devil_666</p>
-    <img src="../img/uno_hand.png" alt="Uno hand" id="opponent7_hand">
-    </div>
-    <div class="opponent_area" id="opponent6">
-        <p>XxXSlayerXxX</p>
-    <img src="../img/uno_hand.png" alt="Uno hand" id="opponent6_hand">
-    </div>
-    <div class="opponent_area" id="opponent5">
-        <p>IceT</p>
-    <img src="../img/uno_hand.png" alt="Uno hand" id="opponent5_hand">
-    </div>
-    <div class="opponent_area" id="opponent4">
-        <p>Mr. P</p>
-    <img src="../img/uno_hand.png" alt="Uno hand" id="opponent4_hand">
-    </div>
-    <div class="opponent_area" id="opponent3">
-        <p>MastChief</p>
-    <img src="../img/uno_hand.png" alt="Uno hand" id="opponent3_hand">
-    </div>
-    <div class="opponent_area" id="opponent2">
-        <p>Lillyyyyyy</p>
-    <img src="../img/uno_hand.png" alt="Uno hand" id="opponent2_hand"
-         class="opponent_hands">
-    </div>
-    <div class="opponent_area" id="opponent1">
-        <p>Michelangelo</p>
-    <img src="../img/uno_hand.png" alt="Uno hand" id="opponent1_hand">
-    </div>
+            <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+        </div>
+        <div class="opponent_area current_player" id="opponent6">
+            <p>XxXSlayerXxX</p>
+            <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+        </div>
+        <div class="opponent_area" id="opponent5">
+            <p>IceT</p>
+            <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+        </div>
+        <div class="opponent_area" id="opponent4">
+            <p>Mr. P</p>
+            <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+        </div>
+        <div class="opponent_area" id="opponent3">
+            <p>MastChief</p>
+            <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+        </div>
+        <div class="opponent_area" id="opponent2">
+            <p>Lillyyyyyy</p>
+            <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+        </div>
+        <div class="opponent_area" id="opponent1">
+            <p>Michelangelo</p>
+            <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+        </div>
         <div id="player_area">
-                <img src="../img/uno_hand.png" alt="Uno hand" id="player_hand">
+               <div id="player_hand">
+            
+            </div>
+            
+            
+            
 
         </div>
+        
+        <div id="chat" >
+                <div class="message_container sent">
+                Lorem ipsum dolor text....
+                    </div>
+                <div class="message_container sent">
+                Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
+                    </div>
+                <div class="message_container sent">
+                Lorem ipsum dolor text....
+                    </div>
+                <div class="message_container sent">
+                Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
+                    </div>
+                <div class="message_container recived">
+                Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
+                    </div>
+                <div class="message_container recived">
+                Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
+                    </div>
+                <div class="message_container sent">
+                Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
+                    </div>
+            
+            </div>
+        <form id="chat_input" ><div class="form-group"><input type="text" class="form-control" placeholder="Chat..." id="chat_input_box"></div> </form>
 
     </div>
+    
 </body>
+    <script src="../js/asset_manager.js"></script>
+        <script src="../js/chat_manager.js"></script>
+
 
 </html>
