@@ -132,12 +132,10 @@ $(function () {
         $(this).css('bottom', '0%');
     });
     $(".card").hover(function () {
-        $(this).css('bottom', '15%');
         $(this).css({'box-shadow': '0px 0px 50px black'});
     });
     $(".card").mouseout(function () {
         $(this).css({'box-shadow': 'none'});
-        $(this).css('bottom', '0%');
     });
 
 });
