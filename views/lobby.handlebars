@@ -1,0 +1,26 @@
+<div style="height:500px;border:5px solid yellowgreen;overflow:auto;">
+
+<table >
+<th style="width:50%;height:500px;">
+
+  <table >
+    <tr >
+    {{#each games}}
+    <tr >
+      <th style="border:1px solid red">{{number}}</th>
+      <th style="border:1px solid red">{{host}}</th>
+      <th style="border:1px solid red">{{players}}</th>
+      <th style="border:1px solid red">{{status}}</th>
+    </tr>
+    {{/each}}
+  </table>
+
+</th>
+<th >
+<div id="chatBox" style="height:500px;border:5px solid cyan;overflow:auto;">chat</div>
+
+</th>
+</tr>
+</table>
+
+</div>

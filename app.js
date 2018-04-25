@@ -5,7 +5,7 @@ if(process.env.NODE_ENV === 'development') {
 const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
-const handlebars = require('handlebars');
+const exphbs = require('express-handlebars');
 const http = require('http');
 var path = require('path');
 
@@ -21,24 +21,61 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
+app.engine('handlebars',exphbs({defaultLayout:'layout'}));
 app.set('view engine', 'handlebars');
 
 // static assets
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 app.use('/cards', require('./routes/cards'));
 app.use('/tests', require('./routes/tests'));
 
-app.get('/', function (req, res){
+/*app.get('/', function (req, res){
 	// index, login and registraction in one
 	res.sendFile(__dirname +'/html/index.html');
+	});
+*/
+
+// replace with db call later
+var games = [
+	{
+		number:"NUMBER",
+        host:"HOST",
+        players:"COUNT",
+        status:"STATUS"
+    },
+    {
+    	number:"1",
+        host:"xX_Slayer_Xx",
+        players:"1",
+        status:"Join"
+    },
+	{
+		number:"2",
+        host:"Mr P",
+        players:"4",
+        status:"In Progress"
+    },
+    {
+    	number:"5",
+        host:"BigE",
+        players:"8",
+        status:"In Progress"
+    },
+	{
+		number:"5",
+        host:"BigE",
+        players:"8",
+        status:"In Progress"
+    }];
+
+app.get('/',function(req,res){
+	res.render('index');
 });
 
 app.get('/lobby', function (req, res){
-	// all game room and chat
-	res.sendFile(__dirname +'/views/lobby.html');
-});
+	res.render('lobby',{ games:games });
+	});
 
 app.get('/room', (req, res) =>
 	res.status(200).
@@ -47,8 +84,8 @@ app.get('/room', (req, res) =>
 
 app.get('/table', function (req, res){
 	// game table
-	res.sendFile(__dirname +'/html/game_table.html');
-});
+	res.render('table');
+	});
 
 app.get('/error', (req, res) =>
 	res.status(200).
