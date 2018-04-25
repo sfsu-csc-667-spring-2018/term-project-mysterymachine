@@ -1,0 +1,221 @@
+#game_table {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#player_area {
+    position: absolute;
+    bottom: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 20%;
+    border-top: 5px solid blue;
+}
+
+#player_hand {
+    position: absolute;
+    left: 0;
+    height: 100%;
+    width: 60%;
+    margin: 0;
+    padding: 0;
+}
+
+#player_area .user_name {
+    position: absolute;
+    right: 2.5%;
+    height: 25%;
+    width: 10%;
+    margin: 0;
+    padding: 0;
+    color: black;
+    bottom: 5%;
+    font-size: 150%;
+    font-weight: bolder;
+}
+
+#player_area .avatar{
+    position: absolute;
+    right: 5%;
+    margin: 0;
+    padding: 0;
+    top: 10%;
+}
+
+
+#player_area .card {
+    position: absolute;
+    bottom: 0;
+    max-height: 100%;
+    max-width: 10%;
+}
+
+
+#player_area button {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 10%;
+    height: 20%;
+    margin: 0;
+    padding: 0;
+}
+
+#chat {
+    position: absolute;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    width: 20%;
+    height: 70%;
+    bottom: 30%;
+    background-color: white;
+    overflow: scroll;
+    opacity: 0.1;
+}
+
+#chat_input {
+    position: absolute;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    width: 20%;
+    height: 10%;
+    bottom: 20%;
+}
+
+#chat::-webkit-scrollbar {
+    width: 12px;
+}
+
+#chat::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+#chat::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+}
+
+.message_container {
+    margin-top: 5%;
+    margin-bottom: 5%;
+    width: 90%;
+    padding: 10px;
+    overflow: hidden;
+    display: flex;
+
+}
+
+.sent {
+    margin-right: 0;
+    margin-left: 5%;
+    float: right;
+    background-color: #4181FF;
+}
+
+.recived {
+    margin-left: 0;
+    margin-right: 5%;
+    float: left;
+    background-color: #EFF0F1;
+}
+
+#opponent1 {
+    left: 20%;
+    bottom: 20%;
+}
+
+#opponent2 {
+    left: 10%;
+    bottom: 40%;
+}
+
+
+#opponent3 {
+    left: 25%;
+    bottom: 60%;
+}
+
+
+#opponent4 {
+    right: 20%;
+    bottom: 20%;
+}
+
+
+#opponent5 {
+    right: 10%;
+    bottom: 40%;
+}
+
+
+#opponent6 {
+    right: 25%;
+    bottom: 60%;
+}
+
+
+#opponent7 {
+    right: 40%;
+    bottom: 70%;
+}
+
+.opponent_hand {
+    position: absolute;
+    width: 20%;
+    height: 60%;
+    margin: 0;
+    left: 5%;
+    bottom: 5%;
+}
+
+
+.opponent_area {
+    position: absolute;
+    height: 20%;
+    width: 20%;
+    margin: 0;
+    padding: 0;
+}
+
+.opponent_area .user_name {
+    position: absolute;
+    height: 20%;
+    width: 50%;
+    margin: 0;
+    padding: 0;
+    color: black;
+    font-size: 150%;
+    font-weight: bolder;
+    left: 5%;
+    top: 0%;
+}
+
+.current_player {
+    border-color: green;
+    border-style: solid;
+    border-width: thick;
+    border-radius: 25px;
+
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    position: relative;
+}
+
+/*body {
+    background-image: url("../img/table_top.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}*/
