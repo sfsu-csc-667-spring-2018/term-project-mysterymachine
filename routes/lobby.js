@@ -35,7 +35,13 @@ var games = [
 }];
 
 router.get('/', function (req, res){
-	res.render('lobby',{ games:games });
+	res.render('lobby',{ games:games, title:"Lobby" });
 	});
+
+// host/lobby/message/
+// user posts a message
+router.post('/message/',function(req,res){
+    const{userID,message}=req;
+});
 
 module.exports = router;

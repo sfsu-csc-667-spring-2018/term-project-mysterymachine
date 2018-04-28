@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang='en'>
+<head>
+	<title>
+        {{# if title}} {{title}} {{else}} UNO {{/if}}
+    </title>
+	{{>bootstraps}}
+
+    {{#if table}}
+        {{> tableHead }}
+    {{ else }}
+        <link rel="stylesheet" href="../css/main.css">
+    {{/if}}
+
+</head>
+<body>
+
+	{{> navbar }}
+    {{{ body }}}
+    
+</body>
+
+    {{#if table}}
+        {{> tableScript }}
+    {{/if}}
+
+</html>
