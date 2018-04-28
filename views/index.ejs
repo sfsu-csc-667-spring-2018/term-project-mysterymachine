@@ -1,0 +1,58 @@
+<% include ./header %>
+    <link rel="stylesheet" href="/css/main.css">
+    <div class="container center_div">
+        <form action="/user/login" method="POST">
+
+            <div class="container">
+                <h2>Welcome to Uno!</h2>
+                <label for="uname"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" name="email" required>
+
+                <label for="psw"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="password" required>
+
+                <button type="submit" class="btn btn-success">Login</button>
+                <button type="button" class="dataCheck btn btn-primary" data-toggle="modal" data-target="#myModal">Register new user</button>
+
+                <label>
+                  <input type="checkbox" checked="checked" name="remember"> Remember me
+                </label>
+            </div>
+        </form>
+    </div>
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Register new user</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="register" action="/user/register" method="POST">
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" name="email" class="form-control" id="loginName">
+                        </div>
+                        <div class="form-group">
+                            <label for="screenName">Screen name:</label>
+                            <input type="text" name="screen_name" class="form-control" id="loginName">
+                        </div>
+                        <div class="form-group">
+                            <label for="pwd">Password:</label>
+                            <input type="password" name="password" class="form-control" id="pwd">
+                        </div>
+                        <div class="form-group">
+                            <label for="confPwd">Confirm password:</label>
+                            <input type="password" class="form-control" id="confPwd">
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button id="confirm_submit_create_user_button" type="submit" form="register" class="dataSub btn btn-success">Submit</button>
+                    <button type="button" class="btn btn-danger emptyPreview" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+<% include ./footer %>
