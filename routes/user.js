@@ -6,7 +6,7 @@ const User = require('../db/users');
 router.post(
   '/login',
   passport.authenticate('local', {
-    successRedirect: '/game',
+    successRedirect: '/game/1',
     failureRedirect: '/'
   })
 );

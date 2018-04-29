@@ -66,14 +66,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/cards', require('./routes/cards'));
 app.use('/tests', require('./routes/tests'));
-// Setup a default catch-all route that sends back a welcome message.
-// app.get('/', (req, res) => res.status(200).send(
-//   '<h1>Welcome to CSC667 MisteryMachine team</h1>'));
 app.use('/', require('./routes/index'));
 app.use('/user', require('./routes/user'));
-app.get('/game', function(req, res, next) {
-  console.log(req.user);
-  res.render('game_table', { title: 'Home' });
-});
+app.use('/game', require('./routes/game'));
+app.use('/message', require('./routes/message'));
 
 module.exports = app;
