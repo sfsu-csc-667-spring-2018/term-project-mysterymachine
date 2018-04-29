@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       game_status: {
-        type: Sequelize.INTEGER
+        type: Sequelize.TEXT
       },
       turn_order: {
         type: Sequelize.INTEGER
