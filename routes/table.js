@@ -12,6 +12,7 @@ router.get('/', function (req, res){
 // player posts a message
 router.post('/message/:roomID',function(req,res){
 	const{userID,message}=req;
+	res.render('tabe',{table:true});
 });
 
 // host/table/play/:roomID
