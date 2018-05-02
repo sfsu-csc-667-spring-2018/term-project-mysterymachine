@@ -5,9 +5,13 @@ if(process.env.NODE_ENV === 'development') {
 const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
+const path = require('path');
+const passport = require('./auth');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+
 const hbs = require('express-handlebars');
 const http = require('http');
-const path = require('path');
 
 // Set up the express app
 const app = express();
@@ -16,8 +20,10 @@ const app = express();
 app.use(logger('dev'));
 
 // Parse incoming requests data (https://github.com/expressjs/body-parser)
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(cookieParser('my secret'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -30,9 +36,18 @@ app.engine('hbs',hbs(
 app.set('view engine', 'hbs');
 app.set('views',__dirname + '/views');
 
+// Login session setup
+app.use(passport.initialize());
+app.use(session({
+  secret: 'testScret',
+  resave: false,
+  saveUninitialized: false
+}));
+
 // static assets
 app.use(express.static(path.join(__dirname, 'public')));
 
+// old test calls
 app.use('/cards', require('./routes/cards'));
 app.use('/tests', require('./routes/tests'));
 
@@ -40,7 +55,7 @@ app.use('/tests', require('./routes/tests'));
 app.use('/',require('./routes/login'));
 app.use('/lobby',require('./routes/lobby'));
 app.use('/room',require('./routes/room'));
-app.use('/table',require('./routes/table'));
-
+app.use('/game',require('./routes/game'));
+app.use('/users/',require('./routes/users'));
 
 module.exports = app;
