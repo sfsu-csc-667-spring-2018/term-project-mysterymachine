@@ -2,6 +2,7 @@ if(process.env.NODE_ENV === 'development') {
   require("dotenv").config();
 }
 
+const createError = require('http-errors');
 const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
@@ -66,5 +67,10 @@ app.use('/lobby',	require('./routes/lobby'));
 app.use('/room',	require('./routes/room'));
 app.use('/game',	require('./routes/game'));
 app.use('/users/',	require('./routes/users'));
+
+app.use(function(req, res, next) {
+  console.log(req.method+req.url+" 404 error")
+  res.redirect('/');
+});
 
 module.exports = app;

@@ -1,2 +1,4 @@
 package-lock.json
 .env
+node_modules/
+public/img/
