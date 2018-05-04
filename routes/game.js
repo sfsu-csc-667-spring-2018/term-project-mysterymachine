@@ -1,13 +1,13 @@
 //table.js
 const express = require('express');
 const router = express.Router();
+const passport = require('../auth');
 
 // host/table/
-router.get('/', function (req, res){
+router.get('/', function (req, res, next){
 	// game table
 	res.render('table',{table:true});
-	});
-
+});
 // host/table/message/:roomID
 // player posts a message
 router.post('/message/:roomID',function(req,res){

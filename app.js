@@ -37,12 +37,21 @@ app.set('view engine', 'hbs');
 app.set('views',__dirname + '/views');
 
 // Login session setup
-app.use(passport.initialize());
 app.use(session({
   secret: 'testScret',
   resave: false,
   saveUninitialized: false
 }));
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Making user object available to all views once loged in
+// Global Vars
+app.use(function (req, res, next) {
+  
+  res.locals.user = req.user || null;
+  next();
+});
 
 // static assets
 app.use(express.static(path.join(__dirname, 'public')));
@@ -52,10 +61,10 @@ app.use('/cards', require('./routes/cards'));
 app.use('/tests', require('./routes/tests'));
 
 // routes
-app.use('/',require('./routes/login'));
-app.use('/lobby',require('./routes/lobby'));
-app.use('/room',require('./routes/room'));
-app.use('/game',require('./routes/game'));
-app.use('/users/',require('./routes/users'));
+app.use('/',		require('./routes/login'));
+app.use('/lobby',	require('./routes/lobby'));
+app.use('/room',	require('./routes/room'));
+app.use('/game',	require('./routes/game'));
+app.use('/users/',	require('./routes/users'));
 
 module.exports = app;
