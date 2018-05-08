@@ -40,8 +40,11 @@ router.get('/', function (req, res){
 
 // host/lobby/message/
 // user posts a message
-router.post('/message/',function(req,res){
-    const{userID,message}=req;
+router.post('/message',function(req,res){
+    console.log('message recieved');
+    const{user,body,app}=req;
+    app.io.of('chat').emit('update',{message:body.message,user});
+    res.status(200);
 });
 
 module.exports = router;

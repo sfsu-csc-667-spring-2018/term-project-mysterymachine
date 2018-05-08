@@ -10,9 +10,7 @@ const path = require('path');
 const passport = require('./auth');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
-
 const hbs = require('express-handlebars');
-const http = require('http');
 
 // Set up the express app
 const app = express();
@@ -46,6 +44,9 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// sockets
+app.io = require('./socket');
+
 // Making user object available to all views once loged in
 // Global Vars
 app.use(function (req, res, next) {
@@ -66,7 +67,8 @@ app.use('/',		require('./routes/login'));
 app.use('/lobby',	require('./routes/lobby'));
 app.use('/room',	require('./routes/room'));
 app.use('/game',	require('./routes/game'));
-app.use('/users/',	require('./routes/users'));
+app.use('/users',	require('./routes/users'));
+app.use('/chat', require('./routes/chat'));
 
 app.use(function(req, res, next) {
   console.log(req.method+req.url+" 404 error")
