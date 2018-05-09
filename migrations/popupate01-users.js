@@ -1,7 +1,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert( 'users', [
-      { email: "phuonglinh83@gmail.com", screen_name: 'Lillyyyyyy',password: "$2b$10$nzRwHRUXkrV27qYhK9/vBeQiqtVFpjBR9qfIVKS3w15vtlcKONtG6"},
+      { email: "phuonglinh83@gmail.com", screen_name: 'Lillyyyyyy',password: "$2b$10$RzP9w9uljQnTz/Q/gnfx6uZN6yXW/QctmTww8IbXa3zVNRc9w7suu"},
       { email: "abc1@def.xyz", screen_name: 'Devil_666',password: "$2b$10$OJ8cDQB4AtnpIwmdwuEZCuct.Pu1fpkXKd0UicN3Tg62yYrPCCnpm"},
       { email: "abc2@def.xyz", screen_name: 'MastChief',password: "$2b$10$DOxCk9DnvuuQoNhubOnbJOv521RBf2OIRMqT5Mz4ZZ0qsDDi5p33S"},
       { email: "abc3@def.xyz", screen_name: 'Mr. P',password: "$2b$10$R7uDA6AmRDlfSL4kLadkweRRoYPIDTbPjIlTGdglh604UrYAmtT76"},
