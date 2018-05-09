@@ -1,4 +1,9 @@
 # term-project-mysterymachine
+To run on Windows, replace start:dev in package.json with:
+```
+"start:dev": " SET \"NODE_ENV=development\" SET DEBUG=myapp:* & nodemon ./bin/www",
+```
+
 # Game: Uno
 
 # TODO
