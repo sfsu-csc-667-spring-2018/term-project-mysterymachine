@@ -16,6 +16,15 @@ router.get('/logout', (request, response) => {
   response.redirect('/');
 });
 
+router.get('/find/:email', (req, res) => {
+  User.find(req.params.email).then(user => {
+    res.status(200).json(user.user_id);
+  }).catch( error => {
+    // console.log( "ERROR: ", error );
+    res.status(200).json(-1);
+  } );
+});
+
 router.post('/register', function(req, res, next) {
   console.log(req.body);
   User.create(req.body.email, req.body.screen_name, req.body.password)
