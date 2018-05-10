@@ -23,6 +23,7 @@
   "dependencies": {
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
+    "mysql": "^2.15.0",
     "pg-promise": "^8.2.2",
     "sequelize": "^4.37.4",
     "sequelize-cli": "^4.0.0"

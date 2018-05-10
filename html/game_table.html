@@ -2,90 +2,122 @@
 <html>
 
 <head lang='en'>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="../css/game_table.css">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
-    <script src="../js/cookie_handler.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="../css/game_table.css">
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
+	<script src="../js/cookie_handler.js"></script>
 
 </head>
 
 <body>
 
 
-    <div id="game_table">
-        <div class="opponent_area" id="opponent7">
-            <p class="user_name"></p>
-            <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
-        </div>
-        <div class="opponent_area current_player" id="opponent6">
-            <p class="user_name"></p>
-            <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
-        </div>
-        <div class="opponent_area" id="opponent5">
-            <p class="user_name"></p>
-            <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
-        </div>
-        <div class="opponent_area" id="opponent4">
-            <p class="user_name"></p>
-            <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
-        </div>
-        <div class="opponent_area" id="opponent3">
-            <p class="user_name"></p>
-            <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
-        </div>
-        <div class="opponent_area" id="opponent2">
-            <p class="user_name"></p>
-            <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
-        </div>
-        <div class="opponent_area" id="opponent1">
-            <p class="user_name"></p>
-            <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
-        </div>
-        <div id="player_area">
-            <div id="player_hand">
-                
-
-            </div>
-            <p class="user_name"></p>
-            <img src="" class="avatar" >
+	<div id="game_table">
+		<img src="../img/turn_order.png" id="turn_order_img" class="flipped">
 
 
+		<div class="container">
+			<!-- Trigger the modal with a button -->
+			<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#color_modal">Open Large Modal</button>
 
-        </div>
+			<!-- Modal -->
+			<div class="modal fade color_wheel_box" id="color_modal" role="dialog">
+				<div class="modal-dialog modal-lg color_wheel_box">
+					<div class="modal-content color_wheel_box">
+						<div class="modal-body">
 
-        <div id="chat">
-            <div class="message_container sent">
-                Lorem ipsum dolor text....
-            </div>
-            <div class="message_container sent">
-                Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
-            </div>
-            <div class="message_container sent">
-                Lorem ipsum dolor text....
-            </div>
-            <div class="message_container sent">
-                Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
-            </div>
-            <div class="message_container recived">
-                Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
-            </div>
-            <div class="message_container recived">
-                Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
-            </div>
-            <div class="message_container sent">
-                Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
-            </div>
+							<img src="../img/blue_half_circle.png" class="color_picker" id="pick_blue" alt="Button for choosing blue color.">
+							<img src="../img/green_half_circle.png" class="color_picker" id="pick_green" alt="Button for choosing green color.">
+							<img src="../img/yellow_half_circle.png" class="color_picker" id="pick_yellow" alt="Button for choosing yellow color.">
+							<img src="../img/red_half_circle.png" class="color_picker" id="pick_red" alt="Button for choosing red color.">
 
-        </div>
-        <form id="chat_input">
-            <div class="form-group"><input type="text" class="form-control" placeholder="Chat..." id="chat_input_box"></div>
-        </form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="opponent_area" id="opponent7">
+		<p class="user_name"></p>
+		<img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+	</div>
+	<div class="opponent_area current_player" id="opponent6">
+		<p class="user_name"></p>
+		<img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+	</div>
+	<div class="opponent_area" id="opponent5">
+		<p class="user_name"></p>
+		<img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+	</div>
+	<div class="opponent_area" id="opponent4">
+		<p class="user_name"></p>
+		<img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+	</div>
+	<div class="opponent_area" id="opponent3">
+		<p class="user_name"></p>
+		<img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+	</div>
+	<div class="opponent_area" id="opponent2">
+		<p class="user_name"></p>
+		<img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+	</div>
+	<div class="opponent_area" id="opponent1">
+		<p class="user_name"></p>
+		<img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+	</div>
+	<div id="discard_pile">
+		<p>Discard pile</p>
+	</div>
 
-    </div>
+
+	<div id="player_area">
+		<div id="player_hand">
+
+		</div>
+
+		<button type="button" class="btn btn-success" id="confirm" disabled>Play selected card</button>
+		<button type="button" class="btn btn-danger" id="cancel" disabled>Cancel move</button>
+
+		<p class="user_name"></p>
+		<img src="" class="avatar">
+
+
+
+	</div>
+
+	<div id="chat">
+		<div class="message_container sent">
+			Lorem ipsum dolor text....
+		</div>
+		<div class="message_container sent">
+			Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
+		</div>
+		<div class="message_container sent">
+			Lorem ipsum dolor text....
+		</div>
+		<div class="message_container sent">
+			Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
+		</div>
+		<div class="message_container recived">
+			Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
+		</div>
+		<div class="message_container recived">
+			Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
+		</div>
+		<div class="message_container sent">
+			Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
+		</div>
+
+	</div>
+	<form id="chat_input">
+		<div class="form-group"><input type="text" class="form-control" placeholder="Chat..." id="chat_input_box"></div>
+	</form>
+
+	</div>
 
 </body>
 <script src="../js/game_table.js"></script>

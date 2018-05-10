@@ -58,8 +58,8 @@ CREATE TABLE uno.hands (
   hand_id SERIAL NOT NULL PRIMARY KEY UNIQUE,
   user_id INT NOT NULL,
   game_id INT NOT NULL,    
-  FOREIGN KEY (user_id) REFERENCES uno.users (user_id) ON DELETE CASCADE ON UPDATE CASCADE)
-  FOREIGN KEY (game_id) REFERENCES uno.games (games_id) ON DELETE CASCADE ON UPDATE CASCADE);
+  FOREIGN KEY (user_id) REFERENCES uno.users (user_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (game_id) REFERENCES uno.games (game_id) ON DELETE CASCADE ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
