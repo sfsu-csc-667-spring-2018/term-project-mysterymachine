@@ -1,72 +1,74 @@
-
-
-    <div id="game_table">
-        <div class="opponent_area" id="opponent7">
-            <p class="user_name"></p>
-            <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
-        </div>
-        <div class="opponent_area current_player" id="opponent6">
-            <p class="user_name"></p>
-            <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
-        </div>
-        <div class="opponent_area" id="opponent5">
-            <p class="user_name"></p>
-            <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
-        </div>
-        <div class="opponent_area" id="opponent4">
-            <p class="user_name"></p>
-            <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
-        </div>
-        <div class="opponent_area" id="opponent3">
-            <p class="user_name"></p>
-            <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
-        </div>
-        <div class="opponent_area" id="opponent2">
-            <p class="user_name"></p>
-            <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
-        </div>
-        <div class="opponent_area" id="opponent1">
-            <p class="user_name"></p>
-            <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
-        </div>
-        <div id="player_area">
-            <div id="player_hand">
-                
-
-            </div>
-            <p class="user_name"></p>
-            <img src="" class="avatar" >
-
-
-
-        </div>
-
-        <div id="chat">
-            <div class="message_container sent">
-                Lorem ipsum dolor text....
-            </div>
-            <div class="message_container sent">
-                Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
-            </div>
-            <div class="message_container sent">
-                Lorem ipsum dolor text....
-            </div>
-            <div class="message_container sent">
-                Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
-            </div>
-            <div class="message_container recived">
-                Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
-            </div>
-            <div class="message_container recived">
-                Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
-            </div>
-            <div class="message_container sent">
-                Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
-            </div>
-
-        </div>
-        <form id="chat_input">
-            <div class="form-group"><input type="text" class="form-control" placeholder="Chat..." id="chat_input_box"></div>
-        </form>
+<input id="screen_name" type="hidden" value="<%= user.screen_name %>" />
+<input id="user_id" type="hidden" value="<%= user.user_id %>" />
+<input id="game_id" type="hidden" value=<%= game_id %> />
+<div id="game_table">
+  <div class="opponent_area" id="opponent7">
+    <p class="user_name"></p>
+    <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+  </div>
+  <div class="opponent_area" id="opponent6">
+    <p class="user_name"></p>
+    <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+  </div>
+  <div class="opponent_area" id="opponent5">
+    <p class="user_name"></p>
+    <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+  </div>
+  <div class="opponent_area" id="opponent4">
+    <p class="user_name"></p>
+    <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+  </div>
+  <div class="opponent_area" id="opponent3">
+    <p class="user_name"></p>
+    <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+  </div>
+  <div class="opponent_area" id="opponent2">
+    <p class="user_name"></p>
+    <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+  </div>
+  <div class="opponent_area" id="opponent1">
+    <p class="user_name"></p>
+    <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+  </div>
+  <div id="player_area">
+    <div id="player_hand">
 
     </div>
+    <p class="user_name"></p>
+    <img src="" class="avatar" >
+
+  </div>
+
+  <div id="chat">
+    <div class="message_container sent">
+      Lorem ipsum dolor text....
+    </div>
+    <div class="message_container sent">
+      Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
+    </div>
+    <div class="message_container sent">
+      Lorem ipsum dolor text....
+    </div>
+    <div class="message_container sent">
+      Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
+    </div>
+    <div class="message_container recived">
+      Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
+    </div>
+    <div class="message_container recived">
+      Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
+    </div>
+    <div class="message_container sent">
+      Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
+    </div>
+
+  </div>
+  <form id="chat_input" action="/message" method="POST">
+    <div class="form-group"><input type="text" name="text_message" class="form-control" placeholder="Chat..." id="chat_input_box"></div>
+  </form>
+
+</div>
+
+<script src="../js/game_table.js"></script>
+<!-- <script src="../js/asset_manager.js"></script> -->
+<script src="../js/chat_manager.js"></script>
