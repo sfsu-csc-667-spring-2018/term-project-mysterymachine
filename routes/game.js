@@ -37,4 +37,20 @@ router.post('/draw/keep/:roomID',function(req,res){
 	res.render('game',{table:true});
 });
 
+//CHAT
+router.post('/game_id/chat', (req, res, next) => {
+    let {message} = request.body;
+    let game_id = request.params.game_id;
+    let user = request.user.screen_name;
+
+    console.log('game route chat: ' + message);
+
+    request.app.io.of('/game/${game_id}').emit('message', {
+        game_id,
+        message,
+        user
+    });
+    response.sendStatus(200);
+});
+
 module.exports = router;
