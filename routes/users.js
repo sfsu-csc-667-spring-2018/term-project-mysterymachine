@@ -6,7 +6,7 @@ const User = require('../db/users');
 router.post(
   '/login',
   passport.authenticate('local', {
-    successRedirect: '/game',
+    successRedirect: '/game/1',
     failureRedirect: '/'
   })
 );
@@ -14,6 +14,15 @@ router.post(
 router.get('/logout', (request, response) => {
   request.logout();
   response.redirect('/');
+});
+
+router.get('/find/:email', (req, res) => {
+  User.find(req.params.email).then(user => {
+    res.status(200).json(user.user_id);
+  }).catch( error => {
+    // console.log( "ERROR: ", error );
+    res.status(200).json(-1);
+  } );
 });
 
 router.post('/register', function(req, res, next) {

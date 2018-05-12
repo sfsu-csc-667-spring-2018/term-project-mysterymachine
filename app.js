@@ -2,7 +2,6 @@ if(process.env.NODE_ENV === 'development') {
   require("dotenv").config();
 }
 
-const createError = require('http-errors');
 const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
@@ -10,10 +9,12 @@ const path = require('path');
 const passport = require('./auth');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
-const hbs = require('express-handlebars');
 
 // Set up the express app
 const app = express();
+
+
+
 
 // Log requests to the console.
 app.use(logger('dev'));
@@ -22,18 +23,24 @@ app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.json());
-app.use(cookieParser('my secret'));
+app.use(cookieParser('my screet'));
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.engine('hbs',hbs(
-	{	extname: 'hbs',
-		defaultLayout:'layout',
-		layoutDir:__dirname + "/views/layouts/",
-		partialsDir:__dirname + "/views/partials/"
-	}));
-app.set('view engine', 'hbs');
-app.set('views',__dirname + '/views');
+
+
+// app.use(
+//   session({
+//     store: new (require('connect-pg-simple')(session))(),
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {
+//       secure:
+//         process.env.ENVIRONMENT !== 'development' &&
+//         process.env.ENVIRONMENT !== 'test',
+//       maxAge: 7 * 24 * 60 * 60 * 1000
+//     },
+//     secret: process.env.COOKIE_SECRET
+//   })
+// );
 
 // Login session setup
 app.use(session({
@@ -41,38 +48,27 @@ app.use(session({
   resave: false,
   saveUninitialized: false
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
-// sockets
-app.io = require('./socket');
-
-// Making user object available to all views once loged in
-// Global Vars
-app.use(function (req, res, next) {
-  
-  res.locals.user = req.user || null;
-  next();
+// Making user object available to all views once logedin
+app.use(function(req, res, next) {
+	res.locals.user = req.user;
+	next();
 });
 
-// static assets
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 
-// old test calls
+
 app.use('/cards', require('./routes/cards'));
 app.use('/tests', require('./routes/tests'));
-
-// routes
-app.use('/',		require('./routes/login'));
-app.use('/lobby',	require('./routes/lobby'));
-app.use('/room',	require('./routes/room'));
-app.use('/game',	require('./routes/game'));
-app.use('/users',	require('./routes/users'));
-app.use('/chat', require('./routes/chat'));
-
-app.use(function(req, res, next) {
-  console.log(req.method+req.url+" 404 error")
-  res.redirect('/');
-});
+app.use('/', require('./routes/index'));
+app.use('/user', require('./routes/user'));
+app.use('/game', require('./routes/game'));
+app.use('/message', require('./routes/message'));
 
 module.exports = app;

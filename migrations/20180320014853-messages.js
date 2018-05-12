@@ -2,13 +2,19 @@
   module.exports = {
     up: (queryInterface, Sequelize) => {
       return queryInterface.createTable('messages', {
+        message_id: {
+          allowNull: false,
+          autoIncrement: true,
+          primaryKey: true,
+          type: Sequelize.INTEGER
+        },
         user_id: {
           allowNull: false,
           primaryKey: true,
           type: Sequelize.INTEGER,
           references: {
             model:'users',
-            key:'user_id' 
+            key:'user_id'
           }
         },
         game_id: {
@@ -16,7 +22,7 @@
           type: Sequelize.INTEGER,
           references: {
             model:'games',
-            key:'game_id' 
+            key:'game_id'
           }
         },
         text_message: {
@@ -31,4 +37,3 @@
       return queryInterface.dropTable('messages');
     }
   };
-  

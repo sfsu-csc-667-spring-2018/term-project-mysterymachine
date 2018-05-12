@@ -30,28 +30,45 @@
                     <form id="register" action="/users/register" method="POST">
                         <div class="form-group">
                             <label for="email">Email:</label>
-                            <input type="email" name="email" class="form-control" id="loginName">
+                            <input type="email" name="email" class="form-control" id="email" required>
                         </div>
+                        <div id="email_error" class="form-group"></div>
                         <div class="form-group">
                             <label for="screenName">Screen name:</label>
-                            <input type="text" name="screen_name" class="form-control" id="loginName">
+                            <input type="text" name="screen_name" class="form-control" id="screenName">
                         </div>
                         <div class="form-group">
                             <label for="pwd">Password:</label>
                             <input type="password" name="password" class="form-control" id="pwd">
                         </div>
+<<<<<<< HEAD:views/index.hbs
                          <div class="form-group">
+=======
+                        <div class="form-group">
+                          <p id="pwd_error" class="text-danger center"> </p>
+                        </div>
+                        <div class="form-group">
+>>>>>>> aebbfff90a6109abbfddf0e3bfad1aeb0c27f30e:views/index.ejs
                             <label for="confPwd">Confirm password:</label>
                             <input type="password" class="form-control" id="confPwd">
+                        </div>
+                        <div class="form-group">
+                          <p id="conf_pwd_error" class="text-danger center"> </p>
                         </div>
                     </form>
 
                 </div>
                 <div class="modal-footer">
-                    <button id="confirm_submit_create_user_button" type="submit" form="register" class="dataSub btn btn-success">Submit</button>
+                    <button id="createUser" type="submit" disabled=true form="register" class="dataSub btn btn-success">Submit</button>
                     <button type="button" class="btn btn-danger emptyPreview" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
 
         </div>
+<<<<<<< HEAD:views/index.hbs
     </div>
+=======
+    </div>
+<script src="../js/register.js"></script>
+<% include ./footer %>
+>>>>>>> aebbfff90a6109abbfddf0e3bfad1aeb0c27f30e:views/index.ejs
