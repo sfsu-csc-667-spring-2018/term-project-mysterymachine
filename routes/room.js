@@ -14,7 +14,7 @@ router.post('/:game_id/ready',requireAuth, function(req, res,next){
 	// check for user_id in game_id
 	// check game_status == 0 (waiting room)
 	// toggle ready/not_ready
-	// emit game_state/user_state
+	// emit game_status/user_state
 	});
 
 // host only, start game
@@ -23,7 +23,7 @@ router.post('/:game_id/start',requireAuth, function(req, res,next){
 	// check game_status == 0 (waiting room)
 	// change game_status = 1
 	// redirect to game table
-	// emit game_state
+	// emit game_status
 	});
 
 router.post('/:game_id/message',requireAuth,function(req,res, next){

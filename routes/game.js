@@ -38,8 +38,9 @@ router.get('/:game_id/player/:player_id/cards', requireAuth, function(req, res, 
 // player plays a card
 router.post(':game_id/play/:card_id',requireAuth, function(req,res){
   // check for correct user/turn
-  // check for correct game status
+  // check for correct game_status
   // check for playable card
+  // check for card_id in hand
   // change game status to busy (playing)
 
   // remove card id from player
@@ -47,7 +48,7 @@ router.post(':game_id/play/:card_id',requireAuth, function(req,res){
     // add card_id to discard/active
     // if single card remains in hand and no Uno call, force draw 2
     // apply card effects to game
-      // change game_state color (?)
+      // update game_id active_color
       // if numbered
         // pass turn
         // change game status to 'waiting for play'
@@ -66,6 +67,8 @@ router.post(':game_id/play/:card_id',requireAuth, function(req,res){
         // change game status to 'waiting for color decision'
         // emit color decision
     // end function
+
+  // check for win condition
   // emit new game_state
 });
 
@@ -84,7 +87,7 @@ router.post('/:game_id/draw/',requireAuth,function(req,res){
     // pass turn
     // change game status to 'waiting for play'
   // else
-    // save card_id in game_state
+    // save card_id in game_id
     // change game status to 'waiting for draw decision'
   // emit game_state
 });
@@ -101,27 +104,27 @@ router.post('/:game_id/playDrawn/',requireAuth,function(req,res){
     // add card_id to discard/active
     // if single card remains in hand and no Uno call, force draw 2
     // apply card effects to game
-      // change game_state color (?)
+      // update game_id active_color 
       // if numbered
         // pass turn
-        // change game status to 'waiting for play'
+        // change game_status to 'waiting for play'
       // if skip
         // pass turn twice
-        // change game status to 'waiting for play'
+        // change game_status to 'waiting for play'
       // if reverse
         // reverse turn order (1,-1)
         // pass turn
-        // change game status to 'waiting for play'
+        // change game_status to 'waiting for play'
       // if draw 2
         // then pass turn 
         // force draw 2
-        // change game status to 'waiting for play'
+        // change game_status to 'waiting for play'
       // if wild or wild 4
-        // change game status to 'waiting for color decision'
+        // change game_status to 'waiting for color decision'
         // emit color decision
     // end function
 
-    // emit game state
+    // emit game_state
 });
 
 // host/game/1/keep
@@ -131,7 +134,7 @@ router.post('/:game_id/keep/',requireAuth,function(req,res){
   // check for correct game status
   // change game status to busy(playing)
 
-  // move card_id from game_state to player_hand
+  // move card_id from game_id to player_hand
   // pass turn
   // change game status to 'waiting for play'
   // emit game_state

@@ -59,7 +59,7 @@ router.post('/new',requireAuth,function(req,res,next){
     // make new game_id
     // set initial game_id values
     // add user to game_id player list
-    // redirect to new game waiting room
+    // redirect to new room
 });
 
 module.exports = router;
