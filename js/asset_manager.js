@@ -7,9 +7,29 @@ Object.size = function (obj) {
  return size;
 };
 
+var turnOrder = -1;
 var selectedCard;
 
+
+
+
+
 $(function () {
+ 
+ if(turnOrder == -1){
+  $('#turn_order_img').addClass('flipped');
+  $('#turn_order_img').prop('alt', 'Indicates counterclockwise turn order');
+  $('#turn_order_img').prop('title', 'Indicates counterclockwise turn order');
+ }
+ 
+ if(turnOrder == 1){
+  $('#turn_order_img').removeClass('flipped');
+  $('#turn_order_img').prop('alt', 'Indicates clockwise turn order');
+  $('#turn_order_img').prop('title', 'Indicates clockwise turn order');
+ }
+ 
+
+ 
  var player_hand = {
   "card1": {
    card_id: 1,
@@ -60,36 +80,6 @@ $(function () {
   },
   "card9": {
    card_id: 9,
-   adress: "../img/cards/blue0.jpg",
-   img_pos: "2%"
-
-  },
-  "card10": {
-   card_id: 10,
-   adress: "../img/cards/blue0.jpg",
-   img_pos: "2%"
-
-  },
-  "card11": {
-   card_id: 11,
-   adress: "../img/cards/blue0.jpg",
-   img_pos: "2%"
-
-  },
-  "card12": {
-   card_id: 12,
-   adress: "../img/cards/blue0.jpg",
-   img_pos: "2%"
-
-  },
-  "card13": {
-   card_id: 13,
-   adress: "../img/cards/blue0.jpg",
-   img_pos: "2%"
-
-  },
-  "card14": {
-   card_id: 14,
    adress: "../img/cards/blue0.jpg",
    img_pos: "2%"
 
@@ -153,7 +143,20 @@ $(function () {
    'box-shadow': 'none'
   });
  });
-
+	
+$(".color_picker").mouseenter(function () {
+  $(this).css({
+   'box-shadow': '0px 0px 50px black'
+  });
+ });
+ $(".color_picker").mouseleave(function () {
+  $(this).css({
+   'box-shadow': 'none'
+  });
+ });	
+ 
+ 
+ 
 });
 $(function () {
  $(".card").draggable({

@@ -86,76 +86,31 @@ body {
  position: relative;
 }
 
-.games_list_header {
+
+.player_list {
  position: absolute;
+ bottom: 0;
  left: 0%;
- top: 13.5%;
- height: 10%;
+ height: 90%;
  width: 50%;
  margin: 0;
  padding: 0;
- font-size: 15px;
- 
-}
-
-.games_list {
- position: absolute;
- left: 0%;
- top: 20%;
- height: 80%;
- width: 70%;
+ background-color: #EFF0F1;
  overflow: scroll;
- margin: 0;
- padding: 0;
 }
 
-.th1 {
- width: 10%;
+.player_list td img {
+ max-height: 50px;
+ max-height: 50px;
+}
+.player_list td{
+ background-color: white;
 }
 
-.th2 {
- width: 30%;
+.player_list th{
+ background-color: white;
 }
 
-.th3 {
- width: 30%;
-}
-
-.th4 {
- width: 30%;
-}
-
-.td1 {
- width: 6.6%;
-}
-
-.td2 {
- width: 19.8%;
-}
-
-.td3 {
- width: 19.5%;
-}
-
-.td4 {
- width: 19.8%;
-}
-
-.td5 {
- width: 7%;
-}
-
-.td5 img {
- max-height: 40px;
- max-width: 40px;
- margin-left: 4.5em;
- margin: 0;
- padding: 0;
-}
-
-.td6 {
- width: 29%;
-}
 
 #chat {
  position: absolute;

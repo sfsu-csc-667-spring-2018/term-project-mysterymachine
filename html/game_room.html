@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head lang='en'>
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+ <link rel="stylesheet" href="../css/game_room.css">
+ <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</head>
+
+<body>
+ <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Mystery Machine - Uno</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+   <ul class="navbar-nav mr-auto">
+    <li class="nav-item active">
+     <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+    </li>
+    <li class="nav-item">
+     <a class="nav-link" href="#">About</a>
+    </li>
+   </ul>
+  </div>
+ </nav>
+
+ <div class="container player_list">
+  <table class="table table-bordered table-hover table-fixed">
+   <thead>
+    <tr>
+     <th class="th1">#</th>
+     <th class="th2">Username</th>
+     <th class="th3">Status</th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr>
+     <td class="td1">1</td>
+     <td class="td2">KillaSlayer</td>
+     <td class="td3"><img src="../img/green_dot.png" alt="Indicates player is ready" title="Indicates player is ready"> </td>
+    </tr>
+    <tr>
+     <td class="td1">2</td>
+     <td class="td2">Ezra95</td>
+     <td class="td3"><img src="../img/green_dot.png" alt="Indicates player is ready" title="Indicates player is ready"> </td>
+    </tr>
+    <tr>
+     <td class="td1">3</td>
+     <td class="td2">MasterChief</td>
+     <td class="td3"><img src="../img/green_dot.png" alt="Indicates player is ready" title="Indicates player is ready"> </td>
+    </tr>
+    <tr>
+     <td class="td1">4</td>
+     <td class="td2">XxXBestUnoXxX</td>
+     <td class="td3"><img src="../img/green_dot.png" alt="Indicates player is ready" title="Indicates player is ready"> </td>
+    </tr>
+    <tr>
+     <td class="td1">5</td>
+     <td class="td2">Bob_the_blob</td>
+     <td class="td3"><img src="../img/red_dot.png" alt="Indicates player is not ready" title="Indicates player is not ready"> </td>
+    </tr>
+    <tr>
+     <td class="td1">6</td>
+     <td class="td2">&#8826; Empty &#8827;</td>
+     <td class="td3"></td>
+    </tr>
+    <tr>
+     <td class="td1">7</td>
+     <td class="td2">&#8826; Closed &#8827;</td>
+     <td class="td3"></td>
+    </tr>
+    <tr>
+     <td class="td1">8</td>
+     <td class="td2">&#8826; Closed &#8827;</td>
+     <td class="td3"></td>
+    </tr>
+
+
+   </tbody>
+  </table>
+ </div>
+
+ <div id="chat">
+  <div class="message_container">
+   <div class="user_name">KillerSlaya</div>
+   <div class="message_body">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. In rhoncus augue eget tincidunt placerat. Maecenas elit enim, lacinia vel pretium in, fringilla ac eros. Ut eget accumsan felis. </div>
+  </div>
+
+  <div class="message_container">
+   <div class="user_name">KillerSlaya</div>
+   <div class="message_body">
+    estibulum euismod, dui eu interdum ullamcorper, urna odio elementum augue, sit amet venenatis nisl elit non nulla. </div>
+  </div>
+  <div class="message_container">
+   <div class="user_name">XxXdeamonXxX</div>
+   <div class="message_body">
+    Mauris in imperdiet dolor. Nam tellus diam, fermentum ut malesuada auctor, pellentesque a mi. Nulla sagittis eleifend erat ut mattis. </div>
+  </div>
+  <div class="message_container">
+   <div class="user_name">TheJoker</div>
+   <div class="message_body">
+    Nullam risus nisl, pharetra eleifend iaculis eget, tincidunt pretium enim. </div>
+  </div>
+  <div class="message_container">
+   <div class="user_name">KillerSlaya</div>
+   <div class="message_body">
+    Nam volutpat gravida sapien, eu lobortis nunc porta consequat. </div>
+  </div>
+   </div>
+   <form id="chat_input">
+    <div class="form-group"><input type="text" class="form-control" placeholder="Chat..." id="chat_input_box"></div>
+   </form>
+
+
+</body>
+
+</html>
