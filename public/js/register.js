@@ -1,6 +1,7 @@
-let valid_account = false;
-let valid_password = false;
-let pwd_matched = false;
+//assigned true for testing
+let valid_account = true;
+let valid_password = true;
+let pwd_matched = true;
 $("#email").keyup(function() {
   const email = $("#email").val();
   $.get('/user/find/' + email, function(user) {
@@ -38,7 +39,7 @@ $("#confPwd").keyup(function() {
     pwd_matched = false;
     $("#conf_pwd_error").html("Password NOT matched!");
   }
-  setSubmitProp()
+  setSubmitProp();
 });
 
 var setSubmitProp = function() {
