@@ -46,6 +46,6 @@ var setSubmitProp = function() {
   if (valid_account && valid_account && pwd_matched) {
     $("#createUser").prop('disabled', false);
   } else {
-    $("#createUser").prop('disabled', true);
+    $("#createUser").prop('disabled', false);
   }
 }
