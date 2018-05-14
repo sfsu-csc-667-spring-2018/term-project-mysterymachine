@@ -48,4 +48,4 @@ var setSubmitProp = function() {
   } else {
     $("#createUser").prop('disabled', false);
   }
-}
+};

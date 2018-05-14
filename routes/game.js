@@ -157,17 +157,18 @@ router.post('/:game_id/color/:color',requireAuth,function(req,res){
 });
 
 //CHAT
-router.post('/game_id/message', (req, res, next) => {
+//router.post('/game_id/message', (req, res, next) => {
+router.post('/game_id/chat', (req, res, next) => {
     let {message} = request.body;
     let game_id = request.params.game_id;
-    let user = request.user.screen_name;
+    let screen_name = request.user.screen_name;
 
     console.log('game route chat: ' + message);
 
     request.app.io.of('/game/${game_id}').emit('message', {
         game_id,
         message,
-        user
+        screen_name
     });
     response.sendStatus(200);
 });
