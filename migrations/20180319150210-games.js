@@ -14,6 +14,9 @@ module.exports = {
       turn_order: {
         type: Sequelize.INTEGER
       },
+     active_seat: {
+        type: Sequelize.INTEGER
+      },
       game_start: {
         type: Sequelize.DATE
       },
