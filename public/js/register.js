@@ -1,10 +1,12 @@
 //assigned true for testing
-let valid_account = true;
-let valid_password = true;
-let pwd_matched = true;
+let valid_account = false;
+let valid_password = false;
+let pwd_matched = false;
+
 $("#email").keyup(function() {
   const email = $("#email").val();
-  $.get('/user/find/' + email, function(user) {
+  $.get('/users/find/' + email, function(user) {
+    //console.log("user: "+user);
     if (user < 0) {
       valid_account = true;
       $("#email_error").html('<p style="color:green;"> Account available</p>');
@@ -43,9 +45,9 @@ $("#confPwd").keyup(function() {
 });
 
 var setSubmitProp = function() {
-  if (valid_account && valid_account && pwd_matched) {
+  if (valid_account && valid_password && pwd_matched) {
     $("#createUser").prop('disabled', false);
   } else {
-    $("#createUser").prop('disabled', false);
+    $("#createUser").prop('disabled', true);
   }
 };
