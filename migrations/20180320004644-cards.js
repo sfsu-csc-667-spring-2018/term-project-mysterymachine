@@ -11,6 +11,15 @@ module.exports = {
       description: {
         type: Sequelize.TEXT
       },
+     face: {
+        type: Sequelize.TEXT
+      },
+     color: {
+        type: Sequelize.TEXT
+      },
+     value: {
+        type: Sequelize.INTEGER
+      },
       image_address: {
         type: Sequelize.TEXT
       }
