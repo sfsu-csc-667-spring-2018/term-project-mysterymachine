@@ -20,7 +20,7 @@ router.get('/find/:email', (req, res) => {
   User.find(req.params.email).then(user => {
     res.status(200).json(user.user_id);
   }).catch( error => {
-    // console.log( "ERROR: ", error );
+    console.log( "ERROR: ", error );
     res.status(200).json(-1);
   } );
 });

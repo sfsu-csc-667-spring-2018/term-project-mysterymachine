@@ -31,12 +31,11 @@ router.get('/:game_id/player/:player_id/cards', requireAuth, function(req, res, 
   Games.get_user_cards(req.params.game_id, req.params.user_id).then ( cards => {
     res.status(200).json(cards);
   });
-
 });
 
 // host/game/1/play/12
 // player plays a card
-router.post(':game_id/play/:card_id',requireAuth, function(req,res){
+router.post(':game_id/play/:card_id',requireAuth, function(req,res,next){
   // check for correct user/turn
   // check for correct game_status
   // check for playable card
@@ -74,7 +73,7 @@ router.post(':game_id/play/:card_id',requireAuth, function(req,res){
 
 // host/game/1/draw/
 // player choses to draw a card
-router.post('/:game_id/draw/',requireAuth,function(req,res){
+router.post('/:game_id/draw/',requireAuth,function(req,res,next){
   // check for correct user/turn
   // check for correct game status
   // change game status to busy(playing)
@@ -94,7 +93,7 @@ router.post('/:game_id/draw/',requireAuth,function(req,res){
 
 // host/game/1/playDrawn/
 // player choses to play drawn card
-router.post('/:game_id/playDrawn/',requireAuth,function(req,res){
+router.post('/:game_id/playDrawn/',requireAuth,function(req,res,next){
   // check for correct user/turn
   // check for correct game status
   // change game status to busy(playing)
@@ -129,7 +128,7 @@ router.post('/:game_id/playDrawn/',requireAuth,function(req,res){
 
 // host/game/1/keep
 // player choses to keep drawn card
-router.post('/:game_id/keep/',requireAuth,function(req,res){
+router.post('/:game_id/keep/',requireAuth,function(req,res,next){
   // check for correct user/turn
   // check for correct game status
   // change game status to busy(playing)
@@ -142,7 +141,7 @@ router.post('/:game_id/keep/',requireAuth,function(req,res){
 
 // host.game/1/color
 // player choses a color for their wild card
-router.post('/:game_id/color/:color',requireAuth,function(req,res){
+router.post('/:game_id/color/:color',requireAuth,function(req,res,next){
   // check for correct user/turn
   // check for correct game status
   // change game status to busy(playing)
@@ -156,7 +155,7 @@ router.post('/:game_id/color/:color',requireAuth,function(req,res){
   // emit game_state
 });
 
-router.post('/:game_id/message',requireAuth,function(req,res){
+router.post('/:game_id/message',requireAuth,function(req,res,next){
   // check for user_id in game_id
   // emit message to game_id
 });

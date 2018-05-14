@@ -18,7 +18,7 @@ CREATE TABLE uno.games (
 -- -----------------------------------------------------
 CREATE TABLE uno.users (
   user_id  SERIAL NOT NULL PRIMARY KEY UNIQUE,
-  username VARCHAR(45) NOT NULL,
+  email VARCHAR(45) NOT NULL,
   screen_name VARCHAR(45) NOT NULL,
   password VARCHAR(45) NOT NULL);
 
