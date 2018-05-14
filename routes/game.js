@@ -155,9 +155,19 @@ router.post('/:game_id/color/:color',requireAuth,function(req,res,next){
   // emit game_state
 });
 
-router.post('/:game_id/message',requireAuth,function(req,res,next){
-  // check for user_id in game_id
-  // emit message to game_id
+router.post('/game_id/chat',requireAuth (req, res, next) => {
+    let {message} = request.body;
+    let game_id = request.params.game_id;
+    let screen_name = request.user.screen_name;
+
+    console.log('game route chat: ' + message);
+
+    request.app.io.of('/game/${game_id}').emit('message', {
+        game_id,
+        message,
+        screen_name
+    });
+    response.sendStatus(200);
 });
 
 module.exports = router;

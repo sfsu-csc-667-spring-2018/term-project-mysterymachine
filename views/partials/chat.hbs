@@ -3,15 +3,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-			  <script>
-			  var socket = io();
-		socket.on('message', function(message) {
+          <script>
+			var socket = io();
+		    socket.on('message', function(message) {
 			document.getElementById('chatbox')
 			.innerHTML += '<li>'+message.body+'</li>';
-			
 		});
 
-		$(document).ready(function() { 
+        /*
+		$(document).ready(function() {
 			$('#chatForm').submit(function(event){
 				event.preventDefault();
 				$.ajax({
@@ -26,6 +26,7 @@
 				event.preventDefault();
 			});
 		});
+		*/
 
 /*
 		var chat_text = '';    

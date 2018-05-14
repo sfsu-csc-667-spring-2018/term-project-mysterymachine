@@ -1,3 +1,4 @@
+
 if(process.env.NODE_ENV === 'development') {
   require("dotenv").config();
 }
@@ -50,7 +51,7 @@ app.io = require('./socket');
 // Making user object available to all views once loged in
 // Global Vars
 app.use(function (req, res, next) {
-  
+
   res.locals.user = req.user || null;
   next();
 });
