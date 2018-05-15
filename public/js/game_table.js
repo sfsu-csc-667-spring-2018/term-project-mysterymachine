@@ -12,7 +12,7 @@ var parseCookies = function(allCookies,string){
 var renderPlayers = function() {
   const game_id = $('#game_id').val();
   const current_user = $('#screen_name').val();
-  $.get('/game/' + game_id + '/players', function(game) {
+  $.get('/game/' + game_id + '/details', function(game) {
     console.log(game);
     let i = 1;
     $.each(game.users, function (key, value) {

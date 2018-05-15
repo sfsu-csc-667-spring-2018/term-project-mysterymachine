@@ -17,7 +17,7 @@ const get_user_cards = (game_id, user_id) =>
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const get_game_state = (game_id)=>
-  db.one('SELECT game_status FROM games as g WHERE g.game_id=${game_id}',{game_id});
+  db.one('SELECT game_status, host_id FROM games as g WHERE g.game_id=${game_id}',{game_id});
 
 const get_player_card_count = (game_id,user_id) => {
   // get list of players in game_id
@@ -86,6 +86,19 @@ const new_game = (user_id) =>{
   // generate new game
 };
 
+const get_active_games = () =>
+  db.any(`SELECT g.game_id, game_status, screen_name, count(*) as cnt
+  FROM games g, game_has_hands h, users u
+  WHERE g.host_id = u.user_id AND g.game_id = h.game_id AND g.game_status IN ('OPEN', 'IN PROGRESS')
+  GROUP BY g.game_id, game_status, screen_name ORDER BY game_status desc, count(*)`);
+
+const join_game = (game_id, user_id, seat_number) =>
+  db.none(`INSERT INTO game_has_hands (game_id, user_id, seat_number) VALUES($1, $2, $3)`, [game_id, user_id, seat_number]);
+
+const get_game_status_count = (game_id) =>
+  db.one(`SELECT game_status, count(*) as cnt FROM games g, game_has_hands h
+      WHERE g.game_id = ${game_id} AND h.game_id = ${game_id} GROUP BY game_status`, {game_id});
+
 
 module.exports = {
     get,
@@ -102,5 +115,8 @@ module.exports = {
     remove_card,
     shuffle_discard,
     next_player,
-    new_game
+    new_game,
+    get_active_games,
+    get_game_status_count,
+    join_game
 };
