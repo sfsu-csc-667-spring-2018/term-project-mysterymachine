@@ -20,8 +20,8 @@ router.get('/:game_id/players', requireAuth, function(req, res, next) {
       console.log(users);
       res.status(200).json({game_status : game.status, current_player: game.current_player,
       users: users});
-    })
-  });
+    }).catch( error => console.log("Error in get_user_cards: ",error));
+  }).catch( error=> console.log("ERROR: ",error));
   // res.render('game_table', { title: 'Playing', game_id: req.params.id});
 });
 
@@ -59,7 +59,7 @@ router.post(':game_id/play/:card_id',requireAuth, function(req,res,next){
         // pass turn
         // change game status to 'waiting for play'
       // if draw 2
-        // then pass turn 
+        // then pass turn
         // force draw 2
         // change game status to 'waiting for play'
       // if wild or wild 4
@@ -103,7 +103,7 @@ router.post('/:game_id/playDrawn/',requireAuth,function(req,res,next){
     // add card_id to discard/active
     // if single card remains in hand and no Uno call, force draw 2
     // apply card effects to game
-      // update game_id active_color 
+      // update game_id active_color
       // if numbered
         // pass turn
         // change game_status to 'waiting for play'
@@ -115,7 +115,7 @@ router.post('/:game_id/playDrawn/',requireAuth,function(req,res,next){
         // pass turn
         // change game_status to 'waiting for play'
       // if draw 2
-        // then pass turn 
+        // then pass turn
         // force draw 2
         // change game_status to 'waiting for play'
       // if wild or wild 4
