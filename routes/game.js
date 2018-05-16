@@ -8,11 +8,11 @@ const Games = require('../db/games');
 // host/game/1
 router.get('/:game_id', requireAuth, function(req, res, next) {
   console.log(req.user);
-  res.render('game', { table:true, title: 'Playing', game_id: req.params.game_id});
+  res.render('game', { table:"true", title: 'Playing', game_id: req.params.game_id});
 });
 
-// host/game/1/players
-router.get('/:game_id/players', requireAuth, function(req, res, next) {
+// host/game/1/details
+router.get('/:game_id/details', requireAuth, function(req, res, next) {
   console.log("get all users");
   Games.get(req.params.game_id).then (game => {
     console.log(game);
@@ -30,6 +30,59 @@ router.get('/:game_id/player/:player_id/cards', requireAuth, function(req, res, 
   console.log(req.params);
   Games.get_user_cards(req.params.game_id, req.params.user_id).then ( cards => {
     res.status(200).json(cards);
+  });
+});
+
+router.post('/:game_id/join', requireAuth, function(req, res, next) {
+  console.log(req.params);
+  // console.log(req.user);
+  Games.check_game_user(req.params.game_id, req.user.user_id).then (result => {
+    console.log("Already in game");
+    res.redirect('/room/' + req.params.game_id);
+  }).catch (error => {
+    // console.log(error);
+    Games.get_game_status_count(req.params.game_id).then(result => {
+      console.log("GET GAME STATUS");
+      console.log(result);
+      if (result.game_status === 'OPEN') {
+        Games.join_game(req.params.game_id, req.user.user_id, ++result.cnt).then(insert => {
+          console.log("successfully joined the game");
+          // res.redirect('/lobby');
+          res.redirect('/room/' + req.params.game_id);
+        }).catch(error => {
+          console.log("Error joining the game: ");
+          console.log(error);
+          res.redirect('/lobby');
+        });
+      }
+    }).catch(error => {
+      console.log("Error get game status");
+      console.log(error);
+      res.redirect('/lobby');
+    });
+  })
+});
+
+router.get('/:game_id/players', requireAuth, function(req, res, next) {
+  Games.get_users(req.params.game_id).then (users => {
+    console.log(users);
+    res.status(200).json(users);
+  }).catch( error => console.log("Error in get_users: ", error));
+});
+
+router.post('/create', requireAuth, function(req, res, next) {
+  Games.new_game(req.user.user_id).then(game => {
+    Games.join_game(game.game_id, req.user.user_id, 1).then(join_game => {
+      console.log("successfully created the game");
+      console.log(game);
+      res.redirect('/room/' + game.game_id);
+    }).catch( error => {
+      res.redirect('/lobby');
+      console.log("Error in join_game: ", error)
+    });
+  }).catch( error => {
+    res.redirect('/lobby');
+    console.log("Error in new_game: ", error);
   });
 });
 

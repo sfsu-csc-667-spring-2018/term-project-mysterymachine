@@ -11,8 +11,13 @@ module.exports = {
       game_status: {
         type: Sequelize.TEXT
       },
-      turn_order: {
-        type: Sequelize.INTEGER
+      host_id: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model:'users',
+          key:'user_id'
+        }
       },
      active_seat: {
         type: Sequelize.INTEGER

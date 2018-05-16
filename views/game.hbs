@@ -1,72 +1,111 @@
-<input id="user_id" type="hidden" value="{{user.user_id}}" />
-<input id="game_id" type="hidden" value={{game_id}} />
-<div id="game_table">
-    <div class="opponent_area" id="opponent7">
-        <p class="user_name"></p>
-        <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
-    </div>
-    <div class="opponent_area" id="opponent6">
-        <p class="user_name"></p>
-        <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
-    </div>
-    <div class="opponent_area" id="opponent5">
-        <p class="user_name"></p>
-        <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
-    </div>
-    <div class="opponent_area" id="opponent4">
-        <p class="user_name"></p>
-        <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
-    </div>
-    <div class="opponent_area" id="opponent3">
-        <p class="user_name"></p>
-        <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
-    </div>
-    <div class="opponent_area" id="opponent2">
-        <p class="user_name"></p>
-        <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
-    </div>
-    <div class="opponent_area" id="opponent1">
-        <p class="user_name"></p>
-        <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
-    </div>
-    <div id="player_area">
-        <div id="player_hand">
 
-        </div>
-        <p class="user_name"></p>
-        <img src="" class="avatar" >
 
+ <div id="game_table">
+  <img src="../img/turn_order.png" id="turn_order_img" data-toggle="tooltip">
+
+
+  <div class="container">
+   <!-- Trigger the modal with a button -->
+   <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#color_modal" data-backdrop="static" data-keyboard="false">Open Large Modal</button>
+
+   <!-- Modal -->
+   <div class="modal fade color_wheel_box" id="color_modal" role="dialog">
+    <div class="modal-dialog modal-lg color_wheel_box">
+     <div class="modal-content color_wheel_box">
+      <div class="modal-body">
+
+       <img src="../img/blue_half_circle.png" class="color_picker close" id="pick_blue" data-dismiss="modal" data-toggle="tooltip" alt="Click to pick blue color" title="Click to pick blue color">
+       <img src="../img/green_half_circle.png" class="color_picker close" id="pick_green" data-dismiss="modal" alt="Click to pick green color" title="Click to pick green color">
+       <img src="../img/yellow_half_circle.png" class="color_picker close" id="pick_yellow" data-dismiss="modal" alt="Click to pick yellow color" title="Click to pick yellow color">
+       <img src="../img/red_half_circle.png" class="color_picker close" id="pick_red" data-dismiss="modal" alt="Click to pick red color" title="Click to pick red color">
+
+      </div>
+     </div>
     </div>
+   </div>
+  </div>
+ </div>
+ <div class="opponent_area" id="opponent7">
+  <p class="user_name"></p>
+  <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+ </div>
+ <div class="opponent_area current_player" id="opponent6">
+  <p class="user_name"></p>
+  <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+ </div>
+ <div class="opponent_area" id="opponent5">
+  <p class="user_name"></p>
+  <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+ </div>
+ <div class="opponent_area" id="opponent4">
+  <p class="user_name"></p>
+  <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+ </div>
+ <div class="opponent_area" id="opponent3">
+  <p class="user_name"></p>
+  <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+ </div>
+ <div class="opponent_area" id="opponent2">
+  <p class="user_name"></p>
+  <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+ </div>
+ <div class="opponent_area" id="opponent1">
+  <p class="user_name"></p>
+  <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+ </div>
+ <div id="discard_pile">
+  <p>Discard pile</p>
+ </div>
 
-    <div id="chat">
-        <div class="message_container sent">
-            Lorem ipsum dolor text....
-        </div>
-        <div class="message_container sent">
-            Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
-        </div>
-        <div class="message_container sent">
-            Lorem ipsum dolor text....
-        </div>
-        <div class="message_container sent">
-            Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
-        </div>
-        <div class="message_container recived">
-            Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
-        </div>
-        <div class="message_container recived">
-            Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
-        </div>
-        <div class="message_container sent">
-            Lorem ipsum dolor text....sdf esdfasgf sadfsad fsadfe asdgsafgsa gsafgsa fgsafdgdfs
-        </div>
 
-    </div>
-    <form id="chat_input" action="/message" method="POST">
-        <div class="form-group"><input type="text" name="text_message" class="form-control" placeholder="Chat..." id="chat_input_box"></div>
-    </form>
+ <div id="player_area">
+  <div id="player_hand">
 
-</div>
+  </div>
 
+  <button type="button" class="btn btn-success" id="confirm" disabled>Play selected card</button>
+  <button type="button" class="btn btn-danger" id="cancel" disabled>Cancel move</button>
+
+  <p class="user_name"></p>
+  <img src="" class="avatar">
+
+ </div>
+
+ <div id="chat">
+  <div class="message_container">
+   <div class="user_name">KillerSlaya</div>
+   <div class="message_body">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. In rhoncus augue eget tincidunt placerat. Maecenas elit enim, lacinia vel pretium in, fringilla ac eros. Ut eget accumsan felis. </div>
+  </div>
+
+  <div class="message_container">
+   <div class="user_name">KillerSlaya</div>
+   <div class="message_body">
+    estibulum euismod, dui eu interdum ullamcorper, urna odio elementum augue, sit amet venenatis nisl elit non nulla. </div>
+  </div>
+  <div class="message_container">
+   <div class="user_name">XxXdeamonXxX</div>
+   <div class="message_body">
+    Mauris in imperdiet dolor. Nam tellus diam, fermentum ut malesuada auctor, pellentesque a mi. Nulla sagittis eleifend erat ut mattis. </div>
+  </div>
+  <div class="message_container">
+   <div class="user_name">TheJoker</div>
+   <div class="message_body">
+    Nullam risus nisl, pharetra eleifend iaculis eget, tincidunt pretium enim. </div>
+  </div>
+  <div class="message_container">
+   <div class="user_name">KillerSlaya</div>
+   <div class="message_body">
+    Nam volutpat gravida sapien, eu lobortis nunc porta consequat. </div>
+  </div>
+
+ </div>
+ <form id="chat_input">
+  <div class="form-group"><input type="text" class="form-control" placeholder="Chat..." id="chat_input_box"></div>
+ </form>
+
+
+<script src="/socket.io/socket.io.js"></script>
 <script src="../js/game_table.js"></script>
+<script src="../js/asset_manager.js"></script>
 <script src="../js/chat_manager.js"></script>
