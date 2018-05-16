@@ -57,12 +57,12 @@ const discard_card = (game_id,user_id,card_id)=>{
 };
 
 const draw_card = (game_id,num_of_cards,hand_id)=>{
-  const card_id db.one('DELET FROM active_pile WHERE card_id = (SELECT card_id FROM active_pile WHERE game_id = ' +  game_id + ' LIMIT ' + num_of_cards + ') RETURNING card_id').catch( error=> console.log("ERROR: ",error));
-  db.one('INSERT INTO hand_has_cards (hand_id,card_id) VALUES (' + hand_id + ',' + card_id + ')')
+  card_id db.one('DELET FROM active_pile WHERE card_id = (SELECT card_id FROM active_pile WHERE game_id = ' +  game_id + ' LIMIT ' + num_of_cards + ') RETURNING card_id').catch( error=> console.log("ERROR: ",error));
+  
 };
 
 const card_to_hand = (game_id,user_id,card_id)=>{
-  // insert card_id into game_id.user_id.hand
+  db.one('INSERT INTO hand_has_cards (hand_id,card_id) VALUES ((SELECT hand_id FROM game_has_hands WHERE game_id = ' + game_id + ' AND user_id = ' + user_id + '),' + card_id + ')').catch( error=> console.log("ERROR: ",error));
 };
 
 const remove_card = (game_id,user_id,card_id)=>{
@@ -73,20 +73,32 @@ const remove_card = (game_id,user_id,card_id)=>{
 };
 
 const shuffle_discard = (game_id)=>{
-  // except for top card in discard, insert all cards in game_id.discard into game_id.deck
+  const card_ids = db.multiple ('DELETE FROM discard_pile WHERE game_id = ' + game_id + ' RETURNING card_id' ).catch( error=> console.log("ERROR: ",error));
+ db.one('INSERT INTO active_pile (game_id,card_id) VALUES ' + 
+        $.each(card_ids function(key,value)){
+               
+ } 
+  + '')
 };
 
 const next_player = (game_id)=>{
-  // number_position = game_id.current_player.number_position
-  // turn_rotation = game_id.turn_rotation
-  // number_position += turn_rotation
-  // game_id.current_player = game_id.player_at_position(number_position)
+  db.one('UPDATE games SET active_seat = (active_seat + turn_order) WHERE game_id = ' + game_id + '').catch( error=> console.log("ERROR: ",error));
+ 
+  const num_of_players = db.one('SELECT count(user_id) FROM game_has_hands WHERE game_id = ' + game_id + '').catch( error=> console.log("ERROR: ",error));
+ 
+  const active_seat = db.one('SELECT active_seat FROM games WHERE game_id = ' + game_id + '').catch( error=> console.log("ERROR: ",error));
+ 
+  if(active_seat > num_of_players){
+   db.one('UPDATE games SET active_seat = 1 WHERE game_id = ' + game_id + '').catch( error=> console.log("ERROR: ",error));
+  }
 };
 
 // creates a new game with user_id as host
 const new_game = (user_id) =>{
-  // generate new game
-};
+  const game_id = db.one('INSERT games (game_status, turn_order, active_seat) VALUES ("STARTING",1,1) RETURNING game_id').catch( error=> console.log("ERROR: ",error));
+ 
+  db.one('INSERT game_has_hands (user_id, game_id, seat_number) VALUES (' + user_id + ', ' + game_id + ', 1)').catch( error=> console.log("ERROR: ",error));
+};)
 
 
 module.exports = {
