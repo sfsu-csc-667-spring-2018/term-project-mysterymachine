@@ -90,17 +90,17 @@ body {
  position: absolute;
  left: 0%;
  top: 9.5%;
- width: 68.9%;
+ width: 70%;
  margin: 0;
  padding: 0;
  font-size: 15px;
- 
+
 }
 
 .games_list {
  position: absolute;
  left: 0%;
- top: 20%;
+ top: 22%;
  height: 80%;
  width: 70%;
  overflow: scroll;
@@ -134,23 +134,23 @@ body {
 
 
 .td1 {
- width: 6.6%;
+ width: 6.4%;
 }
 
 .td2 {
- width: 19.8%;
+ width: 19.4%;
 }
 
 .td3 {
- width: 19.5%;
+ width: 19.2%;
 }
 
 .td4 {
- width: 19.8%;
+ width: 19.6%;
 }
 
 .td5 {
- width: 7%;
+ width: 8.2%;
 }
 
 .td5 img {

@@ -5,7 +5,7 @@ const get = game_id =>
     { game_id });
 
 const get_users = game_id =>
-  db.many(`SELECT screen_name FROM game_has_hands as g, users as u WHERE g.user_id = u.user_id AND game_id=${game_id}`,
+  db.many(`SELECT screen_name, seat_number FROM game_has_hands as g, users as u WHERE g.user_id = u.user_id AND game_id=${game_id} ORDER BY seat_number`,
     { game_id });
 
 const get_user_cards = (game_id, user_id) =>
@@ -57,8 +57,7 @@ const discard_card = (game_id,user_id,card_id)=>{
 };
 
 const draw_card = (game_id,num_of_cards,hand_id)=>{
-  card_id db.one('DELET FROM active_pile WHERE card_id = (SELECT card_id FROM active_pile WHERE game_id = ' +  game_id + ' LIMIT ' + num_of_cards + ') RETURNING card_id').catch( error=> console.log("ERROR: ",error));
-  
+  db.one('DELET FROM active_pile WHERE card_id = (SELECT card_id FROM active_pile WHERE game_id = ' +  game_id + ' LIMIT ' + num_of_cards + ') RETURNING card_id').catch( error=> console.log("ERROR: ",error));
 };
 
 const card_to_hand = (game_id,user_id,card_id)=>{
@@ -73,32 +72,25 @@ const remove_card = (game_id,user_id,card_id)=>{
 };
 
 const shuffle_discard = (game_id)=>{
-  const card_ids = db.multiple ('DELETE FROM discard_pile WHERE game_id = ' + game_id + ' RETURNING card_id' ).catch( error=> console.log("ERROR: ",error));
- db.one('INSERT INTO active_pile (game_id,card_id) VALUES ' + 
-        $.each(card_ids function(key,value)){
-               
- } 
-  + '')
+
 };
 
 const next_player = (game_id)=>{
   db.one('UPDATE games SET active_seat = (active_seat + turn_order) WHERE game_id = ' + game_id + '').catch( error=> console.log("ERROR: ",error));
- 
+
   const num_of_players = db.one('SELECT count(user_id) FROM game_has_hands WHERE game_id = ' + game_id + '').catch( error=> console.log("ERROR: ",error));
- 
+
   const active_seat = db.one('SELECT active_seat FROM games WHERE game_id = ' + game_id + '').catch( error=> console.log("ERROR: ",error));
- 
+
   if(active_seat > num_of_players){
    db.one('UPDATE games SET active_seat = 1 WHERE game_id = ' + game_id + '').catch( error=> console.log("ERROR: ",error));
   }
 };
 
 // creates a new game with user_id as host
-const new_game = (user_id) =>{
-  const game_id = db.one('INSERT games (game_status, turn_order, active_seat) VALUES ("STARTING",1,1) RETURNING game_id').catch( error=> console.log("ERROR: ",error));
- 
-  db.one('INSERT game_has_hands (user_id, game_id, seat_number) VALUES (' + user_id + ', ' + game_id + ', 1)').catch( error=> console.log("ERROR: ",error));
-};)
+const new_game = (user_id) =>
+  db.one(`INSERT INTO games (game_status, host_id) VALUES('OPEN', $1) RETURNING game_id`, [user_id]);
+
 
 const get_active_games = () =>
   db.any(`SELECT g.game_id, game_status, screen_name, count(*) as cnt
@@ -113,6 +105,8 @@ const get_game_status_count = (game_id) =>
   db.one(`SELECT game_status, count(*) as cnt FROM games g, game_has_hands h
       WHERE g.game_id = ${game_id} AND h.game_id = ${game_id} GROUP BY game_status`, {game_id});
 
+const check_game_user = (game_id, user_id) =>
+  db.one('SELECT * FROM game_has_hands WHERE game_id = $1 AND user_id = $2', [game_id,user_id]);
 
 module.exports = {
     get,
@@ -132,5 +126,6 @@ module.exports = {
     new_game,
     get_active_games,
     get_game_status_count,
+    check_game_user,
     join_game
 };

@@ -1,6 +1,3 @@
-
-<script src="/js/lobby_games.js"></script>
-
 	<div class="container games_list_header">
 		<table class="table table-bordered table-hover table-fixed">
 			<thead>
@@ -8,69 +5,90 @@
 					<th class="th1">#</th>
 					<th class="th2">game_id</th>
 					<th class="th3">Host</th>
-                    <th class="th4">Number of players</th>
+          <th class="th4">Number of players</th>
 					<th class="th5">Status</th>
-                    <th class="th6"><button type="button" class="btn btn-primary">Create game</button></th>
-
-				</tr>
-			</thead>
-		</table>
-	</div>
-	<div class="container games_list">
-		<div class="games_list_container">
-			<table class="table table-bordered table-hover table-fixed">
-
-				<tbody>{{#each games}}
-					<tr>
-						<td class="td1">{{@index}}</td>
-						<td class="td2">{{game_id}}</td>
-						<td class="td3">{{host}}</td>
-                        <td class="td4">{{player_count}}/8</td>
+          <th class="th6">
+            <form id="create_game" method="POST" action="/game/create">
+              <button id="create_game" type="submit" class="btn btn-primary">Create Game</button>
+            </form>
+          </th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="container games_list">
+		<!-- <div class="games_list_container"> -->
+			<table id="games" class="table table-bordered table-hover table-fixed">
+				<tbody>
+          <!-- <tr>
+						<td class="td1">1</td>
+						<td class="td2">3</td>
+						<td class="td3">Kill</td>
+            <td class="td4">3/8</td>
 						<td class="td5">
-						{{#if joinable}}
-							<img src="../img/green_dot.png" alt="Indicates game is open and possible to join" title="Indicates game is open and possible to join"> </td>
-							<td class="td6"><button>Click to join</button> </td>
-						{{else}}
-							<img src="../img/red_dot.png" alt="Indicates game is not open and not possible to join" title="Indicates game is not open and not possible to join"> </td>
-							<td class="td6"><button disabled="true">Click to join</button> </td>
-						{{/if}}
-                        
-					</tr>{{/each}}
+              <img src="../img/green_dot.png" alt="Indicates game is open and possible to join" title="Indicates game is open and possible to join">
+            </td>
+            <td class="td6"><button>Click to join</button> </td>
+					</tr> -->
 				</tbody>
 			</table>
-		</div>
+		<!-- </div> -->
 	</div>
-	
-	  <div id="chat">
-	<div class="message_container">
-		  <div class="user_name" >KillerSlaya</div>
-   <div class="message_body">
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. In rhoncus augue eget tincidunt placerat. Maecenas elit enim, lacinia vel pretium in, fringilla ac eros. Ut eget accumsan felis.   </div>
-		  </div>
-		  
-	<div class="message_container">
-		  <div class="user_name" >KillerSlaya</div>
-   <div class="message_body">
-estibulum euismod, dui eu interdum ullamcorper, urna odio elementum augue, sit amet venenatis nisl elit non nulla.    </div>
-		  </div>
-		  <div class="message_container">
-		  <div class="user_name" >XxXdeamonXxX</div>
-   <div class="message_body">
-Mauris in imperdiet dolor. Nam tellus diam, fermentum ut malesuada auctor, pellentesque a mi. Nulla sagittis eleifend erat ut mattis.   </div>
-		  </div>
-		  <div class="message_container">
-		  <div class="user_name" >TheJoker</div>
-   <div class="message_body">
-Nullam risus nisl, pharetra eleifend iaculis eget, tincidunt pretium enim.    </div>
-		  </div>
-		  <div class="message_container">
-		  <div class="user_name" >KillerSlaya</div>
-   <div class="message_body">
- Nam volutpat gravida sapien, eu lobortis nunc porta consequat.   </div>
-		  </div>
-		  <
 
+    <!-- <tr>
+      <th style="border:1px solid red">GAME NUMBER</th>
+      <th style="border:1px solid red">HOST</th>
+      <th style="border:1px solid red">NO PLAYERS</th>
+      <th style="border:1px solid red">STATUS</th>
+    </tr>
+  </table> -->
+  <!-- <form id="create_game" method="POST" action="/game/create">
+    <button id="create_game" style="width:auto;" type="submit" class="dataSub btn btn-success">Create Game</button>
+  </form> -->
+<!-- </th>
+<th >
+<div id="chatBox" style="height:500px;border:5px solid cyan;overflow:auto;">{{>chat}}</div>
+</th>
+</table> -->
+
+<div id="chat">
+  <div class="message_container">
+    <div class="user_name" >KillerSlaya</div>
+    <div class="message_body">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In rhoncus augue eget tincidunt placerat. Maecenas elit enim, lacinia vel pretium in, fringilla ac eros. Ut eget accumsan felis.
+    </div>
   </div>
-	<form id="chat_input">
-   <div class="form-group"><input type="text" class="form-control" placeholder="Chat..." id="chat_input_box"></div>
-  </form>
+
+  <div class="message_container">
+    <div class="user_name" >KillerSlaya</div>
+    <div class="message_body">
+        estibulum euismod, dui eu interdum ullamcorper, urna odio elementum augue, sit amet venenatis nisl elit non nulla.
+    </div>
+  </div>
+
+  <div class="message_container">
+    <div class="user_name" >XxXdeamonXxX</div>
+    <div class="message_body">
+        Mauris in imperdiet dolor. Nam tellus diam, fermentum ut malesuada auctor, pellentesque a mi. Nulla sagittis eleifend erat ut mattis.
+    </div>
+  </div>
+
+  <div class="message_container">
+  <div class="user_name" >TheJoker</div>
+    <div class="message_body">
+      Nullam risus nisl, pharetra eleifend iaculis eget, tincidunt pretium enim.
+    </div>
+  </div>
+
+  <div class="message_container">
+    <div class="user_name" >KillerSlaya</div>
+    <div class="message_body">
+      Nam volutpat gravida sapien, eu lobortis nunc porta consequat.
+    </div>
+  </div>
+</div>
+
+<form id="chat_input">
+ <div class="form-group"><input type="text" class="form-control" placeholder="Chat..." id="chat_input_box"></div>
+</form>
+<script src="/js/lobby_games.js"></script>

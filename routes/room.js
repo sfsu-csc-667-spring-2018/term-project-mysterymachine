@@ -2,11 +2,16 @@
 const express = require('express');
 const router = express.Router();
 const requireAuth = require('../auth/requireAuth');
+const Games = require('../db/games');
 
 router.get('/:game_id',requireAuth, function(req, res,next){
-	// if game_status == 0 (waiting room)
-	res.render('room', { title: 'Waiting Room', game_id: req.params.game_id,room:"true"});
-	// else render 'game'
+	Games.get_game_state(req.params.game_id).then (game => {
+    const can_start = (game.host_id === req.user.user_id);
+    res.render('room', { title: 'Waiting room', game_id:req.params.game_id, can_start: can_start, room:"true"});
+  }).catch(error => {
+    console.log("Error query get_game_state: " + error);
+    res.redirect('/lobby');
+  });
 });
 
 // toggle ready status

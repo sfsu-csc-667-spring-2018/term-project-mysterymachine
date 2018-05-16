@@ -12,8 +12,7 @@ router.get('/:game_id', requireAuth, function(req, res, next) {
 });
 
 // host/game/1/details
-router.get('/:game_id/details', function(req, res, next) {
-// router.get('/:game_id/players', requireAuth, function(req, res, next) {
+router.get('/:game_id/details', requireAuth, function(req, res, next) {
   console.log("get all users");
   Games.get(req.params.game_id).then (game => {
     console.log(game);
@@ -36,53 +35,55 @@ router.get('/:game_id/player/:player_id/cards', requireAuth, function(req, res, 
 
 router.post('/:game_id/join', requireAuth, function(req, res, next) {
   console.log(req.params);
-  console.log(req.user);
-  Games.get_game_status_count(req.params.game_id).then(result => {
-    console.log("GET GAME STATUS");
-    console.log(result);
-    if (result.game_status === 'OPEN') {
-      Games.join_game(req.params.game_id, req.user.user_id, ++result.cnt).then(insert => {
-        console.log("successfully joined the game");
-        // res.redirect('/lobby');
-        res.redirect('/game/' + req.body.game_id + '/waiting');
-      }).catch(error => {
-        console.log("Error joining the game: ");
-        console.log(error);
-        res.redirect('/lobby');
-      });
-    }
-  }).catch(error => {
-    console.log("Error get game status");
-    console.log(error);
-    res.redirect('/lobby');
-  });
+  // console.log(req.user);
+  Games.check_game_user(req.params.game_id, req.user.user_id).then (result => {
+    console.log("Already in game");
+    res.redirect('/room/' + req.params.game_id);
+  }).catch (error => {
+    // console.log(error);
+    Games.get_game_status_count(req.params.game_id).then(result => {
+      console.log("GET GAME STATUS");
+      console.log(result);
+      if (result.game_status === 'OPEN') {
+        Games.join_game(req.params.game_id, req.user.user_id, ++result.cnt).then(insert => {
+          console.log("successfully joined the game");
+          // res.redirect('/lobby');
+          res.redirect('/room/' + req.params.game_id);
+        }).catch(error => {
+          console.log("Error joining the game: ");
+          console.log(error);
+          res.redirect('/lobby');
+        });
+      }
+    }).catch(error => {
+      console.log("Error get game status");
+      console.log(error);
+      res.redirect('/lobby');
+    });
+  })
 });
 
-router.get('/:game_id/waiting', requireAuth, function(req, res, next) {
-  Games.get_game_state(req.params.game_id).then (game => {
-    const can_start = (game.host_id === req.user.user_id);
-    res.render('game_waiting', { title: 'Waiting room', game_id:req.params.game_id, can_start: can_start});
-  }).catch(error => {
-    console.log("Error query users: " + error);
-    res.redirect('/lobby');
-  });
-});
-
-router.get('/:game_id/players', function(req, res, next) {
+router.get('/:game_id/players', requireAuth, function(req, res, next) {
   Games.get_users(req.params.game_id).then (users => {
     console.log(users);
     res.status(200).json(users);
   }).catch( error => console.log("Error in get_users: ", error));
-// router.get('/:game_id/players', requireAuth, function(req, res, next) {
-  // Games.get(req.params.game_id).then (game => {
-  //   console.log(game);
-  //   Games.get_users(req.params.game_id).then (users => {
-  //     console.log(users);
-  //     res.status(200).json({game_status : game.status, current_player: game.current_player,
-  //     users: users});
-  //   }).catch( error => console.log("Error in get_user_cards: ",error));
-  // }).catch( error=> console.log("ERROR: ",error));
-  // res.render('game_table', { title: 'Playing', game_id: req.params.id});
+});
+
+router.post('/create', requireAuth, function(req, res, next) {
+  Games.new_game(req.user.user_id).then(game => {
+    Games.join_game(game.game_id, req.user.user_id, 1).then(join_game => {
+      console.log("successfully created the game");
+      console.log(game);
+      res.redirect('/room/' + game.game_id);
+    }).catch( error => {
+      res.redirect('/lobby');
+      console.log("Error in join_game: ", error)
+    });
+  }).catch( error => {
+    res.redirect('/lobby');
+    console.log("Error in new_game: ", error);
+  });
 });
 
 // host/game/1/play/12

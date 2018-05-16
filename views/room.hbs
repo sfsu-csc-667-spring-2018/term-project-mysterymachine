@@ -1,60 +1,60 @@
 <div class="container player_list">
-  <table class="table table-bordered table-hover table-fixed">
-   <thead>
-
-    <tr>
-     <th class="th1">#</th>
-     <th class="th2">Username</th>
-     <th class="th3">Status</th>
-    </tr>
-   </thead>
-   <tbody>
-    {{#each user}}
-    <tr>
-     <td class="td1">{{seat}}</td>
-     <td class="td2">{{screen_name}}</td>
-     <td class="td3">
-        {{#if ready}}
-          <img src="../img/green_dot.png" alt="Indicates player is ready" title="Indicates player is ready"> </td>
-          {{else}}
-          <img src="../img/red_dot.png" alt="Indicates player is not ready" title="Indicates player is not ready"> </td>
-          {{/if}}
-    </tr>
-    {{/each}}
-    
-   </tbody>
+  <input id="game_id" type="hidden" value={{game_id}} />
+  <table id = "game_wating" class="table table-bordered table-hover table-fixed">
+    <thead>
+     <tr>
+      <th class="th1">#</th>
+      <th class="th2">Username</th>
+      <th class="th3">Status</th>
+     </tr>
+    </thead>
   </table>
- </div>
+  {{#if can_start}}
+  <form class="" action="/game/{{game_id}}start" method="POST">
+    <button id="start_game" type="submit" style="width:auto;" class="dataSub btn btn-success">Start Game</button>
+  </form>
+  {{/if}}
+</div>
 
- <div id="chat">
+<div id="chat">
   <div class="message_container">
-   <div class="user_name">KillerSlaya</div>
-   <div class="message_body">
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. In rhoncus augue eget tincidunt placerat. Maecenas elit enim, lacinia vel pretium in, fringilla ac eros. Ut eget accumsan felis. </div>
+    <div class="user_name" >KillerSlaya</div>
+    <div class="message_body">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In rhoncus augue eget tincidunt placerat. Maecenas elit enim, lacinia vel pretium in, fringilla ac eros. Ut eget accumsan felis.
+    </div>
   </div>
 
   <div class="message_container">
-   <div class="user_name">KillerSlaya</div>
-   <div class="message_body">
-    estibulum euismod, dui eu interdum ullamcorper, urna odio elementum augue, sit amet venenatis nisl elit non nulla. </div>
+    <div class="user_name" >KillerSlaya</div>
+    <div class="message_body">
+        estibulum euismod, dui eu interdum ullamcorper, urna odio elementum augue, sit amet venenatis nisl elit non nulla.
+    </div>
   </div>
-  <div class="message_container">
-   <div class="user_name">XxXdeamonXxX</div>
-   <div class="message_body">
-    Mauris in imperdiet dolor. Nam tellus diam, fermentum ut malesuada auctor, pellentesque a mi. Nulla sagittis eleifend erat ut mattis. </div>
-  </div>
-  <div class="message_container">
-   <div class="user_name">TheJoker</div>
-   <div class="message_body">
-    Nullam risus nisl, pharetra eleifend iaculis eget, tincidunt pretium enim. </div>
-  </div>
-  <div class="message_container">
-   <div class="user_name">KillerSlaya</div>
-   <div class="message_body">
-    Nam volutpat gravida sapien, eu lobortis nunc porta consequat. </div>
-  </div>
-   </div>
-   <form id="chat_input">
-    <div class="form-group"><input type="text" class="form-control" placeholder="Chat..." id="chat_input_box"></div>
-   </form>
 
+  <div class="message_container">
+    <div class="user_name" >XxXdeamonXxX</div>
+    <div class="message_body">
+        Mauris in imperdiet dolor. Nam tellus diam, fermentum ut malesuada auctor, pellentesque a mi. Nulla sagittis eleifend erat ut mattis.
+    </div>
+  </div>
+
+  <div class="message_container">
+  <div class="user_name" >TheJoker</div>
+    <div class="message_body">
+      Nullam risus nisl, pharetra eleifend iaculis eget, tincidunt pretium enim.
+    </div>
+  </div>
+
+  <div class="message_container">
+    <div class="user_name" >KillerSlaya</div>
+    <div class="message_body">
+      Nam volutpat gravida sapien, eu lobortis nunc porta consequat.
+    </div>
+  </div>
+</div>
+
+<form id="chat_input">
+ <div class="form-group"><input type="text" class="form-control" placeholder="Chat..." id="chat_input_box"></div>
+</form>
+
+<script src="/js/waiting_room.js"></script>
