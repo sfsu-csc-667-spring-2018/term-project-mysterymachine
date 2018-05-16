@@ -36,7 +36,7 @@ const check_user_has_card = (game_id,user_id,card_id) =>{
 
 // sees if the card provided is playable agains the active card
 const check_playable = (game_id,card_id) =>{
- db.one('SELECT * FROM active_card WHERE color = (SELECT color FROM cards WHERE card_id = ' + card_id + ') OR face = (SELECT face FROM cards WHERE card_id = ' + card_id + ') AND game_id = ' + game_id + '')
+ db.one('SELECT * FROM active_card WHERE color = (SELECT color FROM cards WHERE card_id = ${1}) OR face = (SELECT face FROM cards WHERE card_id = ${1}) AND game_id = ${2}',[card_id,game_id])
   .catch( error=> console.log("ERROR: ",error));
   //    ! not proper implementation !
   // var active = db.one('SELECT top_card FROM game_id'); //<<<<<<<<<<<<<<<<<<<<< top_card or active_card
@@ -47,22 +47,22 @@ const check_playable = (game_id,card_id) =>{
 
 // sees if anyone has won in the game provided
 const check_win = (game_id)=>{
-  db.one('SELECT user_id FROM game_has_hands WHERE hand_id NOT IN (SELECT hand_id FROM hand_has_cards) AND game_id =' + game_id + '').catch( error=> console.log("ERROR: ",error));
+  db.one('SELECT user_id FROM game_has_hands WHERE hand_id NOT IN (SELECT hand_id FROM hand_has_cards) AND game_id = ${1}',[game_id]).catch( error=> console.log("ERROR: ",error));
 };
 
 
 
 const discard_card = (game_id,user_id,card_id)=>{
-  db.one('DELETE FROM hand_has_cards WHERE hand_id = (SELECT hand_id FROM game_has_hands WHERE game_id = ' + game_id + ' AND user_id = ' + user_id + ') AND card_id =  ' + card_id + '').catch( error=> console.log("ERROR: ",error));
+  db.one('DELETE FROM hand_has_cards WHERE hand_id = (SELECT hand_id FROM game_has_hands WHERE game_id = ${1} AND user_id = {2}) AND card_id = ${3}',[game_id,user_id,card_id]).catch( error=> console.log("ERROR: ",error));
 };
 
 const draw_card = (game_id,num_of_cards,hand_id)=>{
-  card_id db.one('DELET FROM active_pile WHERE card_id = (SELECT card_id FROM active_pile WHERE game_id = ' +  game_id + ' LIMIT ' + num_of_cards + ') RETURNING card_id').catch( error=> console.log("ERROR: ",error));
+  card_id db.one('DELETE FROM active_pile WHERE card_id = (SELECT card_id FROM active_pile WHERE game_id = ${1} LIMIT ${2}) RETURNING card_id',[game_id,num_of_cards]).catch( error=> console.log("ERROR: ",error));
   
 };
 
 const card_to_hand = (game_id,user_id,card_id)=>{
-  db.one('INSERT INTO hand_has_cards (hand_id,card_id) VALUES ((SELECT hand_id FROM game_has_hands WHERE game_id = ' + game_id + ' AND user_id = ' + user_id + '),' + card_id + ')').catch( error=> console.log("ERROR: ",error));
+  db.one('INSERT INTO hand_has_cards (hand_id,card_id) VALUES ((SELECT hand_id FROM game_has_hands WHERE game_id = ${1} AND user_id = ${2}),${3})',[game_id,user_id,card_id]).catch( error=> console.log("ERROR: ",error));
 };
 
 const remove_card = (game_id,user_id,card_id)=>{
@@ -73,12 +73,10 @@ const remove_card = (game_id,user_id,card_id)=>{
 };
 
 const shuffle_discard = (game_id)=>{
-  const card_ids = db.multiple ('DELETE FROM discard_pile WHERE game_id = ' + game_id + ' RETURNING card_id' ).catch( error=> console.log("ERROR: ",error));
- db.one('INSERT INTO active_pile (game_id,card_id) VALUES ' + 
-        $.each(card_ids function(key,value)){
-               
- } 
-  + '')
+  db.none('INSERT INTO active_pile (game_id,card_id) VALUES SELECT card_id , ${1} FROM discard_pile WHERE game_id = ${1}',[game_id]).catch( error=> console.log("ERROR: ",error));
+  db.none('DELETE FROM discard_pile WHERE game_id = ${1}',[game_id]).catch( error=> console.log("ERROR: ",error));
+ 
+ 
 };
 
 const next_player = (game_id)=>{
@@ -95,9 +93,9 @@ const next_player = (game_id)=>{
 
 // creates a new game with user_id as host
 const new_game = (user_id) =>{
-  const game_id = db.one('INSERT games (game_status, turn_order, active_seat) VALUES ("STARTING",1,1) RETURNING game_id').catch( error=> console.log("ERROR: ",error));
+  const game_id = db.one('INSERT games (game_status, turn_order, active_seat) VALUES ("joining",1,1) RETURNING game_id').catch( error=> console.log("ERROR: ",error));
  
-  db.one('INSERT game_has_hands (user_id, game_id, seat_number) VALUES (' + user_id + ', ' + game_id + ', 1)').catch( error=> console.log("ERROR: ",error));
+  db.none('INSERT game_has_hands (user_id, game_id, seat_number) VALUES (${1}, {2}, 1)').catch( error=> console.log("ERROR: ",error));
 };)
 
 
