@@ -5,39 +5,34 @@ const requireAuth = require('../auth/requireAuth');
 const Games = require('../db/games');
 
 var games = [
-	{
-		number:"NUMBER",
-        host:"HOST",
-        players:"COUNT",
-        status:"STATUS"
-    },
+	
     {
-    	number:"1",
+    	game_id:"1",
         host:"xX_Slayer_Xx",
-        players:"1",
-        status:"Join"
+        player_count:"1",
+        joinable:"true"
     },
 	{
-		number:"2",
+		game_id:"2",
         host:"Mr P",
-        players:"4",
-        status:"In Progress"
+        player_count:"4",
+        joinable:"false"
     },
     {
-    	number:"5",
+    	game_id:"5",
         host:"BigE",
-        players:"8",
-        status:"In Progress"
+        player_count:"8",
+        joinable:"true"
     },
 	{
-		number:"5",
-        host:"BigE",
-        players:"8",
-        status:"In Progress"
+		game_id:"5",
+        host:"MMM",
+        player_count:"8",
+        joinable:"false"
 }];
 
 router.get('/', requireAuth,function (req, res,next){
-	res.render('lobby',{ games:games, title:"Lobby" });
+	res.render('lobby',{ games:games, title:"Lobby",lobby:"true" });
 	});
 
 router.get('/games', requireAuth, function(req, res, next) {

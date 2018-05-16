@@ -8,7 +8,7 @@ const Games = require('../db/games');
 // host/game/1
 router.get('/:game_id', requireAuth, function(req, res, next) {
   console.log(req.user);
-  res.render('game', { table:true, title: 'Playing', game_id: req.params.game_id});
+  res.render('game', { table:"true", title: 'Playing', game_id: req.params.game_id});
 });
 
 // host/game/1/details

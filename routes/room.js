@@ -5,7 +5,7 @@ const requireAuth = require('../auth/requireAuth');
 
 router.get('/:game_id',requireAuth, function(req, res,next){
 	// if game_status == 0 (waiting room)
-	res.render('room', { title: 'Waiting Room', game_id: req.params.game_id});
+	res.render('room', { title: 'Waiting Room', game_id: req.params.game_id,room:"true"});
 	// else render 'game'
 });
 
