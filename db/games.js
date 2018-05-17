@@ -5,7 +5,7 @@ const get = game_id =>
     { game_id });
 
 const get_users = game_id =>
-  db.many(`SELECT screen_name FROM game_has_hands as g, users as u WHERE g.user_id = u.user_id AND game_id=${game_id}`,
+  db.many(`SELECT screen_name, seat_number FROM game_has_hands as g, users as u WHERE g.user_id = u.user_id AND game_id=${game_id} ORDER BY seat_number`,
     { game_id });
 
 const get_user_cards = (game_id, user_id) =>
@@ -17,7 +17,7 @@ const get_user_cards = (game_id, user_id) =>
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const get_game_state = (game_id)=>
-  db.one('SELECT game_status FROM games as g WHERE g.game_id=${game_id}',{game_id});
+  db.one('SELECT game_status, host_id FROM games as g WHERE g.game_id=${game_id}',{game_id});
 
 const get_player_card_count = (game_id,user_id) => {
   db.one('SELECT user_id, count(hand_has_cards.card_id) AS number_of_cards_in_hand FROM hand_has_cards, game_has_hands WHERE hand_has_cards.hand_id = game_has_hands.hand_id AND game_id = ' + game_id + ' GROUP BY user_id').catch( error=> console.log("ERROR: ",error));
@@ -57,8 +57,9 @@ const discard_card = (game_id,user_id,card_id)=>{
 };
 
 const draw_card = (game_id,num_of_cards,hand_id)=>{
-  card_id db.one('DELETE FROM active_pile WHERE card_id = (SELECT card_id FROM active_pile WHERE game_id = ${1} LIMIT ${2}) RETURNING card_id',[game_id,num_of_cards]).catch( error=> console.log("ERROR: ",error));
+  db.one('DELETE FROM active_pile WHERE card_id = (SELECT card_id FROM active_pile WHERE game_id = ${1} LIMIT ${2}) RETURNING card_id',[game_id,num_of_cards]).catch( error=> console.log("ERROR: ",error));
   
+  db.one('DELET FROM active_pile WHERE card_id = (SELECT card_id FROM active_pile WHERE game_id = ' +  game_id + ' LIMIT ' + num_of_cards + ') RETURNING card_id').catch( error=> console.log("ERROR: ",error));
 };
 
 const card_to_hand = (game_id,user_id,card_id)=>{
@@ -81,11 +82,11 @@ const shuffle_discard = (game_id)=>{
 
 const next_player = (game_id)=>{
   db.one('UPDATE games SET active_seat = (active_seat + turn_order) WHERE game_id = ' + game_id + '').catch( error=> console.log("ERROR: ",error));
- 
+
   const num_of_players = db.one('SELECT count(user_id) FROM game_has_hands WHERE game_id = ' + game_id + '').catch( error=> console.log("ERROR: ",error));
- 
+
   const active_seat = db.one('SELECT active_seat FROM games WHERE game_id = ' + game_id + '').catch( error=> console.log("ERROR: ",error));
- 
+
   if(active_seat > num_of_players){
    db.one('UPDATE games SET active_seat = 1 WHERE game_id = ' + game_id + '').catch( error=> console.log("ERROR: ",error));
   }
@@ -96,8 +97,22 @@ const new_game = (user_id) =>{
   const game_id = db.one('INSERT games (game_status, turn_order, active_seat) VALUES ("joining",1,1) RETURNING game_id').catch( error=> console.log("ERROR: ",error));
  
   db.none('INSERT game_has_hands (user_id, game_id, seat_number) VALUES (${1}, {2}, 1)').catch( error=> console.log("ERROR: ",error));
-};)
+};
 
+const get_active_games = () =>
+  db.any(`CREATE OR REPLACE VIEW player_count AS SELECT g.game_id, count(hand_id) AS num_of_players FROM games AS g, game_has_hands AS ghh WHERE g.game_id = ghh.game_id AND game_status = 'joining' GROUP BY g.game_id;SELECT g.game_id, screen_name, num_of_players, game_status FROM games AS g, users AS u, game_has_hands AS ghu, player_count AS pc WHERE g.game_id = ghu.game_id AND u.user_id = ghu.user_id AND g.game_id = pc.game_id AND g.game_status = 'joining' AND seat_number = 1`);
+ 
+
+
+const join_game = (game_id, user_id, seat_number) =>
+  db.none(`INSERT INTO game_has_hands (game_id, user_id, seat_number) VALUES($1, $2, $3)`, [game_id, user_id, seat_number]);
+
+const get_game_status_count = (game_id) =>
+  db.one(`SELECT game_status, count(*) as cnt FROM games g, game_has_hands h
+      WHERE g.game_id = ${game_id} AND h.game_id = ${game_id} GROUP BY game_status`, {game_id});
+
+const check_game_user = (game_id, user_id) =>
+  db.one('SELECT * FROM game_has_hands WHERE game_id = $1 AND user_id = $2', [game_id,user_id]);
 
 module.exports = {
     get,
@@ -114,5 +129,9 @@ module.exports = {
     remove_card,
     shuffle_discard,
     next_player,
-    new_game
+    new_game,
+    get_active_games,
+    get_game_status_count,
+    check_game_user,
+    join_game
 };

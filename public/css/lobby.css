@@ -43,6 +43,10 @@ button:hover {
  background-color: #f44336;
 }
 
+.disabledBtn{
+ opacity: 0.5;
+}
+
 /* Center the avatar image inside this container */
 
 .imgcontainer {
