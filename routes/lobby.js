@@ -56,6 +56,7 @@ router.post('/:game_id/message',requireAuth,function(req,res){
   // emit message to game_id
 });
 
+// rejoin game, or redirect to lobby, or redirect to waiting room
 router.post('/:game_id',requireAuth,function(req,res,next){
     // check: if user is already in the game
         // redirect to host/game/:game_id
@@ -66,6 +67,7 @@ router.post('/:game_id',requireAuth,function(req,res,next){
     // redirect to host/room/:game_id
 });
 
+// make new game from lobby, then redirect to waiting room
 router.post('/new',requireAuth,function(req,res,next){
     // make new game_id
     // set initial game_id values

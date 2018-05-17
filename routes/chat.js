@@ -21,14 +21,22 @@ router.post('/message',function(req,res){
 */
 
 router.post('/', (req, res, next) => {
-    const {message} = request.body;
-    const user = request.user.screen_name;
 
-    console.log('chat route chat: ' + message);
+    const room = req.body.url;
+    const user = req.user.screen_name
+    const message = req.body.message;
 
-    request.app.io.of('lobby').emit('message', {user, message});
+    console.log('room: ' + room);
+    console.log('user: ' + req.user.screen_name);
+    console.log('message: ' + message);
 
-    response.sendStatus(200);
+	const roomSocket = io.of(room);
+    roomSocket.emit('message', {user, message});
+    io.sockets.emit('message',"hello");
+    
+
+    res.sendStatus(200);
 });
+
 
 module.exports = router;

@@ -1,58 +1,8 @@
-<h1>Communication with socket.io!</h1>
-<script src="/socket.io/socket.io.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
+<div id="chat">hellohellohello
+</div>
 
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-          <script>
-			var socket = io();
-		    socket.on('message', function(message) {
-			document.getElementById('chatbox')
-			.innerHTML += '<li>'+message.body+'</li>';
-		});
-
-        /*
-		$(document).ready(function() {
-			$('#chatForm').submit(function(event){
-				event.preventDefault();
-				$.ajax({
-				url:'/chat/message',
-				type: 'POST',
-				data: {
-					'body' : document.getElementById('messageBox').value 
-				},
-				header: {'content-type':'text'},
-				});
-				//console.log(document.getElementById('messageBox').value);
-				event.preventDefault();
-			});
-		});
-		*/
-
-/*
-		var chat_text = '';    
-  		$("#chatbox").on('keypress', function (event) {
-  			//event.preventDefault();  
-    		if (event.keyCode == 13 && $('#chatbox').val() !== '' ) {
-    			
-      			 $('#chatbox').ajaxForm(function() {
-           			type: "POST",
-           			url: '/chat/message',
-           			data: $("#chatbox").serialize(), // serializes the form's elements.
-         		});
-        		$('#chatbox').val('');
-    		}
-		});*//*
-		$(function() {
-       // bind 'myForm' and provide a simple callback function
-       $('#chatbox').ajaxForm(function() {
-           alert("Thank you for your comment!");
-       });
-     });*/
-</script>
-<p>
-<form id='chatForm' action='/chat/message'>
-<input id='messageBox' type="text" value="Your Message"/>
-<input type='submit' value='send' />
+<form id="chat_input">
+ <div class="form-group"><input type="text" class="form-control" placeholder="Chat..." id="chat_input_box"></div>
 </form>
-</p>
-<ul id="chatbox"></ul>
+
+<script src="/js/chat_manager.js"></script>

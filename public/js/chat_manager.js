@@ -1,40 +1,38 @@
-var loadMessages = function() {
-  const game_id = $('#game_id').val();
-  $.get('/message?game_id=' + game_id, function(messages) {
-    console.log(messages)
-    messages.forEach(function (message) {
-      const time = message.time_sent.toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', second: 'numeric', hour12:true})
-      const chat_content = `
-      <div class="message_container sent">
-        <i> ${message.screen_name}</i>: ${message.text_message}
-      </div>`;
-      $('#chat').append(chat_content);
-    });
-  })
-}
+var chat_text = '';
+var socket = io(window.location.pathname);
 
-
-$(function() {
-  $('#chat').html('');
-  loadMessages();
-
-    var chat_text = '';
-  $("#chat_input").on('keypress', function (event) {
-    if (event.keyCode == 13) {
-        event.preventDefault();
-        chat_text = $('#chat_input_box').val();
-        $('#chat').append('<div class="message_container sent">' + chat_text + '</div>');
-        chat_height = $('#chat').height();
-        $('#chat_input_box').val('');
-    }
+$("#chat_input").on('keypress', function (event) {
+  console.log('sending');
+  if (event.keyCode == 13) {
+    event.preventDefault();
+    chat_text = $('#chat_input_box').val();
+    $.ajax({
+    //url: '/chat/message',
+    url: '/chat',
+    type: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify({
+      "message": chat_text,
+      "url": window.location.pathname
+      }),
+  });
+    $('#chat_input_box').val('');
+ }
 });
 
+socket.on('message', function (user, message) {
+  console.log('recieving');
+$('#chat').append('<div class="message_container"><div class="user_name">' + user + '</div><div class="message_body">' + message + '</div></div>');
+ });
 
-    $("#chat_input_box").focus(function () {
-        $('#chat').css({'opacity': '1.0'});
-    });
-    $("#chat_input_box").blur(function () {
-        $('#chat').css({'opacity': '0.1'});
-    });
 
-});
+$("#chat_input_box").focus(function () {
+  $('#chat').css({
+   'opacity': '1.0'
+  });
+ });
+ $("#chat_input_box").blur(function () {
+  $('#chat').css({
+   'opacity': '0.1'
+  });
+ });

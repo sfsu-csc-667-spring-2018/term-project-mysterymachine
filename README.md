@@ -68,3 +68,12 @@ git push heroku master
 ```
 heroku pg:psql postgresql-reticulated-69917 --app cs667-uno < db/load_cards.sql
 ```
+
+# game_status types
+```
+* "joining" for when the game is still in its initial phase of people joining in the waiting room
+* "waiting" for when the game is waiting for a play action
+* "locked" for when the game is in the middle of a process
+* "colorDecision" and "drawDecision" for when the game is waiting for a specific action
+* "complete" when the game is over, and no longer needs to be displayed in the lobby
+```

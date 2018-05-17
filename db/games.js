@@ -36,8 +36,7 @@ const check_user_has_card = (game_id,user_id,card_id) =>{
 
 // sees if the card provided is playable agains the active card
 const check_playable = (game_id,card_id) =>{
- db.one('SELECT * FROM active_card WHERE color = (SELECT color FROM cards WHERE card_id = ' + card_id + ') OR face = (SELECT face FROM cards WHERE card_id = ' + card_id + ') AND game_id = ' + game_id + '')
-  .catch( error=> console.log("ERROR: ",error));
+ db.one('SELECT * FROM active_card WHERE color = (SELECT color FROM cards WHERE card_id = ' + card_id + ') OR face = (SELECT face FROM cards WHERE card_id = ' + card_id + ') AND game_id = ' + game_id + '');
   //    ! not proper implementation !
   // var active = db.one('SELECT top_card FROM game_id'); //<<<<<<<<<<<<<<<<<<<<< top_card or active_card
   // if( active.color == card_id.color || active.value == card_id.value || card_id > 99)
@@ -66,9 +65,6 @@ const card_to_hand = (game_id,user_id,card_id)=>{
 
 const remove_card = (game_id,user_id,card_id)=>{
   // remove card from game_id.user_id.hand that matches card_id
-  if( check_user_has_card(game_id,user_id,card_id) ){
-
-  }
 };
 
 const shuffle_discard = (game_id)=>{
