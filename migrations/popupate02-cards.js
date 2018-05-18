@@ -1,6 +1,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert( 'cards', [
+{card_id:0,description:'question',face:'?',color:'grey',value: 0,image_address:'/images/question.jpg'},
 {card_id:1,description:'red 1',face:'1',color:'red',value: 1,image_address:'/images/red1.jpg'},
 {card_id:2,description:'red 2',face:'2',color:'red',value: 2,image_address:'/images/red2.jpg'},
 {card_id:3,description:'red 3',face:'3',color:'red',value: 3,image_address:'/images/red3.jpg'},
