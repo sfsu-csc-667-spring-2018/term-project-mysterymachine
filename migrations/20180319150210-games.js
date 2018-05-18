@@ -19,14 +19,14 @@ module.exports = {
           key:'user_id'
         }
       },
+      turn_order: {
+        type: Sequelize.INTEGER
+      },
      active_seat: {
         type: Sequelize.INTEGER
       },
       game_start: {
         type: Sequelize.DATE
-      },
-      top_card_id: {
-        type: Sequelize.INTEGER
       }
     });
   },

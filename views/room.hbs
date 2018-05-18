@@ -10,7 +10,7 @@
     </thead>
   </table>
   {{#if can_start}}
-  <form class="" action="/game/{{game_id}}start" method="POST">
+  <form id="startGame" method="POST" action="/game/{{game_id}}/start" >
     <button id="start_game" type="submit" style="width:auto;" class="dataSub btn btn-success">Start Game</button>
   </form>
   {{/if}}

@@ -38,11 +38,6 @@ const check_user_has_card = (game_id,user_id,card_id) =>{
 const check_playable = (game_id,card_id) =>{
  db.one('SELECT * FROM active_card WHERE color = (SELECT color FROM cards WHERE card_id = ' + card_id + ') OR face = (SELECT face FROM cards WHERE card_id = ' + card_id + ') AND game_id = ' + game_id + '')
   .catch( error=> console.log("ERROR: ",error));
-  //    ! not proper implementation !
-  // var active = db.one('SELECT top_card FROM game_id'); //<<<<<<<<<<<<<<<<<<<<< top_card or active_card
-  // if( active.color == card_id.color || active.value == card_id.value || card_id > 99)
-  //    return true;
-  // else return false
 };
 
 // sees if anyone has won in the game provided
@@ -108,6 +103,65 @@ const get_game_status_count = (game_id) =>
 const check_game_user = (game_id, user_id) =>
   db.one('SELECT * FROM game_has_hands WHERE game_id = $1 AND user_id = $2', [game_id,user_id]);
 
+const get_hands_for_game = (game_id) =>
+  db.many('SELECT hand_id FROM game_has_hands WHERE game_id = $1', [game_id]);
+
+// create a random shuffle for an array
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+  return array;
+}
+
+const start_game = (game_id, hands) => {
+  // first create a random shuffle of card_ids
+  let cards = new Array(108);
+  for (let i = 0; i < 108; i++) {
+    cards[i] = i + 1;
+  }
+  shuffle(cards);
+
+  // then draw cards to players
+  const cards_per_hand = 7;
+  let batch_query = '';
+  for (let i = 0; i < hands.length; i++) {
+    let hand_card_insert = `INSERT INTO hand_has_cards (hand_id, card_id) VALUES (${hands[i].hand_id}, ${cards[i * cards_per_hand]})`;
+    for (let j = i * cards_per_hand + 1; j < (i+ 1) * cards_per_hand ; j++) {
+      hand_card_insert += `, (${hands[i].hand_id}, ${cards[j]})`;
+    }
+    batch_query += hand_card_insert + ";\n";
+  }
+
+  // remaining in active_pile
+  const next_card = hands.length * cards_per_hand;
+  let active_card_insert = `INSERT INTO active_pile (game_id, card_id, card_order) VALUES
+  (${game_id}, ${cards[next_card]}, 1)`;
+  for (let i = next_card + 1; i < 108 ; i++) {
+    const order = i + 1 - next_card;
+    active_card_insert += `, (${game_id}, ${cards[i]}, ${order})`;
+  }
+  batch_query += active_card_insert + ";\n";
+
+  // Update game state
+  let update_game = `UPDATE games SET game_status = 'IN PROGRESS',
+    turn_order = 1, active_seat = (SELECT seat_number from game_has_hands where game_id = ${game_id} and user_id = host_id), game_start = to_timestamp(${Date.now()} / 1000.0) where game_id = ${game_id};`
+  batch_query += update_game;
+  console.log(batch_query);
+  
+  return db.none(batch_query);
+}
+
 module.exports = {
     get,
     get_users,
@@ -127,5 +181,7 @@ module.exports = {
     get_active_games,
     get_game_status_count,
     check_game_user,
-    join_game
+    join_game,
+    get_hands_for_game,
+    start_game
 };

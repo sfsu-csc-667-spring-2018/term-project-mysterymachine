@@ -26,6 +26,7 @@ router.get('/:game_id/details', requireAuth, function(req, res, next) {
 });
 
 // host/game/1/player/1/cards
+// get cards of a player in a game
 router.get('/:game_id/player/:player_id/cards', requireAuth, function(req, res, next) {
   console.log(req.params);
   Games.get_user_cards(req.params.game_id, req.params.user_id).then ( cards => {
@@ -33,6 +34,7 @@ router.get('/:game_id/player/:player_id/cards', requireAuth, function(req, res, 
   });
 });
 
+// user to join an existing game
 router.post('/:game_id/join', requireAuth, function(req, res, next) {
   console.log(req.params);
   // console.log(req.user);
@@ -63,6 +65,7 @@ router.post('/:game_id/join', requireAuth, function(req, res, next) {
   })
 });
 
+// Get players of a game
 router.get('/:game_id/players', requireAuth, function(req, res, next) {
   Games.get_users(req.params.game_id).then (users => {
     console.log(users);
@@ -70,6 +73,7 @@ router.get('/:game_id/players', requireAuth, function(req, res, next) {
   }).catch( error => console.log("Error in get_users: ", error));
 });
 
+// Create a new game for the current user
 router.post('/create', requireAuth, function(req, res, next) {
   Games.new_game(req.user.user_id).then(game => {
     Games.join_game(game.game_id, req.user.user_id, 1).then(join_game => {
@@ -83,6 +87,26 @@ router.post('/create', requireAuth, function(req, res, next) {
   }).catch( error => {
     res.redirect('/lobby');
     console.log("Error in new_game: ", error);
+  });
+});
+
+// Host to start a new game:
+// draw random cards to players, remaining in active active_pile
+// Update game state, start time, turn_order, active_seat
+router.post('/:id/start', function(req, res, next) {
+  const game_id = req.params.id;
+  console.log("START GAME" + game_id);
+  Games.get_hands_for_game(game_id).then(hand_ids => {
+    console.log(hand_ids);
+    Games.start_game(game_id, hand_ids).then(result => {
+      res.redirect('/lobby');
+    }).catch( error => {
+      console.log("Error in start_game: ", error);
+      res.redirect('/lobby');
+    });;
+  }).catch( error => {
+    res.redirect('/lobby');
+    console.log("Error in get_hands_for_game: ", error);
   });
 });
 

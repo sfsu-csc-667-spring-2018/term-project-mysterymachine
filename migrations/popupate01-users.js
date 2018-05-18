@@ -8,6 +8,7 @@ module.exports = {
       { email: "abc4@def.xyz", screen_name: 'IceT',password: "$2b$10$CyZRS0jwjVi/rq5Qa/Lm3eKhz8n7BYheCL5BKpKLId98ux2cNi/W2"},
       { email: "abc5@def.xyz", screen_name: 'XxXSlayerXxX',password: "$2b$10$pfqCZL043R9A2TA9.cbEb.1pY5ZJ8Sfq99PJO6olLlg.p4zgQxw12"},
       { email: "abc6@def.xyz", screen_name: 'Michelangelo',password: "$2b$10$mStXt4RPTtyKfcj1UmH6uuvDTVcl.sBC01Vh72UGQvSkbsyc0vHly"},
+      { email: "abc7@def.xyz", screen_name: 'Player No 7',password: "$2b$10$mStXt4RPTtyKfcj1UmH6uuvDTVcl.sBC01Vh72UGQvSkbsyc0vHly"},
     ], {});
   },
   down: (queryInterface, Sequelize) => {
