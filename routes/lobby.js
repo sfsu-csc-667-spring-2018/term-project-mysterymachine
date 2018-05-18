@@ -4,40 +4,14 @@ const router = express.Router();
 const requireAuth = require('../auth/requireAuth');
 const Games = require('../db/games');
 
-var games = [
-	
-    {
-    	game_id:"1",
-        host:"xX_Slayer_Xx",
-        player_count:"1",
-        joinable:"true"
-    },
-	{
-		game_id:"2",
-        host:"Mr P",
-        player_count:"4",
-        joinable:"false"
-    },
-    {
-    	game_id:"5",
-        host:"BigE",
-        player_count:"8",
-        joinable:"true"
-    },
-	{
-		game_id:"5",
-        host:"MMM",
-        player_count:"8",
-        joinable:"false"
-}];
-
 router.get('/', requireAuth,function (req, res,next){
-	res.render('lobby',{ games:games, title:"Lobby",lobby:"true" });
+	res.render('lobby',{ title:"Lobby",lobby:"true" });
 	});
 
 router.get('/games', requireAuth, function(req, res, next) {
 	Games.get_active_games().then(games => {
     res.status(200).json(games);
+    console.log("games list: "+games);
 	});
 });
 

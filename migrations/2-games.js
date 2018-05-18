@@ -25,9 +25,27 @@ module.exports = {
       game_start: {
         type: Sequelize.DATE
       },
-      top_card_id: {
+      active_card_id: {
+        type: Sequelize.INTEGER,
+        references: {
+            model:'cards',
+            key:'card_id' 
+          }
+      },
+      active_color: {
+        type: Sequelize.TEXT
+      },
+      drawn_card_id:{
+        type: Sequelize.INTEGER,
+        references: {
+            model:'cards',
+            key:'card_id' 
+          }
+      },
+      turn_direction:{
         type: Sequelize.INTEGER
       }
+
     });
   },
   down: (queryInterface, Sequelize) => {
