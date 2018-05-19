@@ -8,11 +8,12 @@ const get_users = game_id =>
   db.many(`SELECT u.user_id, screen_name, seat_number FROM game_has_hands as g, users as u WHERE g.user_id = u.user_id AND game_id=${game_id} ORDER BY seat_number`,
     { game_id });
 
-const get_user_cards = (game_id, user_id) =>
-  db.many(`SELECT c.card_id, c.image_address
+const get_user_cards = (game_id, user_id) => {
+  return db.many(`SELECT c.card_id, c.image_address
     FROM game_has_hands as g, hand_has_cards as h, cards as c
-    WHERE g.hand_id = h.hand_id AND h.card_id = c.card_id and g.game_id = ${1} and g.user_id = ${2}`,
+    WHERE g.hand_id = h.hand_id AND h.card_id = c.card_id and g.game_id = $1 and g.user_id = $2`,
     [game_id, user_id]);
+  }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

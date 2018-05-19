@@ -29,8 +29,18 @@ router.get('/:game_id/details', requireAuth, function(req, res, next) {
 // get cards of a player in a game
 router.get('/:game_id/player/:player_id/cards', requireAuth, function(req, res, next) {
   console.log(req.params);
-  Games.get_user_cards(req.params.game_id, req.params.user_id).then ( cards => {
+  Games.get_user_cards(req.params.game_id, req.params.player_id).then ( cards => {
     res.status(200).json(cards);
+  }).catch( error=> console.log("ERROR: ", error));;
+});
+
+// Check if user is in a game
+router.get('/:game_id/check_user', requireAuth, function(req, res, next) {
+  console.log(req.params);
+  Games.check_game_user(req.params.game_id, req.user.user_id).then (result => {
+    res.status(200).json(1);
+  }).catch (error => {
+    res.status(200).json(-1);
   });
 });
 
@@ -40,13 +50,24 @@ router.post('/:game_id/join', requireAuth, function(req, res, next) {
   // console.log(req.user);
   Games.check_game_user(req.params.game_id, req.user.user_id).then (result => {
     console.log("Already in game");
-    res.redirect('/room/' + req.params.game_id);
+    Games.get_game_status_count(req.params.game_id).then(result => {
+      if (result.game_status === 'OPEN') {
+        // redirect to waiting room if game is open
+        res.redirect('/room/' + req.params.game_id);
+      } else {
+        // redirect to playing game if not
+        res.redirect('/game/' + req.params.game_id);
+      }
+    }).catch(error => {
+      console.log("Error get game status", error);
+      res.redirect('/lobby');
+    });
   }).catch (error => {
     // console.log(error);
     Games.get_game_status_count(req.params.game_id).then(result => {
       console.log("GET GAME STATUS");
       console.log(result);
-      if (result.game_status === 'OPEN') {
+      if (result.game_status === 'OPEN' && result.cnt < 8) {
         Games.join_game(req.params.game_id, req.user.user_id, ++result.cnt).then(insert => {
           console.log("successfully joined the game");
           // res.redirect('/lobby');
@@ -56,10 +77,11 @@ router.post('/:game_id/join', requireAuth, function(req, res, next) {
           console.log(error);
           res.redirect('/lobby');
         });
+      } else {
+        res.redirect('/lobby');
       }
     }).catch(error => {
-      console.log("Error get game status");
-      console.log(error);
+      console.log("Error get game status", error);
       res.redirect('/lobby');
     });
   })
