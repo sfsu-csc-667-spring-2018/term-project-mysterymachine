@@ -19,6 +19,13 @@ module.exports = {
           key:'user_id'
         }
       },
+      top_card_id:{
+        type: Sequelize.INTEGER,
+        references: {
+            model:'cards',
+            key:'card_id'
+          }
+      },
       turn_order: {
         type: Sequelize.INTEGER
       },

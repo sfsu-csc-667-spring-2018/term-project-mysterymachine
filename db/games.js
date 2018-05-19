@@ -1,11 +1,11 @@
 const db = require('./index');
 
 const get = game_id =>
-  db.one('SELECT screen_name as current_player, game_status as status FROM games, users WHERE active_seat = user_id AND game_id=${game_id}',
+  db.one('SELECT active_seat, turn_order, face, color, image_address FROM games, cards WHERE top_card_id = card_id AND game_id=${game_id}',
     { game_id });
 
 const get_users = game_id =>
-  db.many(`SELECT screen_name, seat_number FROM game_has_hands as g, users as u WHERE g.user_id = u.user_id AND game_id=${game_id} ORDER BY seat_number`,
+  db.many(`SELECT u.user_id, screen_name, seat_number FROM game_has_hands as g, users as u WHERE g.user_id = u.user_id AND game_id=${game_id} ORDER BY seat_number`,
     { game_id });
 
 const get_user_cards = (game_id, user_id) =>
@@ -147,7 +147,7 @@ const start_game = (game_id, hands) => {
   const next_card = hands.length * cards_per_hand;
   let active_card_insert = `INSERT INTO active_pile (game_id, card_id, card_order) VALUES
   (${game_id}, ${cards[next_card]}, 1)`;
-  for (let i = next_card + 1; i < 108 ; i++) {
+  for (let i = next_card + 1; i < 107 ; i++) {
     const order = i + 1 - next_card;
     active_card_insert += `, (${game_id}, ${cards[i]}, ${order})`;
   }
@@ -155,10 +155,10 @@ const start_game = (game_id, hands) => {
 
   // Update game state
   let update_game = `UPDATE games SET game_status = 'IN PROGRESS',
-    turn_order = 1, active_seat = (SELECT seat_number from game_has_hands where game_id = ${game_id} and user_id = host_id), game_start = to_timestamp(${Date.now()} / 1000.0) where game_id = ${game_id};`
+    turn_order = 1, top_card_id = ${cards[107]}, active_seat = (SELECT seat_number from game_has_hands where game_id = ${game_id} and user_id = host_id), game_start = to_timestamp(${Date.now()} / 1000.0) where game_id = ${game_id};`
   batch_query += update_game;
   console.log(batch_query);
-  
+
   return db.none(batch_query);
 }
 

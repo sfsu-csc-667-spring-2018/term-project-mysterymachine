@@ -8,7 +8,7 @@ const Games = require('../db/games');
 // host/game/1
 router.get('/:game_id', requireAuth, function(req, res, next) {
   console.log(req.user);
-  res.render('game', { table:"true", title: 'Playing', game_id: req.params.game_id});
+  res.render('game', { table:"true", title: 'Playing', game_id: req.params.game_id, user_id:req.user.user_id});
 });
 
 // host/game/1/details
@@ -18,8 +18,8 @@ router.get('/:game_id/details', requireAuth, function(req, res, next) {
     console.log(game);
     Games.get_users(req.params.game_id).then (users => {
       console.log(users);
-      res.status(200).json({game_status : game.status, current_player: game.current_player,
-      users: users});
+      res.status(200).json({active_seat : game.active_seat, turn_order: game.turn_order,
+        face: game.face, color: game.color, image_address: game.image_address, users: users});
     }).catch( error => console.log("Error in get_user_cards: ",error));
   }).catch( error=> console.log("ERROR: ",error));
   // res.render('game_table', { title: 'Playing', game_id: req.params.id});
@@ -99,7 +99,7 @@ router.post('/:id/start', function(req, res, next) {
   Games.get_hands_for_game(game_id).then(hand_ids => {
     console.log(hand_ids);
     Games.start_game(game_id, hand_ids).then(result => {
-      res.redirect('/lobby');
+      res.redirect('/game/' + game_id);
     }).catch( error => {
       console.log("Error in start_game: ", error);
       res.redirect('/lobby');

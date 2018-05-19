@@ -6,7 +6,7 @@ const Games = require('../db/games');
 
 
 router.get('/', requireAuth,function (req, res,next){
-	res.render('lobby',{ games:games, title:"Lobby",lobby:"true" });
+	res.render('lobby',{ title:"Lobby",lobby:"true" });
 	});
 
 router.get('/games', requireAuth, function(req, res, next) {
