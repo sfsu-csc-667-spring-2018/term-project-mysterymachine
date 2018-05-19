@@ -35,15 +35,8 @@ const check_user_has_card = (game_id,user_id,card_id) =>{
 };
 
 // sees if the card provided is playable agains the active card
-const check_playable = (game_id,card_id) =>{
- db.one('SELECT * FROM active_card WHERE color = (SELECT color FROM cards WHERE card_id = ${1}) OR face = (SELECT face FROM cards WHERE card_id = ${1}) AND game_id = ${2}',[card_id,game_id])
-  .catch( error=> console.log("ERROR: ",error));
-  //    ! not proper implementation !
-  // var active = db.one('SELECT top_card FROM game_id'); //<<<<<<<<<<<<<<<<<<<<< top_card or active_card
-  // if( active.color == card_id.color || active.value == card_id.value || card_id > 99)
-  //    return true;
-  // else return false
-};
+const check_playable = (game_id,card_id) =>
+ db.one('SELECT * FROM active_card WHERE color = (SELECT color FROM cards WHERE card_id = ${1}) OR face = (SELECT face FROM cards WHERE card_id = ${1}) AND game_id = ${2}',[card_id,game_id]);
 
 // sees if anyone has won in the game provided
 const check_win = (game_id)=>{
@@ -56,11 +49,9 @@ const discard_card = (game_id,user_id,card_id)=>{
   db.one('DELETE FROM hand_has_cards WHERE hand_id = (SELECT hand_id FROM game_has_hands WHERE game_id = ${1} AND user_id = {2}) AND card_id = ${3}',[game_id,user_id,card_id]).catch( error=> console.log("ERROR: ",error));
 };
 
-const draw_card = (game_id,num_of_cards,hand_id)=>{
-  db.one('DELETE FROM active_pile WHERE card_id = (SELECT card_id FROM active_pile WHERE game_id = ${1} LIMIT ${2}) RETURNING card_id',[game_id,num_of_cards]).catch( error=> console.log("ERROR: ",error));
-  
-  db.one('DELET FROM active_pile WHERE card_id = (SELECT card_id FROM active_pile WHERE game_id = ' +  game_id + ' LIMIT ' + num_of_cards + ') RETURNING card_id').catch( error=> console.log("ERROR: ",error));
-};
+const draw_card = (game_id,num_of_cards,hand_id)=>
+  db.one('WITH getval(card_id) AS (DELETE FROM active_pile WHERE ctid IN (SELECT ctid FROM active_pile WHERE game_id = ${1} ORDER BY random() LIMIT ${2}) RETURNING card_id) INSERT INTO hand_has_cards (hand_id,card_id) SELECT (SELECT hand_id FROM game_has_hands WHERE game_id = ${1} AND user_id = ${2}), card_id FROM getval;',[game_id,num_of_cards,hand_id]);
+
 
 const card_to_hand = (game_id,user_id,card_id)=>{
   db.one('INSERT INTO hand_has_cards (hand_id,card_id) VALUES ((SELECT hand_id FROM game_has_hands WHERE game_id = ${1} AND user_id = ${2}),${3})',[game_id,user_id,card_id]).catch( error=> console.log("ERROR: ",error));
@@ -82,25 +73,20 @@ const shuffle_discard = (game_id)=>{
 
 const next_player = (game_id)=>{
   db.one('UPDATE games SET active_seat = (active_seat + turn_order) WHERE game_id = ' + game_id + '').catch( error=> console.log("ERROR: ",error));
-
-  const num_of_players = db.one('SELECT count(user_id) FROM game_has_hands WHERE game_id = ' + game_id + '').catch( error=> console.log("ERROR: ",error));
-
-  const active_seat = db.one('SELECT active_seat FROM games WHERE game_id = ' + game_id + '').catch( error=> console.log("ERROR: ",error));
-
-  if(active_seat > num_of_players){
-   db.one('UPDATE games SET active_seat = 1 WHERE game_id = ' + game_id + '').catch( error=> console.log("ERROR: ",error));
-  }
 };
 
 // creates a new game with user_id as host
-const new_game = (user_id) =>{
-  const game_id = db.one('INSERT games (game_status, turn_order, active_seat) VALUES ("joining",1,1) RETURNING game_id').catch( error=> console.log("ERROR: ",error));
- 
-  db.none('INSERT game_has_hands (user_id, game_id, seat_number) VALUES (${1}, {2}, 1)').catch( error=> console.log("ERROR: ",error));
-};
+const new_game = (user_id) =>
+  db.none(`WITH getval(game_id) as (INSERT INTO games (game_status, turn_direction, active_seat,host_id) VALUES ('joining',1,1,$1) RETURNING game_id) INSERT INTO game_has_hands (user_id, game_id, seat_number) SELECT $1, game_id, 1 FROM getval`,[user_id]);
+
+
+
+const update_game_status = (game_id,game_status) =>
+  db.none('UPDATE games SET game_status = ${2} WHERE game_id = ${1}',[game_id,game_status]);
+
 
 const get_active_games = () =>
-  db.any(`CREATE OR REPLACE VIEW player_count AS SELECT g.game_id, count(hand_id) AS num_of_players FROM games AS g, game_has_hands AS ghh WHERE g.game_id = ghh.game_id AND game_status = 'joining' GROUP BY g.game_id;SELECT g.game_id, screen_name, num_of_players, game_status FROM games AS g, users AS u, game_has_hands AS ghu, player_count AS pc WHERE g.game_id = ghu.game_id AND u.user_id = ghu.user_id AND g.game_id = pc.game_id AND g.game_status = 'joining' AND seat_number = 1`);
+  db.any(`CREATE OR REPLACE VIEW player_count AS SELECT g.game_id, count(hand_id) AS num_of_players FROM games AS g, game_has_hands AS ghh WHERE g.game_id = ghh.game_id AND game_status IN ('joining','waiting','locked','colorDecision','drawDecision') GROUP BY g.game_id;SELECT g.game_id, screen_name, num_of_players, game_status FROM games AS g, users AS u, game_has_hands AS ghu, player_count AS pc WHERE g.game_id = ghu.game_id AND u.user_id = ghu.user_id AND g.game_id = pc.game_id AND game_status IN ('joining','waiting','locked','colorDecision','drawDecision') AND seat_number = 1`);
  
 
 

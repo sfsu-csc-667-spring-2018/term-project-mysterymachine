@@ -72,18 +72,13 @@ router.get('/:game_id/players', requireAuth, function(req, res, next) {
 
 router.post('/create', requireAuth, function(req, res, next) {
   Games.new_game(req.user.user_id).then(game => {
-    Games.join_game(game.game_id, req.user.user_id, 1).then(join_game => {
       console.log("successfully created the game");
-      console.log(game);
+      //console.log(game);
       res.redirect('/room/' + game.game_id);
     }).catch( error => {
       res.redirect('/lobby');
       console.log("Error in join_game: ", error)
     });
-  }).catch( error => {
-    res.redirect('/lobby');
-    console.log("Error in new_game: ", error);
-  });
 });
 
 // host/game/1/play/12
