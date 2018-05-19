@@ -86,6 +86,8 @@ router.post('/create', requireAuth, function(req, res, next) {
   });
 });
 
+
+
 // host/game/1/play/12
 // player plays a card
 router.post(':game_id/play/:card_id',requireAuth, function(req,res,next){

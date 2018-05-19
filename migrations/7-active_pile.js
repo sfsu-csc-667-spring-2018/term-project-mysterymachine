@@ -1,7 +1,7 @@
 'use strict';
   module.exports = {
     up: (queryInterface, Sequelize) => {
-      return queryInterface.createTable('discard_pile', {
+      return queryInterface.createTable('active_pile', {
         card_id: {
           allowNull: false,
           primaryKey: true,
@@ -23,7 +23,6 @@
       });
     },
     down: (queryInterface, Sequelize) => {
-      return queryInterface.dropTable('discard_pile');
+      return queryInterface.dropTable('active_pile');
     }
-  };
-
+};
