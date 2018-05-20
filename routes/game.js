@@ -13,26 +13,29 @@ router.get('/:game_id', requireAuth, function(req, res, next) {
 
 // host/game/1/details
 router.get('/:game_id/details', requireAuth, function(req, res, next) {
-  console.log("get all users");
+  const user_id = req.user.user_id;
   Games.get(req.params.game_id).then (game => {
-    console.log(game);
+    // console.log(game);
     Games.get_users(req.params.game_id).then (users => {
-      console.log(users);
-      res.status(200).json({active_seat : game.active_seat, turn_order: game.turn_order,
-        face: game.face, color: game.color, image_address: game.image_address, users: users});
-    }).catch( error => console.log("Error in get_user_cards: ",error));
-  }).catch( error=> console.log("ERROR: ",error));
+      // console.log(users);
+      Games.get_user_cards(req.params.game_id, user_id).then ( cards => {
+        res.status(200).json({active_seat : game.active_seat, turn_order: game.turn_order,
+          has_drawn: game.has_drawn, face: game.face, color: game.color, image_address: game.image_address,
+          users: users, cards: cards});
+      }).catch( error => console.log("Error in get_user_cards: ",error));
+    }).catch( error => console.log("Error in get_users: ",error));
+  }).catch( error=> console.log("Error in Games.get: ",error));
   // res.render('game_table', { title: 'Playing', game_id: req.params.id});
 });
 
 // host/game/1/player/1/cards
 // get cards of a player in a game
-router.get('/:game_id/player/:player_id/cards', requireAuth, function(req, res, next) {
-  console.log(req.params);
-  Games.get_user_cards(req.params.game_id, req.params.player_id).then ( cards => {
-    res.status(200).json(cards);
-  }).catch( error=> console.log("ERROR: ", error));;
-});
+// router.get('/:game_id/player/:player_id/cards', requireAuth, function(req, res, next) {
+//   console.log(req.params);
+//   Games.get_user_cards(req.params.game_id, req.params.player_id).then ( cards => {
+//     res.status(200).json(cards);
+//   }).catch( error=> console.log("ERROR: ", error));;
+// });
 
 // Check if user is in a game
 router.get('/:game_id/check_user', requireAuth, function(req, res, next) {
@@ -113,7 +116,7 @@ router.post('/create', requireAuth, function(req, res, next) {
 });
 
 // Host to start a new game:
-// draw random cards to players, remaining in active active_pile
+// draw random cards to players, remaining cards to active_pile
 // Update game state, start time, turn_order, active_seat
 router.post('/:id/start', function(req, res, next) {
   const game_id = req.params.id;
@@ -125,11 +128,46 @@ router.post('/:id/start', function(req, res, next) {
     }).catch( error => {
       console.log("Error in start_game: ", error);
       res.redirect('/lobby');
-    });;
+    });
   }).catch( error => {
-    res.redirect('/lobby');
     console.log("Error in get_hands_for_game: ", error);
+    res.redirect('/lobby');
   });
+});
+
+// host/game/1/draw/
+// player choses to draw a card
+router.post('/:game_id/draw/',requireAuth,function(req,res,next){
+  const user_id = req.user.user_id;
+  const game_id = req.params.game_id;
+  Games.check_drawable(game_id, user_id).then(data => {
+    Games.get_card_active_pile(game_id).then(card => {
+      Games.draw_card(game_id, user_id, card.card_id).then(result => {
+        res.status(200).json(1);
+      }).catch( error => {
+        console.log("Error in draw_card: ", error);
+        res.status(500);
+      });
+    }).catch( error => {
+      console.log("Error in get_card_active_pile: ", error);
+      res.status(500);
+    });
+  }).catch( error => {
+    console.log("User does not have permission to draw card: ", error);
+    res.status(500);
+  });
+
+  // draw from deck
+  // check if drawn card is playable
+
+  // if not playable
+    // add to player hand
+    // pass turn
+    // change game status to 'waiting for play'
+  // else
+    // save card_id in game_id
+    // change game status to 'waiting for draw decision'
+  // emit game_state
 });
 
 // host/game/1/play/12
@@ -170,25 +208,6 @@ router.post(':game_id/play/:card_id',requireAuth, function(req,res,next){
   // emit new game_state
 });
 
-// host/game/1/draw/
-// player choses to draw a card
-router.post('/:game_id/draw/',requireAuth,function(req,res,next){
-  // check for correct user/turn
-  // check for correct game status
-  // change game status to busy(playing)
-
-  // draw from deck
-  // check if drawn card is playable
-
-  // if not playable
-    // add to player hand
-    // pass turn
-    // change game status to 'waiting for play'
-  // else
-    // save card_id in game_id
-    // change game status to 'waiting for draw decision'
-  // emit game_state
-});
 
 // host/game/1/playDrawn/
 // player choses to play drawn card

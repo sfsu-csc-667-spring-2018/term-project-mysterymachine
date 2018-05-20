@@ -1,7 +1,7 @@
 const db = require('./index');
 
 const get = game_id =>
-  db.one('SELECT active_seat, turn_order, face, color, image_address FROM games, cards WHERE top_card_id = card_id AND game_id=${game_id}',
+  db.one('SELECT active_seat, has_drawn, turn_order, face, color, image_address FROM games, cards WHERE top_card_id = card_id AND game_id=${game_id}',
     { game_id });
 
 const get_users = game_id =>
@@ -52,9 +52,9 @@ const discard_card = (game_id,user_id,card_id)=>{
   db.one('DELETE FROM hand_has_cards WHERE hand_id = (SELECT hand_id FROM game_has_hands WHERE game_id = ' + game_id + ' AND user_id = ' + user_id + ') AND card_id =  ' + card_id + '').catch( error=> console.log("ERROR: ",error));
 };
 
-const draw_card = (game_id,num_of_cards,hand_id)=>{
-  db.one('DELET FROM active_pile WHERE card_id = (SELECT card_id FROM active_pile WHERE game_id = ' +  game_id + ' LIMIT ' + num_of_cards + ') RETURNING card_id').catch( error=> console.log("ERROR: ",error));
-};
+// const draw_card = (game_id,num_of_cards,hand_id)=>{
+//   db.one('DELET FROM active_pile WHERE card_id = (SELECT card_id FROM active_pile WHERE game_id = ' +  game_id + ' LIMIT ' + num_of_cards + ') RETURNING card_id').catch( error=> console.log("ERROR: ",error));
+// };
 
 const card_to_hand = (game_id,user_id,card_id)=>{
   db.one('INSERT INTO hand_has_cards (hand_id,card_id) VALUES ((SELECT hand_id FROM game_has_hands WHERE game_id = ' + game_id + ' AND user_id = ' + user_id + '),' + card_id + ')').catch( error=> console.log("ERROR: ",error));
@@ -155,12 +155,26 @@ const start_game = (game_id, hands) => {
   batch_query += active_card_insert + ";\n";
 
   // Update game state
-  let update_game = `UPDATE games SET game_status = 'IN PROGRESS',
+  let update_game = `UPDATE games SET game_status = 'IN PROGRESS', has_drawn='FALSE',
     turn_order = 1, top_card_id = ${cards[107]}, active_seat = (SELECT seat_number from game_has_hands where game_id = ${game_id} and user_id = host_id), game_start = to_timestamp(${Date.now()} / 1000.0) where game_id = ${game_id};`
   batch_query += update_game;
   console.log(batch_query);
 
   return db.none(batch_query);
+}
+
+const check_drawable = (game_id, user_id) =>
+  db.one("SELECT * FROM games g, game_has_hands h WHERE g.game_id=$1 AND h.game_id=$1 AND g.active_seat = h.seat_number AND g.has_drawn='f' AND h.user_id=$2",[game_id, user_id]);
+
+const get_card_active_pile = (game_id) =>
+  db.one('SELECT card_id FROM active_pile WHERE game_id=$1 LIMIT 1',[game_id]);
+
+const draw_card = (game_id, user_id, card_id) => {
+  let query = `DELETE FROM active_pile WHERE game_id = ${game_id} AND card_id = ${card_id};
+  INSERT INTO hand_has_cards SELECT hand_id, ${card_id} FROM game_has_hands WHERE game_id = ${game_id} AND user_id = ${user_id};
+  UPDATE games SET has_drawn='TRUE' WHERE game_id=${game_id};`
+  console.log(query);
+  return db.none(query);
 }
 
 module.exports = {
@@ -184,5 +198,7 @@ module.exports = {
     check_game_user,
     join_game,
     get_hands_for_game,
-    start_game
+    start_game,
+    check_drawable,
+    get_card_active_pile
 };
