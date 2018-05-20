@@ -26,6 +26,9 @@
         },
         seat_number: {
           type: Sequelize.INTEGER
+        },
+        uno_play: {
+          type: Sequelize.BOOLEAN
         }
       }).then(function() {
         return queryInterface.sequelize.query(

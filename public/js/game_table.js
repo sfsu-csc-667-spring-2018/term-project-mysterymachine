@@ -18,6 +18,11 @@ var renderGame = function(game) {
   const current_user = $('#user_id').val();
   setTurnOrder(game.turn_order);
   renderTopCard(game.image_address, game.face, game.color);
+  if (game.cards.length == 2) {
+    renderUno();
+  } else {
+    $("#uno_hit").html('');
+  }
 
   let user_seat = -1;
   $.each(game.users, function (index, value) {
@@ -54,6 +59,32 @@ var renderPlayerCards = function (cards) {
   });
 }
 
+var renderUno = function () {
+  $("#uno_hit").html('<img src="/img/uno.png" id="play_uno" disabled>');
+  $("#play_uno").css({"opacity": 0.2});
+  $("#play_uno").click(function() {
+    console.log("Play uno");
+    const game_id = $('#game_id').val();
+    $.post('/game/'+ game_id + '/play_uno',
+      {
+        card_id: selectedCard,
+        color: color
+      },
+      function(code, status){
+        // console.log(status);
+        if (status === 'success') {
+          if (code == 1) {
+            alert("Invalid card!");
+          }
+          if (code == 2) {
+            alert("Please select a color for the wild card!");
+          }
+          setTimeout(worker, 100);
+        }
+    });
+  });
+}
+
 var renderTopCard = function (image_address, face, color) {
   $('#discard_pile').html('<img src="' + image_address + '" id="top_card">');
   if (face.includes('wild')) {
@@ -78,8 +109,8 @@ var setTurnOrder = function (turn_order) {
 
 var clickCard = function(card) {
   $(card).css('bottom', '100%');
-  $("#confirm").removeAttr("disabled");
-  $("#confirm").css({"opacity": 1});
+  $("#confirm, #play_uno").removeAttr("disabled");
+  $("#confirm, #play_uno").css({"opacity": 1});
   $("#player_hand .card").off();
   $("#cancel").removeAttr("disabled");
   $("#cancel").css({"opacity": 1});
@@ -98,8 +129,8 @@ var setButtonAttributes = function(is_current, skipped, has_drawn) {
     $("#skip").removeAttr("disabled");
     $("#skip").css({"opacity": 1});
   } else {
-    $("#skip, #cancel, #confirm").prop('disabled', true);;
-    $("#skip, #cancel, #confirm").css({"opacity": 0.2});
+    $("#skip, #cancel, #confirm, #play_uno").prop('disabled', true);;
+    $("#skip, #cancel, #confirm, #play_uno").css({"opacity": 0.2});
   }
 
   if (is_current && !skipped) {
@@ -109,9 +140,9 @@ var setButtonAttributes = function(is_current, skipped, has_drawn) {
 
     $("#cancel").click(function () {
       $("#player_hand .card").css('bottom', '0%');
-      $("#confirm, #cancel").prop('disabled', true);
+      $("#confirm, #play_uno, #cancel").prop('disabled', true);
       // $("#cancel").attr("disabled");
-      $("#confirm, #cancel").css({"opacity": 0.2});
+      $("#confirm, #play_uno, #cancel").css({"opacity": 0.2});
       $("#player_hand .card").on('click', function () {
         clickCard(this);
       });
@@ -194,7 +225,6 @@ $("#confirm").click(function() {
       }
   });
 });
-
 
 function worker() {
   const game_id = $('#game_id').val();

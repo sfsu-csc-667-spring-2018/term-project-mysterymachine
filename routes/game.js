@@ -184,9 +184,6 @@ router.post('/:game_id/skip_turn/',requireAuth,function(req,res,next){
 });
 
 const next_active_seat = function(current_seat, move, user_cnt) {
-  console.log(current_seat);
-  console.log(move);
-  console.log(user_cnt);
   let next_seat = current_seat + move;
   if (next_seat > user_cnt) {
     next_seat = next_seat - user_cnt;
@@ -194,7 +191,6 @@ const next_active_seat = function(current_seat, move, user_cnt) {
   if (next_seat <= 0) {
     next_seat = next_seat + user_cnt;
   }
-  console.log(next_seat);
   return next_seat;
 }
 
@@ -202,61 +198,62 @@ const next_active_seat = function(current_seat, move, user_cnt) {
 // player plays a card
 router.post('/:game_id/play/',requireAuth, function(req,res,next){
   console.log(req.body);
-  const user_id = req.user.user_id;
-  const game_id = req.params.game_id;
-  const player_card_id = req.body.card_id;
-  const chosen_color = req.body.color;
-  Games.check_playable(game_id, user_id, player_card_id).then(data => {
-    let turn_order = parseInt(data[0].turn_order);
-    const active_seat = parseInt(data[0].active_seat);
-    const top_card_id = parseInt(data[1].top_card_id);
-    const top_color = data[1].color == "black" ? data[0].top_card_color : data[1].color;
-    const top_face = data[1].face;
-    let player_color = data[2].color;
-    const player_face = data[2].face;
-    const total_players = parseInt(data[3].cnt);
-    let skipped = 'f';
-
-    if (player_color == 'black') {
-      if (chosen_color != null) {
-        player_color = chosen_color;
-      } else {
-        res.status(200).json(2);
-        return;
-      }
-    }
-    let move = turn_order;
-    if (player_face == 'skip') {
-      move = turn_order * 2;
-    } else if (player_face == 'reverse') {
-      turn_order = -turn_order;
-      move = turn_order;
-    }
-
-    if (player_face == 'draw two' ||
-      player_face == 'draw two' ||
-      player_face == 'wild draw four') {
-        skipped = 't';
-    }
-
-    console.log(top_color);
-    console.log(player_color);
-    if (top_color == player_color || top_face == player_face) {
-      const next_seat = next_active_seat(active_seat, move, total_players);
-      Games.next_player(game_id, user_id, next_seat, turn_order, player_card_id, top_card_id, skipped, chosen_color)
-        .then(result => {
-          res.status(200).json(0);
-        }).catch( error => {
-          console.log("Error in next_player: ", error);
-          res.status(500);
-        });
-    } else {
-      res.status(200).json(1);
-    }
-  }).catch( error => {
-    console.log("Error in check_playable: ", error);
-    res.status(500);
-  });
+  playCard(req, res, false);
+  // const user_id = req.user.user_id;
+  // const game_id = req.params.game_id;
+  // const player_card_id = req.body.card_id;
+  // const chosen_color = req.body.color;
+  // Games.check_playable(game_id, user_id, player_card_id).then(data => {
+  //   let turn_order = parseInt(data[0].turn_order);
+  //   const active_seat = parseInt(data[0].active_seat);
+  //   const top_card_id = parseInt(data[1].top_card_id);
+  //   const top_color = data[1].color == "black" ? data[0].top_card_color : data[1].color;
+  //   const top_face = data[1].face;
+  //   let player_color = data[2].color;
+  //   const player_face = data[2].face;
+  //   const total_players = parseInt(data[3].cnt);
+  //   let skipped = 'f';
+  //
+  //   if (player_color == 'black') {
+  //     if (chosen_color != null) {
+  //       player_color = chosen_color;
+  //     } else {
+  //       res.status(200).json(2);
+  //       return;
+  //     }
+  //   }
+  //   let move = turn_order;
+  //   if (player_face == 'skip') {
+  //     move = turn_order * 2;
+  //   } else if (player_face == 'reverse') {
+  //     turn_order = -turn_order;
+  //     move = turn_order;
+  //   }
+  //
+  //   if (player_face == 'draw two' ||
+  //     player_face == 'draw two' ||
+  //     player_face == 'wild draw four') {
+  //       skipped = 't';
+  //   }
+  //
+  //   console.log(top_color);
+  //   console.log(player_color);
+  //   if (top_color == player_color || top_face == player_face) {
+  //     const next_seat = next_active_seat(active_seat, move, total_players);
+  //     Games.next_player(game_id, user_id, next_seat, turn_order, player_card_id, top_card_id, skipped, chosen_color)
+  //       .then(result => {
+  //         res.status(200).json(0);
+  //       }).catch( error => {
+  //         console.log("Error in next_player: ", error);
+  //         res.status(500);
+  //       });
+  //   } else {
+  //     res.status(200).json(1);
+  //   }
+  // }).catch( error => {
+  //   console.log("Error in check_playable: ", error);
+  //   res.status(500);
+  // });
 
   // check for correct user/turn
   // check for correct game_status
@@ -292,6 +289,87 @@ router.post('/:game_id/play/',requireAuth, function(req,res,next){
   // check for win condition
   // emit new game_state
 });
+
+router.post('/:game_id/play_uno/',requireAuth, function(req,res,next) {
+  console.log(req.body);
+  const user_id = req.user.user_id;
+  const game_id = req.params.game_id;
+  Games.mark_uno(req.params.game_id, req.user.user_id).then(result => {
+    playCard(req, res, true);
+  }).catch(error => {
+    console.log("Cannot do mark_uno for game: " + game_id + " and user: " + user_id, error);
+    res.status(200).json(3);
+  });
+});
+
+const playCard = function(req, res, user_uno_play) {
+  const user_id = req.user.user_id;
+  const game_id = req.params.game_id;
+  const player_card_id = req.body.card_id;
+  const chosen_color = req.body.color;
+  Games.check_playable(game_id, user_id, player_card_id).then(data => {
+    let turn_order = parseInt(data[0].turn_order);
+    const active_seat = parseInt(data[0].active_seat);
+    const top_card_id = parseInt(data[1].top_card_id);
+    const top_color = data[1].color == "black" ? data[0].top_card_color : data[1].color;
+    const top_face = data[1].face;
+    let player_color = data[2].color;
+    const player_face = data[2].face;
+    const total_players = parseInt(data[3].cnt);
+    const db_uno_play = data[4].uno_play;
+    const card_cnt = data[4].card_cnt;
+
+
+    if (player_color == 'black') {
+      if (chosen_color != null) {
+        player_color = chosen_color;
+      } else {
+        res.status(200).json(2);
+        return;
+      }
+    }
+
+    let draws = !db_uno_play && card_cnt == 1 ? 2 : 0;
+
+    let move = turn_order;
+    if (player_face == 'skip') {
+      move = turn_order * 2;
+    } else if (player_face == 'reverse') {
+      turn_order = -turn_order;
+      move = turn_order;
+    }
+
+    let skipped = 'f';
+    if (player_face == 'draw two' ||
+      player_face == 'draw two' ||
+      player_face == 'wild draw four') {
+        skipped = 't';
+    }
+
+    console.log(top_color);
+    console.log(player_color);
+    if (top_color == player_color || top_face == player_face) {
+      if (card_cnt == 1 && draws == 0) {
+        // Game over
+      }
+
+      const next_seat = next_active_seat(active_seat, move, total_players);
+      Games.next_player(game_id, user_id, next_seat, turn_order, player_card_id,
+        top_card_id, skipped, chosen_color, draws, user_uno_play)
+        .then(result => {
+          res.status(200).json(0);
+        }).catch( error => {
+          console.log("Error in next_player: ", error);
+          res.status(500);
+        });
+    } else {
+      res.status(200).json(1);
+    }
+  }).catch( error => {
+    console.log("Error in check_playable: ", error);
+    res.status(500);
+  });
+}
 
 router.post('/game_id/chat',requireAuth, (req, res, next) => {
     let {message} = request.body;

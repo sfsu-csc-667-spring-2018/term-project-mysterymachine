@@ -130,24 +130,25 @@ const check_skipable = (game_id, user_id) =>
     return t.batch([q1, q2, q3]); // all of the queries are to be resolved;
   });
 
+const DRAW_CARDS = `
+  WITH draw_cards AS (
+    DELETE FROM active_pile
+    WHERE card_id IN (
+      SELECT card_id
+      FROM active_pile
+      WHERE game_id=$1
+      ORDER BY RANDOM()
+      LIMIT $3)
+    RETURNING card_id
+  )
+INSERT INTO hand_has_cards
+  SELECT DISTINCT hand_id, card_id
+  FROM game_has_hands, draw_cards
+  WHERE game_id = $1 AND user_id = $2`;
+
 const skip_turn = (game_id, user_id, active_seat, draws) =>
   db.tx(t => {
-    const q1 = t.none(`
-      WITH draw_cards AS (
-        DELETE FROM active_pile
-        WHERE card_id IN (
-          SELECT card_id
-          FROM active_pile
-          WHERE game_id=$1
-          ORDER BY RANDOM()
-          LIMIT $3)
-        RETURNING card_id
-      )
-    INSERT INTO hand_has_cards
-      SELECT DISTINCT hand_id, card_id
-      FROM game_has_hands, draw_cards
-      WHERE game_id = $1 AND user_id = $2`,
-    [game_id, user_id, draws]);
+    const q1 = t.none(DRAW_CARDS, [game_id, user_id, draws]);
     const q2 = t.none("UPDATE games SET skipped='FALSE', has_drawn='FALSE', active_seat=$2 WHERE game_id=$1", [game_id, active_seat]);
     return t.batch([q1, q2]); // all of the queries are to be resolved;
   });
@@ -158,10 +159,14 @@ const check_playable = (game_id, user_id, card_id) =>
     const q2 = t.one("SELECT top_card_id, face, color FROM games, cards WHERE top_card_id = card_id AND game_id = $1", [game_id]);
     const q3 = t.one("SELECT face, color FROM cards WHERE card_id = $1", [card_id]);
     const q4 = t.one('SELECT COUNT(*) as cnt FROM game_has_hands WHERE game_id=$1', [game_id]);
-    return t.batch([q1, q2, q3, q4]); // all of the queries are to be resolved;
+    const q5 = t.one(`SELECT g.hand_id, uno_play, COUNT(*) as card_cnt
+                      FROM game_has_hands g, hand_has_cards h
+                      WHERE game_id=$1 AND user_id=$2 and g.hand_id = h.hand_id
+                      GROUP BY g.hand_id, uno_play`, [game_id, user_id]);
+    return t.batch([q1, q2, q3, q4, q5]); // all of the queries are to be resolved;
   });
 
-const next_player = (game_id, user_id, active_seat, turn_order, user_card_id, top_card_id, skipped, top_card_color) =>
+const next_player = (game_id, user_id, active_seat, turn_order, user_card_id, top_card_id, skipped, top_card_color, draws, uno_play) =>
   db.tx(t => {
     // Put current top card back to active_pile
     const q1 = t.none("INSERT INTO active_pile (game_id, card_id) VALUES ($1, $2)", [game_id, top_card_id]);
@@ -169,8 +174,23 @@ const next_player = (game_id, user_id, active_seat, turn_order, user_card_id, to
     const q2 = t.one("DELETE FROM hand_has_cards WHERE card_id=$3 AND hand_id = (SELECT hand_id FROM game_has_hands WHERE game_id=$1 AND user_id=$2) RETURNING hand_id", [game_id, user_id, user_card_id]);
     // Update game game_state
     const q3 = t.none("UPDATE games SET skipped=$5, has_drawn='false', active_seat=$2, turn_order=$3, top_card_id=$4, top_card_color=$6 WHERE game_id=$1", [game_id, active_seat, turn_order, user_card_id, skipped, top_card_color]);
-    return t.batch([q1, q2, q3]); // all of the queries are to be resolved;
+    let queries = [q1, q2, q3];
+    if (!uno_play) {
+      queries.push(t.none("UPDATE game_has_hands SET uno_play='false' WHERE game_id=$1 AND user_id=$2", [game_id, user_id]));
+    }
+    if (draws > 0) {
+      queries.push(t.none(DRAW_CARDS, [game_id, user_id, draws]));
+    }
+    return t.batch(queries); // all of the queries are to be resolved;
   });
+
+const mark_uno = (game_id, user_id) =>
+  db.one(`UPDATE game_has_hands SET uno_play='true'
+          WHERE hand_id = (SELECT g.hand_id
+            FROM hand_has_cards h, game_has_hands g
+            WHERE g.game_id=$1 AND g.user_id=$2 AND g.hand_id = h.hand_id
+            GROUP BY g.hand_id
+            HAVING count(*) = 2) RETURNING hand_id`, [game_id, user_id]);
 
 module.exports = {
     get,
@@ -190,5 +210,6 @@ module.exports = {
     check_drawable,
     check_skipable,
     skip_turn,
+    mark_uno,
     get_card_active_pile
 };
