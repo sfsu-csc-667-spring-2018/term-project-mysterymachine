@@ -118,11 +118,21 @@
     max-width: 10%;
 }
 
+#skip {
+    position: absolute;
+    right: 20%;
+    bottom: 75%;
+    width: 10%;
+    height: 20%;
+    margin: 0;
+    padding: 0;
+    opacity: 0.2;
+}
 
 #confirm {
     position: absolute;
     right: 20%;
-    bottom: 55%;
+    bottom: 45%;
     width: 10%;
     height: 20%;
     margin: 0;
@@ -133,7 +143,7 @@
 #cancel {
     position: absolute;
     right: 20%;
-    bottom: 25%;
+    bottom: 15%;
     width: 10%;
     height: 20%;
     margin: 0;

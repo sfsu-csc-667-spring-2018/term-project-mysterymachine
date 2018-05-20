@@ -53,6 +53,14 @@ var renderGame = function(game) {
     $("#active_pile").css({"opacity": 0.2});
   }
 
+  if (is_current && drawn) {
+    $("#skip").removeAttr("disabled");
+    $("#skip").css({"opacity": 1});
+  } else {
+    $("#skip, #cancel").attr("disabled");
+    $("#skip, #cancel").css({"opacity": 0.2});
+  }
+
   let starting_pos = 0;
   const sepperation_increments = game.cards.length <= 10 ? 9 : 100/game.cards.length;
   $("#player_hand").html('');
@@ -121,6 +129,19 @@ $("#top_card").click(function() {
     });
   }
 });
+
+$("#skip").click(function() {
+  const game_id = $('#game_id').val();
+  $.post('/game/'+ game_id + '/skip_turn',
+    {},
+    function(data, status){
+      // console.log(status);
+      if (status === 'success') {
+        setTimeout(worker, 100);
+      }
+  });
+});
+
 
 function worker() {
   const game_id = $('#game_id').val();

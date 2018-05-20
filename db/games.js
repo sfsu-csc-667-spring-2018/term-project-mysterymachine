@@ -20,7 +20,7 @@ const get_user_cards = (game_id, user_id) => {
 const get_game_state = (game_id)=>
   db.one('SELECT game_status, host_id FROM games as g WHERE g.game_id=${game_id}',{game_id});
 
-const get_player_card_count = (game_id,user_id) => {
+const get_player_card_count = (game_id, user_id) => {
   db.one('SELECT user_id, count(hand_has_cards.card_id) AS number_of_cards_in_hand FROM hand_has_cards, game_has_hands WHERE hand_has_cards.hand_id = game_has_hands.hand_id AND game_id = ' + game_id + ' GROUP BY user_id').catch( error=> console.log("ERROR: ",error));
 };
 
@@ -83,6 +83,7 @@ const next_player = (game_id)=>{
   }
 };
 
+//////////////////////////////////////////////////////////////////////////////////////
 // creates a new game with user_id as host
 const new_game = (user_id) =>
   db.one(`INSERT INTO games (game_status, host_id) VALUES('OPEN', $1) RETURNING game_id`, [user_id]);
@@ -169,13 +170,23 @@ const check_drawable = (game_id, user_id) =>
 const get_card_active_pile = (game_id) =>
   db.one('SELECT card_id FROM active_pile WHERE game_id=$1 LIMIT 1',[game_id]);
 
-const draw_card = (game_id, user_id, card_id) => {
-  let query = `DELETE FROM active_pile WHERE game_id = ${game_id} AND card_id = ${card_id};
-  INSERT INTO hand_has_cards SELECT hand_id, ${card_id} FROM game_has_hands WHERE game_id = ${game_id} AND user_id = ${user_id};
-  UPDATE games SET has_drawn='TRUE' WHERE game_id=${game_id};`
-  console.log(query);
-  return db.none(query);
-}
+const draw_card = (game_id, user_id, card_id) =>
+  db.tx(t => {
+    const q1 = t.none("DELETE FROM active_pile WHERE game_id = $1 AND card_id = $2",[game_id, card_id]);
+    const q2 = t.none("INSERT INTO hand_has_cards SELECT hand_id, $3 FROM game_has_hands WHERE game_id = $1 AND user_id = $2", [game_id, user_id, card_id])
+    const q3 = t.none("UPDATE games SET has_drawn='TRUE' WHERE game_id=$1", [game_id]);
+    return t.batch([q1, q2, q3]); // all of the queries are to be resolved;
+  });
+
+const check_skipable = (game_id, user_id) =>
+  db.tx(t => {
+    const q1 = t.one("SELECT active_seat, turn_order FROM games g, game_has_hands h WHERE g.game_id=$1 AND h.game_id=$1 AND g.active_seat = h.seat_number AND g.has_drawn='t' AND h.user_id=$2",[game_id, user_id]);
+    const q2 = t.one('SELECT COUNT(*) as cnt FROM game_has_hands WHERE game_id=$1', [game_id]);
+    return t.batch([q1, q2]); // all of the queries are to be resolved;
+  });
+
+const skip_turn = (game_id, active_seat) =>
+  db.none("UPDATE games SET has_drawn='FALSE', active_seat=$2 WHERE game_id=$1", [game_id, active_seat]);
 
 module.exports = {
     get,
@@ -200,5 +211,7 @@ module.exports = {
     get_hands_for_game,
     start_game,
     check_drawable,
+    check_skipable,
+    skip_turn,
     get_card_active_pile
 };

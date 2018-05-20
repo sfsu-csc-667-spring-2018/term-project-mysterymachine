@@ -156,18 +156,31 @@ router.post('/:game_id/draw/',requireAuth,function(req,res,next){
     console.log("User does not have permission to draw card: ", error);
     res.status(500);
   });
+});
 
-  // draw from deck
-  // check if drawn card is playable
+// player choses to skip their turn after keep drawn card
+router.post('/:game_id/skip_turn/',requireAuth,function(req,res,next){
+  const user_id = req.user.user_id;
+  const game_id = req.params.game_id;
 
-  // if not playable
-    // add to player hand
-    // pass turn
-    // change game status to 'waiting for play'
-  // else
-    // save card_id in game_id
-    // change game status to 'waiting for draw decision'
-  // emit game_state
+  Games.check_skipable(game_id, user_id).then(data => {
+    console.log(data[0]);
+    console.log(data[1]);
+    const current_seat = parseInt(data[0].active_seat);
+    const turn_order = parseInt(data[0].turn_order);
+    const user_cnt = parseInt(data[1].cnt);
+    const next_seat = current_seat % user_cnt + turn_order;
+    console.log("NEXT " + next_seat);
+    Games.skip_turn(game_id, next_seat).then(result => {
+      res.status(200).json(1);
+    }).catch( error => {
+      console.log("Error in skip_turn: ", error);
+      res.status(500);
+    });;
+  }).catch( error => {
+    console.log("User does not have permission to skip their turn: ", error);
+    res.status(500);
+  });
 });
 
 // host/game/1/play/12
@@ -242,19 +255,6 @@ router.post('/:game_id/playDrawn/',requireAuth,function(req,res,next){
     // end function
 
     // emit game_state
-});
-
-// host/game/1/keep
-// player choses to keep drawn card
-router.post('/:game_id/keep/',requireAuth,function(req,res,next){
-  // check for correct user/turn
-  // check for correct game status
-  // change game status to busy(playing)
-
-  // move card_id from game_id to player_hand
-  // pass turn
-  // change game status to 'waiting for play'
-  // emit game_state
 });
 
 // host.game/1/color
