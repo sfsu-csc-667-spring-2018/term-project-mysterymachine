@@ -1,7 +1,7 @@
 const db = require('./index');
 
 const get = game_id =>
-  db.one('SELECT active_seat, has_drawn, turn_order, face, color, image_address FROM games, cards WHERE top_card_id = card_id AND game_id=${game_id}',
+  db.one('SELECT active_seat, skipped, has_drawn, turn_order, face, top_card_color, image_address FROM games, cards WHERE top_card_id = card_id AND game_id=${game_id}',
     { game_id });
 
 const get_users = game_id =>
@@ -15,8 +15,6 @@ const get_user_cards = (game_id, user_id) => {
     [game_id, user_id]);
   }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 const get_game_state = (game_id)=>
   db.one('SELECT game_status, host_id FROM games as g WHERE g.game_id=${game_id}',{game_id});
 
@@ -24,67 +22,6 @@ const get_player_card_count = (game_id, user_id) => {
   db.one('SELECT user_id, count(hand_has_cards.card_id) AS number_of_cards_in_hand FROM hand_has_cards, game_has_hands WHERE hand_has_cards.hand_id = game_has_hands.hand_id AND game_id = ' + game_id + ' GROUP BY user_id').catch( error=> console.log("ERROR: ",error));
 };
 
-// checks if this user is able to make a play
-const check_user_turn = (game_id,user_id) =>{
-  db.one('SELECT user_id FROM games WHERE game_id = ${1} AND current_player = ${2}', [game_id,user_id])
-    .catch( error=> console.log("ERROR: ",error));
-};
-
-// makes sure the user has a card
-const check_user_has_card = (game_id,user_id,card_id) =>{
-  get_user_cards(game_id,user_id).contains(card_id);
-};
-
-// sees if the card provided is playable agains the active card
-const check_playable = (game_id,card_id) =>{
- db.one('SELECT * FROM active_card WHERE color = (SELECT color FROM cards WHERE card_id = ' + card_id + ') OR face = (SELECT face FROM cards WHERE card_id = ' + card_id + ') AND game_id = ' + game_id + '')
-  .catch( error=> console.log("ERROR: ",error));
-};
-
-// sees if anyone has won in the game provided
-const check_win = (game_id)=>{
-  db.one('SELECT user_id FROM game_has_hands WHERE hand_id NOT IN (SELECT hand_id FROM hand_has_cards) AND game_id =' + game_id + '').catch( error=> console.log("ERROR: ",error));
-};
-
-
-
-const discard_card = (game_id,user_id,card_id)=>{
-  db.one('DELETE FROM hand_has_cards WHERE hand_id = (SELECT hand_id FROM game_has_hands WHERE game_id = ' + game_id + ' AND user_id = ' + user_id + ') AND card_id =  ' + card_id + '').catch( error=> console.log("ERROR: ",error));
-};
-
-// const draw_card = (game_id,num_of_cards,hand_id)=>{
-//   db.one('DELET FROM active_pile WHERE card_id = (SELECT card_id FROM active_pile WHERE game_id = ' +  game_id + ' LIMIT ' + num_of_cards + ') RETURNING card_id').catch( error=> console.log("ERROR: ",error));
-// };
-
-const card_to_hand = (game_id,user_id,card_id)=>{
-  db.one('INSERT INTO hand_has_cards (hand_id,card_id) VALUES ((SELECT hand_id FROM game_has_hands WHERE game_id = ' + game_id + ' AND user_id = ' + user_id + '),' + card_id + ')').catch( error=> console.log("ERROR: ",error));
-};
-
-const remove_card = (game_id,user_id,card_id)=>{
-  // remove card from game_id.user_id.hand that matches card_id
-  if( check_user_has_card(game_id,user_id,card_id) ){
-
-  }
-};
-
-const shuffle_discard = (game_id)=>{
-
-};
-
-const next_player = (game_id)=>{
-  db.one('UPDATE games SET active_seat = (active_seat + turn_order) WHERE game_id = ' + game_id + '').catch( error=> console.log("ERROR: ",error));
-
-  const num_of_players = db.one('SELECT count(user_id) FROM game_has_hands WHERE game_id = ' + game_id + '').catch( error=> console.log("ERROR: ",error));
-
-  const active_seat = db.one('SELECT active_seat FROM games WHERE game_id = ' + game_id + '').catch( error=> console.log("ERROR: ",error));
-
-  if(active_seat > num_of_players){
-   db.one('UPDATE games SET active_seat = 1 WHERE game_id = ' + game_id + '').catch( error=> console.log("ERROR: ",error));
-  }
-};
-
-//////////////////////////////////////////////////////////////////////////////////////
-// creates a new game with user_id as host
 const new_game = (user_id) =>
   db.one(`INSERT INTO games (game_status, host_id) VALUES('OPEN', $1) RETURNING game_id`, [user_id]);
 
@@ -133,6 +70,13 @@ const start_game = (game_id, hands) => {
     cards[i] = i + 1;
   }
   shuffle(cards);
+  // Initial top card should not be a wild cards
+  while (cards[107] > 100) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    temporaryValue = array[107];
+    array[107] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
 
   // then draw cards to players
   const cards_per_hand = 7;
@@ -156,7 +100,7 @@ const start_game = (game_id, hands) => {
   batch_query += active_card_insert + ";\n";
 
   // Update game state
-  let update_game = `UPDATE games SET game_status = 'IN PROGRESS', has_drawn='FALSE',
+  let update_game = `UPDATE games SET game_status = 'IN PROGRESS', skipped='FALSE', has_drawn = 'FALSE',
     turn_order = 1, top_card_id = ${cards[107]}, active_seat = (SELECT seat_number from game_has_hands where game_id = ${game_id} and user_id = host_id), game_start = to_timestamp(${Date.now()} / 1000.0) where game_id = ${game_id};`
   batch_query += update_game;
   console.log(batch_query);
@@ -165,10 +109,10 @@ const start_game = (game_id, hands) => {
 }
 
 const check_drawable = (game_id, user_id) =>
-  db.one("SELECT * FROM games g, game_has_hands h WHERE g.game_id=$1 AND h.game_id=$1 AND g.active_seat = h.seat_number AND g.has_drawn='f' AND h.user_id=$2",[game_id, user_id]);
+  db.one("SELECT * FROM games g, game_has_hands h WHERE g.game_id=$1 AND h.game_id=$1 AND g.active_seat = h.seat_number AND g.skipped='f' AND g.has_drawn='f' AND h.user_id=$2",[game_id, user_id]);
 
 const get_card_active_pile = (game_id) =>
-  db.one('SELECT card_id FROM active_pile WHERE game_id=$1 LIMIT 1',[game_id]);
+  db.one('SELECT card_id FROM active_pile WHERE game_id=$1 ORDER BY RANDOM() LIMIT 1',[game_id]);
 
 const draw_card = (game_id, user_id, card_id) =>
   db.tx(t => {
@@ -180,28 +124,61 @@ const draw_card = (game_id, user_id, card_id) =>
 
 const check_skipable = (game_id, user_id) =>
   db.tx(t => {
-    const q1 = t.one("SELECT active_seat, turn_order FROM games g, game_has_hands h WHERE g.game_id=$1 AND h.game_id=$1 AND g.active_seat = h.seat_number AND g.has_drawn='t' AND h.user_id=$2",[game_id, user_id]);
+    const q1 = t.one("SELECT skipped, active_seat, turn_order FROM games g, game_has_hands h WHERE g.game_id=$1 AND h.game_id=$1 AND g.active_seat = h.seat_number AND (g.skipped='t' OR g.has_drawn='t') AND h.user_id=$2",[game_id, user_id]);
     const q2 = t.one('SELECT COUNT(*) as cnt FROM game_has_hands WHERE game_id=$1', [game_id]);
+    const q3 = t.one('SELECT face, color FROM games, cards WHERE top_card_id = card_id AND game_id=$1', [game_id]);
+    return t.batch([q1, q2, q3]); // all of the queries are to be resolved;
+  });
+
+const skip_turn = (game_id, user_id, active_seat, draws) =>
+  db.tx(t => {
+    const q1 = t.none(`
+      WITH draw_cards AS (
+        DELETE FROM active_pile
+        WHERE card_id IN (
+          SELECT card_id
+          FROM active_pile
+          WHERE game_id=$1
+          ORDER BY RANDOM()
+          LIMIT $3)
+        RETURNING card_id
+      )
+    INSERT INTO hand_has_cards
+      SELECT DISTINCT hand_id, card_id
+      FROM game_has_hands, draw_cards
+      WHERE game_id = $1 AND user_id = $2`,
+    [game_id, user_id, draws]);
+    const q2 = t.none("UPDATE games SET skipped='FALSE', has_drawn='FALSE', active_seat=$2 WHERE game_id=$1", [game_id, active_seat]);
     return t.batch([q1, q2]); // all of the queries are to be resolved;
   });
 
-const skip_turn = (game_id, active_seat) =>
-  db.none("UPDATE games SET has_drawn='FALSE', active_seat=$2 WHERE game_id=$1", [game_id, active_seat]);
+const check_playable = (game_id, user_id, card_id) =>
+  db.tx(t => {
+    const q1 = t.one("SELECT active_seat, turn_order, top_card_color FROM games g, game_has_hands h WHERE g.game_id=$1 AND h.game_id=$1 AND g.active_seat = h.seat_number AND g.skipped = 'f' AND h.user_id=$2",[game_id, user_id]);
+    const q2 = t.one("SELECT top_card_id, face, color FROM games, cards WHERE top_card_id = card_id AND game_id = $1", [game_id]);
+    const q3 = t.one("SELECT face, color FROM cards WHERE card_id = $1", [card_id]);
+    const q4 = t.one('SELECT COUNT(*) as cnt FROM game_has_hands WHERE game_id=$1', [game_id]);
+    return t.batch([q1, q2, q3, q4]); // all of the queries are to be resolved;
+  });
+
+const next_player = (game_id, user_id, active_seat, turn_order, user_card_id, top_card_id, skipped, top_card_color) =>
+  db.tx(t => {
+    // Put current top card back to active_pile
+    const q1 = t.none("INSERT INTO active_pile (game_id, card_id) VALUES ($1, $2)", [game_id, top_card_id]);
+    // Delete the card from player hand
+    const q2 = t.one("DELETE FROM hand_has_cards WHERE card_id=$3 AND hand_id = (SELECT hand_id FROM game_has_hands WHERE game_id=$1 AND user_id=$2) RETURNING hand_id", [game_id, user_id, user_card_id]);
+    // Update game game_state
+    const q3 = t.none("UPDATE games SET skipped=$5, has_drawn='false', active_seat=$2, turn_order=$3, top_card_id=$4, top_card_color=$6 WHERE game_id=$1", [game_id, active_seat, turn_order, user_card_id, skipped, top_card_color]);
+    return t.batch([q1, q2, q3]); // all of the queries are to be resolved;
+  });
 
 module.exports = {
     get,
     get_users,
     get_user_cards,
     get_game_state,
-    check_user_turn,
-    check_user_has_card,
     check_playable,
-    check_win,
-    discard_card,
     draw_card,
-    card_to_hand,
-    remove_card,
-    shuffle_discard,
     next_player,
     new_game,
     get_active_games,

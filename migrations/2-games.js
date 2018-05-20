@@ -26,11 +26,17 @@ module.exports = {
             key:'card_id'
           }
       },
+      top_card_color: {
+        type: Sequelize.STRING
+      },
       turn_order: {
         type: Sequelize.INTEGER
       },
       active_seat: {
         type: Sequelize.INTEGER
+      },
+      skipped: {
+        type: Sequelize.BOOLEAN
       },
       has_drawn: {
         type: Sequelize.BOOLEAN

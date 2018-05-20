@@ -306,14 +306,30 @@
     border: thick solid black;
 }
 
-#discard_pile p {
+#top_card_color {
+    position: absolute;
+    /* margin: 0;
+    padding: 0; */
+    height: 10%;
+    width: 4%;
+    left: 45%;
+    top: 42%;
+    /* border: thick solid black; */
+}
+
+#top_card_color_image {
+  max-width:100%;
+  max-height:100%;
+}
+
+/* #discard_pile p {
     position: absolute;
     left: 11%;
     top: 40%;
     margin: 0;
     padding: 0;
     font-weight: bolder;
-}
+} */
 
 html,
 body {

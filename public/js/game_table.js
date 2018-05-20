@@ -1,35 +1,25 @@
-var allCookies = document.cookie;
-
-var parseCookies = function(allCookies,string){
-    var cookieArray = allCookies.split(";");
-    for(var i = 0; i < cookieArray.length; i++){
-        if(cookieArray[i].split("=")[0] === string){
-            return cookieArray[i].split("=")[1];
-        }
-    }
-}
+// var allCookies = document.cookie;
+//
+// var parseCookies = function(allCookies,string){
+//     var cookieArray = allCookies.split(";");
+//     for(var i = 0; i < cookieArray.length; i++){
+//         if(cookieArray[i].split("=")[0] === string){
+//             return cookieArray[i].split("=")[1];
+//         }
+//     }
+// }
 
 var selectedCard;
 var is_current = false;
-var drawn = false;
+var color;
 
 var renderGame = function(game) {
   console.log(game);
-  drawn = game.has_drawn;
   const current_user = $('#user_id').val();
-  if (game.turn_order == -1){
-   $('#turn_order_img').addClass('flipped');
-   $('#turn_order_img').prop('alt', 'Indicates counterclockwise turn order');
-   $('#turn_order_img').prop('title', 'Indicates counterclockwise turn order');
-  }
-  if (game.turn_order == 1){
-   $('#turn_order_img').removeClass('flipped');
-   $('#turn_order_img').prop('alt', 'Indicates clockwise turn order');
-   $('#turn_order_img').prop('title', 'Indicates clockwise turn order');
-  }
+  setTurnOrder(game.turn_order);
+  renderTopCard(game.image_address, game.face, game.color);
 
   let user_seat = -1;
-  $('#discard_pile').html('<img src="' + game.image_address + '" id="top_card">');
   $.each(game.users, function (index, value) {
       if (value.user_id == current_user){
           user_seat = value.seat_number;
@@ -47,87 +37,116 @@ var renderGame = function(game) {
   });
   // Decide whether the user is the current player
   is_current = (user_seat == game.active_seat);
-  if (is_current && !drawn) {
-    $("#active_pile").css({"opacity": 1});
-  } else {
-    $("#active_pile").css({"opacity": 0.2});
-  }
+  renderPlayerCards(game.cards);
+  setButtonAttributes(is_current, game.skipped, game.has_drawn);
+}
 
-  if (is_current && drawn) {
-    $("#skip").removeAttr("disabled");
-    $("#skip").css({"opacity": 1});
-  } else {
-    $("#skip, #cancel").attr("disabled");
-    $("#skip, #cancel").css({"opacity": 0.2});
-  }
-
+var renderPlayerCards = function (cards) {
   let starting_pos = 0;
-  const sepperation_increments = game.cards.length <= 10 ? 9 : 100/game.cards.length;
+  const sepperation_increments = cards.length <= 10 ? 9 : 100/cards.length;
   $("#player_hand").html('');
-  $.each(game.cards, function (index, value) {
+  $.each(cards, function (index, value) {
     const html_id = 'card' + value.card_id;
     $("#player_hand").append('<img src="' + value.image_address + '" class="card" id="' + html_id + '">');
     $('#' + html_id + '').css("zIndex", value.card_id);
     $('#' + html_id + '').css("left", starting_pos + '%');
     starting_pos = starting_pos + sepperation_increments;
   });
-  $("#player_hand .card").click(function () {
-    clickCard(this);
-  });
+}
 
-  $("#cancel").click(function () {
-    $("#player_hand .card").css('bottom', '0%');
-    $("#confirm, #cancel").attr("disabled");
-    $("#confirm, #cancel").css({"opacity": 0.2});
-    $("#player_hand .card").on('click', function () {
-      clickCard(this);
-    });
-    $("#player_hand .card").on('mouseenter', function () {
-      $(this).css({'box-shadow': '0px 0px 50px black'});
-    });
-    $("#player_hand .card").on('mouseleave', function () {
-      $(this).css({'box-shadow': 'none'});
-    });
-    $('#card' + selectedCard + '').css({'box-shadow': 'none'});
-  });
+var renderTopCard = function (image_address, face, color) {
+  $('#discard_pile').html('<img src="' + image_address + '" id="top_card">');
+  if (face.includes('wild')) {
+    $('#top_card_color').html('<img src="/img/' + color + '_half_circle.png" id="top_card_color_image">');
+  } else {
+    $('#top_card_color').html('');
+  }
+}
 
-  $(".card").mouseenter(function () {
-    $(this).css({
-      'box-shadow': '0px 0px 50px black'
-    });
-  });
-  $(".card").mouseleave(function () {
-    $(this).css({
-      'box-shadow': 'none'
-    });
-  });
+var setTurnOrder = function (turn_order) {
+  if (turn_order == -1){
+   $('#turn_order_img').addClass('flipped');
+   $('#turn_order_img').prop('alt', 'Indicates counterclockwise turn order');
+   $('#turn_order_img').prop('title', 'Indicates counterclockwise turn order');
+  }
+  if (turn_order == 1){
+   $('#turn_order_img').removeClass('flipped');
+   $('#turn_order_img').prop('alt', 'Indicates clockwise turn order');
+   $('#turn_order_img').prop('title', 'Indicates clockwise turn order');
+  }
 }
 
 var clickCard = function(card) {
   $(card).css('bottom', '100%');
-  if (is_current) {
-    $("#confirm").removeAttr("disabled");
-    $("#confirm").css({"opacity": 1});
-    $("#player_hand .card").off();
-  }
+  $("#confirm").removeAttr("disabled");
+  $("#confirm").css({"opacity": 1});
+  $("#player_hand .card").off();
   $("#cancel").removeAttr("disabled");
   $("#cancel").css({"opacity": 1});
   selectedCard = $(card).css('z-index');
   console.log(selectedCard);
 }
 
+var setButtonAttributes = function(is_current, skipped, has_drawn) {
+  if (is_current && ! has_drawn) {
+    $("#active_pile").css({"opacity": 1});
+  } else {
+    $("#active_pile").css({"opacity": 0.2});
+  }
+
+  if (is_current && (skipped || has_drawn)) {
+    $("#skip").removeAttr("disabled");
+    $("#skip").css({"opacity": 1});
+  } else {
+    $("#skip, #cancel, #confirm").prop('disabled', true);;
+    $("#skip, #cancel, #confirm").css({"opacity": 0.2});
+  }
+
+  if (is_current && !skipped) {
+    $("#player_hand .card").click(function () {
+      clickCard(this);
+    });
+
+    $("#cancel").click(function () {
+      $("#player_hand .card").css('bottom', '0%');
+      $("#confirm, #cancel").prop('disabled', true);
+      // $("#cancel").attr("disabled");
+      $("#confirm, #cancel").css({"opacity": 0.2});
+      $("#player_hand .card").on('click', function () {
+        clickCard(this);
+      });
+      $("#player_hand .card").on('mouseenter', function () {
+        $(this).css({'box-shadow': '0px 0px 50px black'});
+      });
+      $("#player_hand .card").on('mouseleave', function () {
+        $(this).css({'box-shadow': 'none'});
+      });
+      $('#card' + selectedCard + '').css({'box-shadow': 'none'});
+    });
+
+    $(".card").mouseenter(function () {
+      $(this).css({
+        'box-shadow': '0px 0px 50px black'
+      });
+    });
+    $(".card").mouseleave(function () {
+      $(this).css({
+        'box-shadow': 'none'
+      });
+    });
+  }
+}
+
 $("#top_card").click(function() {
   const game_id = $('#game_id').val();
-  if (is_current && !drawn) {
-    $.post('/game/'+ game_id + '/draw',
+  $.post('/game/'+ game_id + '/draw',
       {},
       function(data, status){
         // console.log(status);
         if (status === 'success') {
           setTimeout(worker, 100);
         }
-    });
-  }
+  });
 });
 
 $("#skip").click(function() {
@@ -137,6 +156,40 @@ $("#skip").click(function() {
     function(data, status){
       // console.log(status);
       if (status === 'success') {
+        setTimeout(worker, 100);
+      }
+  });
+});
+
+$("#pick_blue").click(function() {
+  color = "blue";
+});
+$("#pick_green").click(function() {
+  color = "green";
+});
+$("#pick_red").click(function() {
+  color = "red";
+});
+$("#pick_yellow").click(function() {
+  color = "yellow";
+});
+
+$("#confirm").click(function() {
+  const game_id = $('#game_id').val();
+  $.post('/game/'+ game_id + '/play',
+    {
+      card_id: selectedCard,
+      color: color
+    },
+    function(code, status){
+      // console.log(status);
+      if (status === 'success') {
+        if (code == 1) {
+          alert("Invalid card!");
+        }
+        if (code == 2) {
+          alert("Please select a color for the wild card!");
+        }
         setTimeout(worker, 100);
       }
   });
