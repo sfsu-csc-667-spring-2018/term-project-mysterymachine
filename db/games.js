@@ -96,6 +96,51 @@ const get_game_status_count = (game_id) =>
 const check_game_user = (game_id, user_id) =>
   db.one('SELECT * FROM game_has_hands WHERE game_id = $1 AND user_id = $2', [game_id,user_id]);
 
+//////////////////////////////////////////////////////////////////////////////////////////
+
+  /// get current player based off active_seat and the list of players in a game
+const get_current_player = (game_id) =>
+  db.one();
+
+// set game status to new value
+const set_game_status = (game_id, status)=>
+  db.none();
+
+// play a card and return new status
+  const play_card = (game_id,card_id)=>{
+  // add card_id to discard/active
+  //* apply card effects to game *//
+  // update game_id active_color
+  // if numbered
+    // pass turn
+    // return game status to 'waiting for play'
+  // else if skip
+    // pass turn twice
+    // return game status to 'waiting for play'
+  // if reverse
+    // reverse turn order (1,-1)
+    // pass turn
+    // return game status to 'waiting for play'
+  // if draw 2
+    // pass turn
+    // force draw 2
+    // pass turn
+    // return game status to 'waiting for play'
+  // if wild or wild 4
+    // put card in draw_card
+    // emit color decision
+    // return game status to 'waiting for color decision'
+  // end function
+  };
+
+  // store card in draw_card in game table
+const save_card = (card_id) =>{
+
+}
+
+// return draw_card from game table
+const get_saved_card =(card_id)=>{}
+
 module.exports = {
     get,
     get_users,
@@ -115,5 +160,11 @@ module.exports = {
     get_active_games,
     get_game_status_count,
     check_game_user,
-    join_game
+    join_game,
+    ///////////////////
+    get_current_player,
+    set_game_status,
+    play_card, 
+    save_card,
+    get_saved_card
 };

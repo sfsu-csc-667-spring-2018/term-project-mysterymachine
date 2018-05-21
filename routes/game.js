@@ -84,123 +84,232 @@ router.post('/create', requireAuth, function(req, res, next) {
 // host/game/1/play/12
 // player plays a card
 router.post(':game_id/play/:card_id',requireAuth, function(req,res,next){
-  // check for correct user/turn
-  // check for correct game_status
-  // check for playable card
-  // check for card_id in hand
-  // change game status to busy (playing)
+  var game_id = req.params.game_id;
+  var screen_name = req.user.screen_name;
+  var card_id = req.params.card_id;
 
-  // remove card id from player
-  // play card function( card_id )
-    // add card_id to discard/active
-    // if single card remains in hand and no Uno call, force draw 2
-    // apply card effects to game
-      // update game_id active_color
-      // if numbered
-        // pass turn
-        // change game status to 'waiting for play'
-      // if skip
-        // pass turn twice
-        // change game status to 'waiting for play'
-      // if reverse
-        // reverse turn order (1,-1)
-        // pass turn
-        // change game status to 'waiting for play'
-      // if draw 2
-        // then pass turn
-        // force draw 2
-        // change game status to 'waiting for play'
-      // if wild or wild 4
-        // change game status to 'waiting for color decision'
-        // emit color decision
-    // end function
+  console.log("Player "+screen_name+" in game "+game_id+" is playing "+card_id);
+  
+  var p_check_state = Games.get_game_state(game_id); // check for correct game_status
+  var p_check_player = Games.get_current_player(game_id); // check for correct player
+  var p_check_card = Games.get_user_cards(game_id,screen_name); // check for card in hand
+  var p_check_playable = Games.check_playable(game_id,card_id); // check if card is playable
 
-  // check for win condition
-  // emit new game_state
-});
+  Promise.all([p_check_state,p_check_player,p_check_card,p_check_playable]).then( ()=>{ // promise all checks
+    if( p_check_state == 'waiting' 
+        && p_check_player == screen_name
+        && p_check_card.contains(card_id)
+        && p_check_playable){
+       // checks successful!
+      Games.set_status(game_id,"locked").then( ()=>{ // change state to locked
+        var p_remove = Games.discard_card(game_id,screen_name,card_id); // remove card id from player
+        var p_card_count = Games.get_user_cards(game_id,screen_name); // for uno check
+        var p_play_card = Games.play_card(game_id,card_id); // play card function( card_id )
+
+        Promise.all([p_remove, p_card_count, p_play_card]).then(()=>{ // wait for all card functions
+          if( p_card_count == 1 && !req.body.uno){ // if they needed to call uno and didnt
+            Games.draw_card(game_id,2,screen_name); // draw two
+          }
+          console.log("successful play"); 
+          Games.check_win(game_id).then( win=>{ // check for win
+            if( win ){
+              // win
+              Games.set_status(game_id,'complete'); // set status to finished
+              // emit update
+              // io.to('/game/'+game_id).emit('win',data);
+            }else{
+              // continue
+              Games.set_status(game_id,p_play_card); // set game status from return status value
+              // emit update (maybe seperate function)
+              // io.to('/game/'+game_id).emit('update', data);
+            }
+          });// end check win
+        });// end promis all card actions
+    });// end set status 'joining'
+
+    }// end if everything checks out
+    else{
+      // failed checks
+      console.log("bad request from "+user_id+" in game "+game_id);
+      // io.to('/game/'+game_id+'/'+screen_name).emit('error',data);
+    }
+  }).catch(error=>console.log('error: '+error));// end promise all checks
+});// end play card
+
 
 // host/game/1/draw/
 // player choses to draw a card
 router.post('/:game_id/draw/',requireAuth,function(req,res,next){
-  // check for correct user/turn
-  // check for correct game status
-  // change game status to busy(playing)
+  var game_id = req.params.game_id;
+  var screen_name = req.user.screen_name;
 
-  // draw from deck
-  // check if drawn card is playable
+  var p_check_user = Games.get_current_player(game_id);// check for correct user/turn
+  var p_check_status = Games.get_game_status(game_id);// check for correct game status
 
-  // if not playable
-    // add to player hand
-    // pass turn
-    // change game status to 'waiting for play'
-  // else
-    // save card_id in game_id
-    // change game status to 'waiting for draw decision'
-  // emit game_state
-});
+  Promise.all([p_check_user,p_check_status]).then( ()=>{ // all pre check promises
+    if(p_check_user == screen_name
+       && p_check_status == 'waiting'){
+
+      Games.set_game_status(game_id,'locked').then(()=>{// change game status to busyd
+        Games.draw_card(game_id).then( card_id =>{ // draw from deck
+          Games.check_playable(game_id,card_id).then( playable=>{ // check if playable boolean (???)
+            if(playable){
+              var p_card = Games.save_card(game_id,card_id);// save card_id in game_id
+              var p_status =Games.set_game_status(game_id,'drawDecision');// change game status to 'waiting for draw decision'
+              Promise.all([p_card,p_status]).then(()=>{ // promise all actions
+                // emit update
+                // emit cards to players
+                // io.to('/game/'+game_id).emit('update',data);
+            }).catch(error=>console.log('Error: '+error));
+
+            }else { // not playable
+              var p_card = Games.card_to_hand(game_id,screen_name,card_id);// add to player hand
+              var p_player = Games.next_player(game_id); // next player
+              var p_status = Games.set_game_status(game_id,'waiting');// change game status to 'waiting for play'
+              Promise.all([p_card,p_player,p_status]).then(()=>{ // promise all actions
+                // emit update
+                // emit cards to players
+                // io.to('/game/'+game_id).emit('update',data);
+            }).catch(error=>console.log('Error: '+error));
+            }// end if else
+          })// end playable check promise
+        })// end draw card
+      })// end status check
+  }else{ // checks didnt pass
+    // emit error
+    // io.to('/game/'+game_id).emit('error',data);
+    console.log("bad request from "+user_id+" in game "+game_id);
+  }
+  })// end promise all checks
+  .catch(error=>console.log('Error: '+error));
+});// end post
 
 // host/game/1/playDrawn/
 // player choses to play drawn card
 router.post('/:game_id/playDrawn/',requireAuth,function(req,res,next){
-  // check for correct user/turn
-  // check for correct game status
-  // change game status to busy(playing)
+  var game_id = req.params.game_id;
+  var screen_name = req.user.screen_name;
 
-  // get card_id from game_state
-  // play card function(card_id)
-    // add card_id to discard/active
-    // if single card remains in hand and no Uno call, force draw 2
-    // apply card effects to game
-      // update game_id active_color
-      // if numbered
-        // pass turn
-        // change game_status to 'waiting for play'
-      // if skip
-        // pass turn twice
-        // change game_status to 'waiting for play'
-      // if reverse
-        // reverse turn order (1,-1)
-        // pass turn
-        // change game_status to 'waiting for play'
-      // if draw 2
-        // then pass turn
-        // force draw 2
-        // change game_status to 'waiting for play'
-      // if wild or wild 4
-        // change game_status to 'waiting for color decision'
-        // emit color decision
-    // end function
+  var p_check_user = Games.get_current_player(game_id);// check for correct user/turn
+  var p_check_status = Games.get_game_status(game_id);// check for correct game status
 
-    // emit game_state
-});
+  Promise.all([p_check_user,p_check_status]).then( ()=>{ // all pre check promises
+    if(p_check_user == screen_name
+      && p_check_status == 'drawDecision'){
+      Games.set_game_status(game_id,'locked').then(()=>{// change game status to busy
+        Games.get_saved_card(game_id).then(card_id=>{// get card_id from game_state
+          Games.play_card(game_id,card_id).then(game_state=>{ // play card function(card_id)
+            Games.set_game_status(game_id,game_state);
+            // emit update
+            // io.to('/game/'+game_id).emit('update',data);
+            // emit cards to players
+          }).catch(error=>console.log('Error: '+error));
+        }).catch(error=>console.log('Error: '+error));
+      }).catch(error=>console.log('Error: '+error));
+    }else{ // checks didnt pass
+    // emit error
+    // io.to('/game/'+game_id).emit('error',data);
+    console.log("bad request from "+user_id+" in game "+game_id);
+  }
+  })// end promise all checks
+  .catch(error=>console.log('Error: '+error));
+});// end post
+
 
 // host/game/1/keep
 // player choses to keep drawn card
 router.post('/:game_id/keep/',requireAuth,function(req,res,next){
-  // check for correct user/turn
-  // check for correct game status
-  // change game status to busy(playing)
+  var game_id = req.params.game_id;
+  var screen_name = req.user.screen_name;
 
-  // move card_id from game_id to player_hand
-  // pass turn
-  // change game status to 'waiting for play'
-  // emit game_state
+  var p_check_user = Games.get_current_player(game_id);// check for correct user/turn
+  var p_check_status = Games.get_game_status(game_id);// check for correct game status
+
+  Promise.all([p_check_user,p_check_status]).then( ()=>{ // all pre check promises
+    if(p_check_user == screen_name
+      && p_check_status == 'drawDecision'){
+      Games.set_game_status(game_id,'locked').then(()=>{// change game status to busy
+        Games.get_saved_card(game_id).then(card_id=>{// get card_id from game_state
+
+          var p_card = Games.card_to_hand(game_id,screen_name,card_id) // move card to hand
+            .catch(error=>console.log('Error: '+error));
+          var p_next = Games.next_player(game_id) // pass player turn
+            .catch(error=>console.log('Error: '+error));
+
+          Promise.all([p_card,p_next]).then(()=>{
+            Games.set_game_status(game_state,'waiting') // set game code
+              .catch(error=>console.log('Error: '+error));
+
+              // emit update
+            // io.to('/game/'+game_id).emit('update',data);
+            // emit cards to players
+          })// end all promises
+            
+        }).catch(error=>console.log('Error: '+error)); // end get draw_card
+      }).catch(error=>console.log('Error: '+error)); // end get status
+    }else{ // checks didnt pass
+    // emit error
+    // io.to('/game/'+game_id).emit('error',data);
+    console.log("bad request from "+user_id+" in game "+game_id);
+  }
+  })// end promise all checks
+  .catch(error=>console.log('Error: '+error));
 });
 
 // host.game/1/color
 // player choses a color for their wild card
-router.post('/:game_id/color/:color',requireAuth,function(req,res,next){
-  // check for correct user/turn
-  // check for correct game status
-  // change game status to busy(playing)
+router.post('/:game_id/color/:colorVal',requireAuth,function(req,res,next){
+  var game_id = req.params.game_id;
+  var screen_name = req.user.screen_name;
+  var colorVal = req.params.colorVal;
 
-  // change color
-  // pass turn
-  // if discard/active is 'wild 4'
-    // force draw 4
-  // pass turn (skip)
-  // change game status to 'waiting for play'
-  // emit game_state
+  var p_check_user = Games.get_current_player(game_id);// check for correct user/turn
+  var p_check_status = Games.get_game_status(game_id);// check for correct game status
+
+  Promise.all([p_check_user,p_check_status]).then( ()=>{ // all pre check promises
+    if(p_check_user == screen_name
+      && p_check_status == 'colorDecision'){
+      Games.set_game_status(game_id,'locked').then(()=>{// change game status to busy
+        Games.set_color(game_id,colorVal).then(()=>{// set color value
+          Games.get_saved_card(game_id).then((card_id)=>{// get drawn_card, which is a wild or wild 4
+            if(card_id.face == 'wild'){
+              Games.next_player(game_id).then(()=>// skip this player
+                Games.next_player(game_id).then(()=>{ // next player
+                  Games.set_game_status(game_id,'waiting') //change game status
+                  .catch(error=>console.log('Error: '+error)) // end game status change
+                  // emit update
+                  // io.to('/game/'+game_id).emit('update',data);
+                  // emit cards to players
+                  }).catch(error=>console.log('Error: '+error))) // end skip
+              .catch(error=>console.log('Error: '+error)); // end turn
+            }else{ // wild draw 4
+              Games.next_player(game_id).then(()=>// skip this player
+                Games.draw_card(game_id,4,screen_name).then(()=>
+                  Games.next_player(game_id).then(()=>{ // next player
+                    Games.set_game_status(game_id,'waiting') //change game status
+                      .catch(error=>console.log('Error: '+error)); // end game status change
+                  // emit update
+                  // io.to('/game/'+game_id).emit('update',data);
+                  // emit cards to players
+                    }).catch(error=>console.log('Error: '+error)) // end next
+                  ).catch(error=>console.log('Error: '+error)) // end draw
+                ).catch(error=>console.log('Error: '+error)) // end skip
+            }// end else
+          }).catch(error=>console.log('Error: '+error));// end get saved card
+
+            // emit update
+            // io.to('/game/'+game_id).emit('update',data);
+            // emit cards to players
+          
+        }).catch(error=>console.log('Error: '+error));// end set color
+      }).catch(error=>console.log('Error: '+error)); // end set status
+    }else{ // checks didnt pass
+    // emit error
+    // io.to('/game/'+game_id).emit('error',data);
+    console.log("bad request from "+user_id+" in game "+game_id);
+  }
+  })// end promise all checks
+  .catch(error=>console.log('Error: '+error));
 });
 
 router.post('/:game_id/chat',requireAuth, (req, res, next) => {
