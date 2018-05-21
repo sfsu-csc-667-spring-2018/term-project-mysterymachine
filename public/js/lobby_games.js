@@ -14,8 +14,8 @@ var renderGames = function(games) {
         <td class="td1">${index}</td>
         <td class="td2">${value.game_id}</td>
         <td class="td3">${value.screen_name}</td>
-        <td class="td4">${value.cnt}/8</td>`;
-      const can_join = value.game_status === 'OPEN' && value.cnt < 8;
+        <td class="td4">${value.cnt}/7</td>`;
+      const can_join = value.game_status === 'OPEN' && value.cnt < 7;
       if (can_join) {
         rowHtml += `
         <td class="td5">
