@@ -14,8 +14,8 @@ var renderGames = function(games) {
       <td class="td1">${index}</td>
       <td class="td2">${value.game_id}</td>
       <td class="td3">${value.screen_name}</td>
-      <td class="td4">${value.cnt}/8</td>`;
-    if (value.game_status === 'OPEN') {
+      <td class="td4">${value.num_of_players}/8</td>`;
+    if (value.num_of_players < 8 && value.game_status == 'joining') {
       rowHtml += `
       <td class="td5">
         <img src="../img/green_dot.png" alt="Indicates game is open and possible to join" title="Indicates game is open and possible to join">
@@ -25,10 +25,15 @@ var renderGames = function(games) {
           <button id="join_game${index}" type="submit" class="dataSub btn btn-success">Click to join </button>
         </form>
       </td>`;
-    } else {
+    } else if (value.num_of_players == 8 || value.game_status == 'locked'){
       rowHtml += `
       <td class="td5">
         <img src="/img/red_dot.png" alt="Indicates game is closed and not possible to join" title="Indicates game is close and not possible to join">
+      </td>
+      <td class="td6">
+        <form id="join_form${index}" action="/game/${value.game_id}/join" method="POST">
+          <button id="join_game${index}" type="submit" class="disabledBtn btn btn-success" disabled="true">Click to join </button>
+        </form>
       </td>`;
     }
     // let rowHtml = `<th style="border:1px solid red">GAME ${value.game_id}</th>
