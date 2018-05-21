@@ -15,21 +15,21 @@ var selectedCard;
 
 
 $(function () {
- 
+
  if(turnOrder == -1){
   $('#turn_order_img').addClass('flipped');
   $('#turn_order_img').prop('alt', 'Indicates counterclockwise turn order');
   $('#turn_order_img').prop('title', 'Indicates counterclockwise turn order');
  }
- 
+
  if(turnOrder == 1){
   $('#turn_order_img').removeClass('flipped');
   $('#turn_order_img').prop('alt', 'Indicates clockwise turn order');
   $('#turn_order_img').prop('title', 'Indicates clockwise turn order');
  }
- 
 
- 
+
+
  var player_hand = {
   "card1": {
    card_id: 1,
@@ -112,7 +112,7 @@ $(function () {
   selectedCard = $(this).css('z-index');
   $("#player_hand .card").off();
  });
- 
+
  $("#cancel").click(function () {
   $("#player_hand .card").css('bottom', '0%');
   $("#confirm, #cancel").attr("disabled");
@@ -132,7 +132,7 @@ $(function () {
   });
   $('#card' + selectedCard + '').css({'box-shadow': 'none'});
  });
- 
+
  $(".card").mouseenter(function () {
   $(this).css({
    'box-shadow': '0px 0px 50px black'
@@ -143,7 +143,7 @@ $(function () {
    'box-shadow': 'none'
   });
  });
-    
+
 $(".color_picker").mouseenter(function () {
   $(this).css({
    'box-shadow': '0px 0px 50px black'
@@ -153,10 +153,10 @@ $(".color_picker").mouseenter(function () {
   $(this).css({
    'box-shadow': 'none'
   });
- });    
- 
- 
- 
+ });
+
+
+
 });
 $(function () {
  $(".card").draggable({
@@ -166,12 +166,12 @@ $(function () {
  $("#discard_pile").droppable({
   drop: function (event, ui) {
    $(ui.draggable).css("zIndex", 0);
-   
+
    $(".card").draggable({
   revert: 'invalid',
   bottom: '0%'
  });
-   
+
    console.log("dzfsdfsdf");
   }
  });

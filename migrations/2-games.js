@@ -19,14 +19,30 @@ module.exports = {
           key:'user_id'
         }
       },
-     active_seat: {
+      top_card_id:{
+        type: Sequelize.INTEGER,
+        references: {
+            model:'cards',
+            key:'card_id'
+          }
+      },
+      top_card_color: {
+        type: Sequelize.STRING
+      },
+      turn_order: {
         type: Sequelize.INTEGER
+      },
+      active_seat: {
+        type: Sequelize.INTEGER
+      },
+      skipped: {
+        type: Sequelize.BOOLEAN
+      },
+      has_drawn: {
+        type: Sequelize.BOOLEAN
       },
       game_start: {
         type: Sequelize.DATE
-      },
-      top_card_id: {
-        type: Sequelize.INTEGER
       }
     });
   },

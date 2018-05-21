@@ -1,19 +1,28 @@
+<div id="title">
+</div>
 <div class="container player_list">
   <input id="game_id" type="hidden" value={{game_id}} />
+  <input id="game_status" type="hidden" value={{status}} />
   <table id = "game_wating" class="table table-bordered table-hover table-fixed">
     <thead>
      <tr>
       <th class="th1">#</th>
       <th class="th2">Username</th>
-      <th class="th3">Status</th>
+      <th class="th3">Score</th>
      </tr>
     </thead>
   </table>
+  <div id="submitArea">
   {{#if can_start}}
-  <form class="" action="/game/{{game_id}}start" method="POST">
-    <button id="start_game" type="submit" style="width:auto;" class="dataSub btn btn-success">Start Game</button>
+  <form id="startGame" method="POST" action="/game/{{game_id}}/start" >
+    <button id="start_game" type="submit" style="width:auto;" class="btn btn-success">Start Game</button>
+  </form>
+  {{else}}
+  <form id="playGame" method="GET" action="/room/{{game_id}}" >
+    <button id="play_game" type="submit" style="width:auto;" class="btn btn-success">Refresh</button>
   </form>
   {{/if}}
+  </div>
 </div>
 
 <div id="chat">
