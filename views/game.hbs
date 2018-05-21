@@ -1,4 +1,6 @@
 
+<input id="game_id" type="hidden" value={{game_id}} />
+<input id="user_id" type="hidden" value={{user_id}} />
 
  <div id="game_table">
   <img src="../img/turn_order.png" id="turn_order_img" data-toggle="tooltip">
@@ -6,7 +8,7 @@
 
   <div class="container">
    <!-- Trigger the modal with a button -->
-   <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#color_modal" data-backdrop="static" data-keyboard="false">Open Large Modal</button>
+   <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#color_modal" data-backdrop="static" data-keyboard="false">Select a color</button>
 
    <!-- Modal -->
    <div class="modal fade color_wheel_box" id="color_modal" role="dialog">
@@ -28,33 +30,57 @@
  <div class="opponent_area" id="opponent7">
   <p class="user_name"></p>
   <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+  <div id="uno_opponent7">
+  </div>
  </div>
- <div class="opponent_area current_player" id="opponent6">
+ <div class="opponent_area" id="opponent6">
   <p class="user_name"></p>
   <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+  <div id="uno_opponent6">
+  </div>
  </div>
  <div class="opponent_area" id="opponent5">
   <p class="user_name"></p>
   <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+  <div id="uno_opponent5">
+  </div>
  </div>
  <div class="opponent_area" id="opponent4">
   <p class="user_name"></p>
   <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+  <div id="uno_opponent4">
+  </div>
  </div>
  <div class="opponent_area" id="opponent3">
   <p class="user_name"></p>
   <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+  <div id="uno_opponent3">
+  </div>
  </div>
  <div class="opponent_area" id="opponent2">
   <p class="user_name"></p>
   <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+  <div id="uno_opponent2">
+  </div>
  </div>
  <div class="opponent_area" id="opponent1">
   <p class="user_name"></p>
   <img src="../img/hand_back_1.png" alt="Uno hand" class="opponent_hand">
+  <div id="uno_opponent1">
+  </div>
  </div>
+
+ <div id="active_pile">
+  <img src="/img/uno_back.png" class="card" id="top_card">
+ </div>
+
  <div id="discard_pile">
   <p>Discard pile</p>
+ </div>
+
+ <div id="top_card_color">
+ </div>
+ <div id="uno_hit">
  </div>
 
 
@@ -63,6 +89,7 @@
 
   </div>
 
+  <button type="button" class="btn btn-success" id="skip" disabled>Skip my turn</button>
   <button type="button" class="btn btn-success" id="confirm" disabled>Play selected card</button>
   <button type="button" class="btn btn-danger" id="cancel" disabled>Cancel move</button>
 
@@ -106,6 +133,6 @@
 
 
 <script src="/socket.io/socket.io.js"></script>
-<script src="../js/game_table.js"></script>
-<script src="../js/asset_manager.js"></script>
-<script src="../js/chat_manager.js"></script>
+<!-- <script src="../js/game_table.js"></script> -->
+<!-- <script src="../js/asset_manager.js"></script> -->
+<!-- <script src="../js/chat_manager.js"></script> -->

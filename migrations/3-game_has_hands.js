@@ -26,14 +26,20 @@
         },
         seat_number: {
           type: Sequelize.INTEGER
+        },
+        uno_play: {
+          type: Sequelize.BOOLEAN
+        },
+        score: {
+          type: Sequelize.INTEGER
         }
       }).then(function() {
         return queryInterface.sequelize.query(
-          `ALTER TABLE game_has_hands ADD CONSTRAINT unique_index1 UNIQUE(game_id, user_id)`
+          `ALTER TABLE game_has_hands ADD CONSTRAINT game_has_hands_unique1 UNIQUE(game_id, user_id)`
         );
       }).then(function() {
         return queryInterface.sequelize.query(
-          `ALTER TABLE game_has_hands ADD CONSTRAINT unique_index2 UNIQUE(game_id, seat_number)`
+          `ALTER TABLE game_has_hands ADD CONSTRAINT game_has_hands_unique2 UNIQUE(game_id, seat_number)`
         );
       });
     },
