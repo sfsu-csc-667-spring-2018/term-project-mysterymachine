@@ -208,7 +208,7 @@ router.post('/:game_id/color/:color',requireAuth,function(req,res,next){
   // emit game_state
 });
 
-router.post('/game_id/chat',requireAuth, (req, res, next) => {
+router.post('/:game_id/chat',requireAuth, (req, res, next) => {
     let {message} = request.body;
     let game_id = request.params.game_id;
     let screen_name = request.user.screen_name;
@@ -222,5 +222,43 @@ router.post('/game_id/chat',requireAuth, (req, res, next) => {
     });
     response.sendStatus(200);
 });
+
+router.post('/:game_id/start',requireAuth,(req,res,next)=>{})
+ /* // check for user in game
+  Games.check_game_user(req.params.game_id, req.user.user_id).then (result => {
+    Games.get_game_state(req.params.game_id).then( (game_state) =>{
+      // check for valid game and user
+      if( game_state.game_status != 'joining' || game_state.host_id != req.user.user_id)
+        {res.sendStatus(400)}
+      else{ 
+        Promise.all(
+          Games.get_users(req.params.game_id).then( (userList)=>{
+          // for each user in game_id
+          userList.forEach( (user)=>{
+            
+          })}));
+            // draw 7 cards for user
+
+
+        // active_seat = host
+        // active_card = draw card
+        // turn direction = 1
+        // if wild, redraw
+            // set active_color
+        // else if reverse
+            // turn direction = -1
+        // else if skip
+            // next turn
+        // else if draw 2
+            // force draw 2
+            // skip
+
+      }
+    })
+  }).catch (error => {
+    // user not in game
+    res.redirect('/lobby');
+  }
+})*/
 
 module.exports = router;

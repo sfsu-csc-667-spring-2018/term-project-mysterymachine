@@ -49,8 +49,9 @@ const discard_card = (game_id,user_id,card_id)=>{
   db.one('DELETE FROM hand_has_cards WHERE hand_id = (SELECT hand_id FROM game_has_hands WHERE game_id = ' + game_id + ' AND user_id = ' + user_id + ') AND card_id =  ' + card_id + '').catch( error=> console.log("ERROR: ",error));
 };
 
-const draw_card = (game_id,num_of_cards,hand_id)=>{
-  db.one('DELETE FROM active_pile WHERE card_id = (SELECT card_id FROM active_pile WHERE game_id = ' +  game_id + ' LIMIT ' + num_of_cards + ') RETURNING card_id').catch( error=> console.log("ERROR: ",error));
+const draw_card = (game_id,user_id,number)=>{
+  db.none('INSERT INTO hand_has_cards WHERE hand_id = (SELECT hand_id FROM game_has_hands WHERE game_id = '+game_id+', user_id = '+user_id+' ) FROM active_pile LIMIT ' + number +
+        '; DELETE FROM active_pile WHERE card_id = (SELECT card_id FROM active_pile WHERE game_id = ' +  game_id + ' LIMIT ' + number + ') RETURNING card_id');
 };
 
 const card_to_hand = (game_id,user_id,card_id)=>{
@@ -76,25 +77,7 @@ const next_player = (game_id)=>{
 
 // creates a new game with user_id as host
 const new_game = (user_id) =>
-  db.one(`INSERT INTO games (game_status, host_id) VALUES('joining', $1) RETURNING game_id`, [user_id]);
-
-const start_game = (game_id) =>{
-  // for each user in game_id
-  get_users(game_id).then( (userList)=>{})
-      // draw 7 cards for user
-  // active_seat = host
-  // active_card = draw card
-  // if wild, redraw
-  // set active_color
-  // if reverse
-      // turn direction = -1
-  // else turn direction = 1
-  // if skip
-      // next turn
-  // if draw 2
-      // force draw 2
-      // skip
-}
+  db.one("INSERT INTO games (game_status, host_id) VALUES('joining', $1) RETURNING game_id", [user_id]);
 
 const get_active_games = () =>
   db.any(`SELECT g.game_id, game_status, screen_name, count(*) as cnt

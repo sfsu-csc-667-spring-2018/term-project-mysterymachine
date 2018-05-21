@@ -8,7 +8,7 @@ var renderGames = function(games) {
   //       <th style="border:1px solid red">NO PLAYERS</th>
   //       <th style="border:1px solid red">STATUS</th>`;
   $.each(games, function( index, value) {
-    console.log(value);
+    //console.log(value);
     let row = table.insertRow(-1);
     let rowHtml = `
       <td class="td1">${index}</td>

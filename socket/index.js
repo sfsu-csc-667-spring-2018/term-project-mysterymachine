@@ -4,10 +4,15 @@ const io = socketIo();
 
 io.sockets.on('connection', function(socket) {
 	console.log('someone connected!!!');
-    socket.on('room', function(room) {
-    	console.log('new user joined '+room);
+
+    socket.on('join', function(room,user) {
+    	console.log('new user joined '+ room);
+
         socket.join(room);
-        io.sockets.to(room).emit('message','new user','*joined the channel*');
+        socket.join(room +'/' + user);
+        io.sockets.to(room).emit('message',user,'*joined the channel*');
+        //io.sockets.to(user).emit('message','SERVER','Welcome to '+room+', '+user);
+
     });
 });
 

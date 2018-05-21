@@ -11,7 +11,6 @@ router.get('/', requireAuth,function (req, res,next){
 router.get('/games', requireAuth, function(req, res, next) {
 	Games.get_active_games().then(games => {
     res.status(200).json(games);
-    console.log("games list: "+games);
 	});
 });
 
