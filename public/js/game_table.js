@@ -39,6 +39,11 @@ var renderGame = function(game) {
       } else {
           $('#opponent' + value.seat_number).attr('class', 'opponent_area');
       }
+      if (value.uno_play) {
+        $('#uno_opponent' + value.seat_number).html('<img src="/img/uno.png" id="player_uno">');
+      } else {
+        $('#uno_opponent' + value.seat_number).html('');
+      }
   });
   // Decide whether the user is the current player
   is_current = (user_seat == game.active_seat);

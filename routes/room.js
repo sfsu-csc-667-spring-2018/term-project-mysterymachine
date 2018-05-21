@@ -6,11 +6,11 @@ const Games = require('../db/games');
 
 router.get('/:game_id',requireAuth, function(req, res,next){
 	Games.get_game_state(req.params.game_id).then (game => {
-    const can_start = (game.host_id === req.user.user_id);
+    const can_start = (game.host_id == req.user.user_id);
 		if (game.game_status == 'IN PROGRESS') {
 			res.redirect('/game/' + req.params.game_id);
 		} else {
-    	res.render('room', { title: 'Waiting room', game_id:req.params.game_id, can_start: can_start, room:"true", finished:"false"});
+    	res.render('room', { title: 'Waiting room', game_id:req.params.game_id, can_start: can_start, room:"true", status:game.game_status});
 		}
   }).catch(error => {
     console.log("Error query get_game_state: " + error);

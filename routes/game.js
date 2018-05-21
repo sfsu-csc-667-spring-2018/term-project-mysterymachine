@@ -1,4 +1,4 @@
-  const express = require('express');
+const express = require('express');
 const router = express.Router();
 const requireAuth = require('../auth/requireAuth');
 const io = require('../socket');
@@ -20,10 +20,18 @@ router.get('/:game_id/details', requireAuth, function(req, res, next) {
         res.status(200).json({active_seat : game.active_seat, turn_order: game.turn_order,
           skipped: game.skipped, has_drawn: game.has_drawn, face: game.face, color: game.top_card_color,
           image_address: game.image_address, users: users, cards: cards});
-      }).catch( error => console.log("Error in get_user_cards: ",error));
-    }).catch( error => console.log("Error in get_users: ",error));
-  }).catch( error=> console.log("Error in Games.get: ",error));
-  // res.render('game_table', { title: 'Playing', game_id: req.params.id});
+      }).catch( error => {
+        console.log("Error in get_user_cards: ",error);
+        res.status(500).json();
+      });
+    }).catch( error => {
+      console.log("Error in get_users: ",error);
+      res.status(500).json();
+    });
+  }).catch( error=> {
+    console.log("Error in Games.get: ",error);
+    res.status(500).json();
+  });
 });
 
 // Check if user is in a game
@@ -74,7 +82,7 @@ router.post('/:game_id/join', requireAuth, function(req, res, next) {
 // Get players of a game
 router.get('/:game_id/players/', requireAuth, function(req, res, next) {
   Games.get_users(req.params.game_id).then (users => {
-    console.log(users);
+    // console.log(users);
     res.status(200).json(users);
   }).catch( error => console.log("Error in get_users: ", error));
 });
@@ -116,6 +124,17 @@ router.post('/:id/start/', function(req, res, next) {
   });
 });
 
+// Update game state, start time, turn_order, active_seat
+router.post('/:id/done/', function(req, res, next) {
+  const game_id = req.params.id;
+  Games.done_game(game_id).then(result => {
+    res.redirect('/room/' + game_id);
+  }).catch( error => {
+    console.log("Error in done_game: ", error);
+    res.redirect('/lobby');
+  });
+});
+
 // host/game/1/draw/
 // player choses to draw a card
 router.post('/:game_id/draw/',requireAuth,function(req,res,next){
@@ -127,15 +146,15 @@ router.post('/:game_id/draw/',requireAuth,function(req,res,next){
         res.status(200).json(1);
       }).catch( error => {
         console.log("Error in draw_card: ", error);
-        res.status(500);
+        res.status(500).json();
       });
     }).catch( error => {
       console.log("Error in get_card_active_pile: ", error);
-      res.status(500);
+      res.status(500).json();
     });
   }).catch( error => {
     console.log("User does not have permission to draw card: ", error);
-    res.status(500);
+    res.status(500).json();
   });
 });
 
@@ -165,11 +184,11 @@ router.post('/:game_id/skip_turn/',requireAuth,function(req,res,next){
       res.status(200).json(1);
     }).catch( error => {
       console.log("Error in skip_turn: ", error);
-      res.status(500);
+      res.status(500).json();
     });
   }).catch( error => {
     console.log("User does not have permission to skip their turn: ", error);
-    res.status(500);
+    res.status(500).json();
   });
 });
 
@@ -189,95 +208,6 @@ const next_active_seat = function(current_seat, move, user_cnt) {
 router.post('/:game_id/play/',requireAuth, function(req,res,next){
   console.log(req.body);
   playCard(req, res, false);
-  // const user_id = req.user.user_id;
-  // const game_id = req.params.game_id;
-  // const player_card_id = req.body.card_id;
-  // const chosen_color = req.body.color;
-  // Games.check_playable(game_id, user_id, player_card_id).then(data => {
-  //   let turn_order = parseInt(data[0].turn_order);
-  //   const active_seat = parseInt(data[0].active_seat);
-  //   const top_card_id = parseInt(data[1].top_card_id);
-  //   const top_color = data[1].color == "black" ? data[0].top_card_color : data[1].color;
-  //   const top_face = data[1].face;
-  //   let player_color = data[2].color;
-  //   const player_face = data[2].face;
-  //   const total_players = parseInt(data[3].cnt);
-  //   let skipped = 'f';
-  //
-  //   if (player_color == 'black') {
-  //     if (chosen_color != null) {
-  //       player_color = chosen_color;
-  //     } else {
-  //       res.status(200).json(2);
-  //       return;
-  //     }
-  //   }
-  //   let move = turn_order;
-  //   if (player_face == 'skip') {
-  //     move = turn_order * 2;
-  //   } else if (player_face == 'reverse') {
-  //     turn_order = -turn_order;
-  //     move = turn_order;
-  //   }
-  //
-  //   if (player_face == 'draw two' ||
-  //     player_face == 'draw two' ||
-  //     player_face == 'wild draw four') {
-  //       skipped = 't';
-  //   }
-  //
-  //   console.log(top_color);
-  //   console.log(player_color);
-  //   if (top_color == player_color || top_face == player_face) {
-  //     const next_seat = next_active_seat(active_seat, move, total_players);
-  //     Games.next_player(game_id, user_id, next_seat, turn_order, player_card_id, top_card_id, skipped, chosen_color)
-  //       .then(result => {
-  //         res.status(200).json(0);
-  //       }).catch( error => {
-  //         console.log("Error in next_player: ", error);
-  //         res.status(500);
-  //       });
-  //   } else {
-  //     res.status(200).json(1);
-  //   }
-  // }).catch( error => {
-  //   console.log("Error in check_playable: ", error);
-  //   res.status(500);
-  // });
-
-  // check for correct user/turn
-  // check for correct game_status
-  // check for playable card
-  // check for card_id in hand
-  // change game status to busy (playing)
-
-  // remove card id from player
-  // play card function( card_id )
-    // add card_id to discard/active
-    // if single card remains in hand and no Uno call, force draw 2
-    // apply card effects to game
-      // update game_id active_color
-      // if numbered
-        // pass turn
-        // change game status to 'waiting for play'
-      // if skip
-        // pass turn twice
-        // change game status to 'waiting for play'
-      // if reverse
-        // reverse turn order (1,-1)
-        // pass turn
-        // change game status to 'waiting for play'
-      // if draw 2
-        // then pass turn
-        // force draw 2
-        // change game status to 'waiting for play'
-      // if wild or wild 4
-        // change game status to 'waiting for color decision'
-        // emit color decision
-    // end function
-
-  // check for win condition
-  // emit new game_state
 });
 
 router.post('/:game_id/play_uno/',requireAuth, function(req,res,next) {
@@ -308,7 +238,6 @@ const playCard = function(req, res, user_uno_play) {
     const total_players = parseInt(data[3].cnt);
     const db_uno_play = data[4].uno_play;
     const card_cnt = data[4].card_cnt;
-
 
     if (player_color == 'black') {
       if (chosen_color != null) {
@@ -341,7 +270,7 @@ const playCard = function(req, res, user_uno_play) {
           res.status(200).json(3);
         }).catch(error => {
           console.log("Error in finish_game", error);
-          res.status(500);
+          res.status(500).json();
         });
         return;
       }
@@ -353,17 +282,16 @@ const playCard = function(req, res, user_uno_play) {
           res.status(200).json(0);
         }).catch( error => {
           console.log("Error in next_player: ", error);
-          res.status(500);
+          res.status(500).json();
         });
     } else {
       res.status(200).json(1);
     }
   }).catch( error => {
     console.log("Error in check_playable: ", error);
-    res.status(500);
+    res.status(500).json();
   });
 }
-
 router.post('/game_id/chat',requireAuth, (req, res, next) => {
     let {message} = request.body;
     let game_id = request.params.game_id;

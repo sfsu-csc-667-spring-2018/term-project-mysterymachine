@@ -244,6 +244,15 @@
     bottom: 70%;
 }
 
+#player_uno {
+    position: absolute;
+    right: 75%;
+    bottom: 40%;
+    width: 25%;
+    height: 25%;
+    z-index: -1;
+}
+
 .opponent_hand {
     position: absolute;
     width: 20%;

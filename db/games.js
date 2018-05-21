@@ -5,7 +5,7 @@ const get = game_id =>
     { game_id });
 
 const get_users = game_id =>
-  db.many(`SELECT u.user_id, screen_name, seat_number, score
+  db.many(`SELECT u.user_id, screen_name, seat_number, score, uno_play
     FROM game_has_hands as g, users as u
     WHERE g.user_id = u.user_id AND game_id=$1
     ORDER BY seat_number`,
@@ -28,11 +28,13 @@ const get_player_card_count = (game_id, user_id) => {
 const new_game = (user_id) =>
   db.one(`INSERT INTO games (game_status, host_id) VALUES('OPEN', $1) RETURNING game_id`, [user_id]);
 
+const done_game = (game_id) =>
+  db.none(`UPDATE games SET game_status='DONE' WHERE game_id=$1`, [game_id]);
 
 const get_active_games = () =>
   db.any(`SELECT g.game_id, game_status, screen_name, count(*) as cnt
   FROM games g, game_has_hands h, users u
-  WHERE g.host_id = u.user_id AND g.game_id = h.game_id AND g.game_status IN ('OPEN', 'IN PROGRESS')
+  WHERE g.host_id = u.user_id AND g.game_id = h.game_id AND g.game_status IN ('OPEN', 'IN PROGRESS', 'WAIT NEXT')
   GROUP BY g.game_id, game_status, screen_name ORDER BY game_status desc, count(*)`);
 
 const join_game = (game_id, user_id, seat_number) =>
@@ -197,7 +199,7 @@ const mark_uno = (game_id, user_id) =>
 
 const finish_game = (game_id, user_id) =>
 db.tx(t => {
-  const q1 = t.one(`UPDATE game_has_hands SET score = score +
+  const q1 = t.one(`UPDATE game_has_hands SET uno_play = 'f', score = score +
         (SELECT SUM(value)
          FROM game_has_hands g, hand_has_cards h, cards c
          WHERE g.hand_id = h.hand_id AND h.card_id = c.card_id AND g.game_id=$1 AND g.user_id !=$2)
@@ -227,6 +229,7 @@ module.exports = {
     join_game,
     get_hands_for_game,
     start_game,
+    done_game,
     check_drawable,
     check_skipable,
     skip_turn,
