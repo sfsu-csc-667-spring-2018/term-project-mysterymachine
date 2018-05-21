@@ -75,9 +75,12 @@ const start_game = (game_id, hands) => {
     cards[i] = i + 1;
   }
   shuffle(cards);
-  // Initial top card should not be a wild cards
-  while (cards[107] > 100) {
-    randomIndex = Math.floor(Math.random() * currentIndex);
+  // Initial top card should not be a a special card
+  while (cards[107] > 94 /* blue special and wild cards */
+    || (cards[107] >19 &&  ards[107] < 26 /* red special cards */)
+    || (cards[107] >44 &&  ards[107] < 51 /* green special cards */)
+    || (cards[107] >69 &&  ards[107] < 76 /* yellow special cards */)) {
+    randomIndex = Math.floor(Math.random() * 107);
     temporaryValue = array[107];
     array[107] = array[randomIndex];
     array[randomIndex] = temporaryValue;
