@@ -264,7 +264,7 @@ const playCard = function(req, res, user_uno_play) {
       player_face == 'wild draw four') {
         skipped = 't';
     }
-    if (top_color == player_color || top_face == player_face) {
+    if (player_face.includes('wild') || top_color == player_color || top_face == player_face) {
       if (card_cnt == 1 && draws == 0) {
         Games.finish_game(game_id, user_id).then(result => {
           res.status(200).json(3);
