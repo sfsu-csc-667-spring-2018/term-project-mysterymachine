@@ -1,4 +1,4 @@
-const express = require('express');
+  const express = require('express');
 const router = express.Router();
 const requireAuth = require('../auth/requireAuth');
 const io = require('../socket');
@@ -15,9 +15,7 @@ router.get('/:game_id/', requireAuth, function(req, res, next) {
 router.get('/:game_id/details', requireAuth, function(req, res, next) {
   const user_id = req.user.user_id;
   Games.get(req.params.game_id).then (game => {
-    // console.log(game);
     Games.get_users(req.params.game_id).then (users => {
-      // console.log(users);
       Games.get_user_cards(req.params.game_id, user_id).then ( cards => {
         res.status(200).json({active_seat : game.active_seat, turn_order: game.turn_order,
           skipped: game.skipped, has_drawn: game.has_drawn, face: game.face, color: game.top_card_color,
@@ -45,13 +43,7 @@ router.post('/:game_id/join', requireAuth, function(req, res, next) {
   Games.check_game_user(req.params.game_id, req.user.user_id).then (result => {
     console.log("Already in game");
     Games.get_game_status_count(req.params.game_id).then(result => {
-      if (result.game_status === 'OPEN') {
-        // redirect to waiting room if game is open
-        res.redirect('/room/' + req.params.game_id);
-      } else {
-        // redirect to playing game if not
-        res.redirect('/game/' + req.params.game_id);
-      }
+      res.redirect('/room/' + req.params.game_id);
     }).catch(error => {
       console.log("Error get game status", error);
       res.redirect('/lobby');
@@ -64,11 +56,9 @@ router.post('/:game_id/join', requireAuth, function(req, res, next) {
       if (result.game_status === 'OPEN' && result.cnt < 8) {
         Games.join_game(req.params.game_id, req.user.user_id, ++result.cnt).then(insert => {
           console.log("successfully joined the game");
-          // res.redirect('/lobby');
           res.redirect('/room/' + req.params.game_id);
         }).catch(error => {
-          console.log("Error joining the game: ");
-          console.log(error);
+          console.log("Error joining the game: ", error);
           res.redirect('/lobby');
         });
       } else {
@@ -298,7 +288,7 @@ router.post('/:game_id/play_uno/',requireAuth, function(req,res,next) {
     playCard(req, res, true);
   }).catch(error => {
     console.log("Cannot do mark_uno for game: " + game_id + " and user: " + user_id, error);
-    res.status(200).json(3);
+    res.status(200).json(4);
   });
 });
 
@@ -345,12 +335,15 @@ const playCard = function(req, res, user_uno_play) {
       player_face == 'wild draw four') {
         skipped = 't';
     }
-
-    console.log(top_color);
-    console.log(player_color);
     if (top_color == player_color || top_face == player_face) {
       if (card_cnt == 1 && draws == 0) {
-        // Game over
+        Games.finish_game(game_id, user_id).then(result => {
+          res.status(200).json(3);
+        }).catch(error => {
+          console.log("Error in finish_game", error);
+          res.status(500);
+        });
+        return;
       }
 
       const next_seat = next_active_seat(active_seat, move, total_players);

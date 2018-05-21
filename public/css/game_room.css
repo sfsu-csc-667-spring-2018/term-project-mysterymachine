@@ -89,7 +89,7 @@ body {
 
 .player_list {
  position: absolute;
- bottom: 0;
+ top: 15%;
  left: 0%;
  height: 90%;
  width: 50%;

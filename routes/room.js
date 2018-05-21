@@ -10,7 +10,7 @@ router.get('/:game_id',requireAuth, function(req, res,next){
 		if (game.game_status == 'IN PROGRESS') {
 			res.redirect('/game/' + req.params.game_id);
 		} else {
-    	res.render('room', { title: 'Waiting room', game_id:req.params.game_id, can_start: can_start, room:"true"});
+    	res.render('room', { title: 'Waiting room', game_id:req.params.game_id, can_start: can_start, room:"true", finished:"false"});
 		}
   }).catch(error => {
     console.log("Error query get_game_state: " + error);

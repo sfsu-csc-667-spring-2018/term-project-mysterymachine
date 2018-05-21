@@ -5,8 +5,11 @@ const get = game_id =>
     { game_id });
 
 const get_users = game_id =>
-  db.many(`SELECT u.user_id, screen_name, seat_number FROM game_has_hands as g, users as u WHERE g.user_id = u.user_id AND game_id=${game_id} ORDER BY seat_number`,
-    { game_id });
+  db.many(`SELECT u.user_id, screen_name, seat_number, score
+    FROM game_has_hands as g, users as u
+    WHERE g.user_id = u.user_id AND game_id=$1
+    ORDER BY seat_number`,
+    [game_id]);
 
 const get_user_cards = (game_id, user_id) => {
   return db.many(`SELECT c.card_id, c.image_address
@@ -33,7 +36,7 @@ const get_active_games = () =>
   GROUP BY g.game_id, game_status, screen_name ORDER BY game_status desc, count(*)`);
 
 const join_game = (game_id, user_id, seat_number) =>
-  db.none(`INSERT INTO game_has_hands (game_id, user_id, seat_number) VALUES($1, $2, $3)`, [game_id, user_id, seat_number]);
+  db.none(`INSERT INTO game_has_hands (game_id, user_id, seat_number, score) VALUES($1, $2, $3, 0)`, [game_id, user_id, seat_number]);
 
 const get_game_status_count = (game_id) =>
   db.one(`SELECT game_status, count(*) as cnt FROM games g, game_has_hands h
@@ -192,6 +195,23 @@ const mark_uno = (game_id, user_id) =>
             GROUP BY g.hand_id
             HAVING count(*) = 2) RETURNING hand_id`, [game_id, user_id]);
 
+const finish_game = (game_id, user_id) =>
+db.tx(t => {
+  const q1 = t.one(`UPDATE game_has_hands SET score = score +
+        (SELECT SUM(value)
+         FROM game_has_hands g, hand_has_cards h, cards c
+         WHERE g.hand_id = h.hand_id AND h.card_id = c.card_id AND g.game_id=$1 AND g.user_id !=$2)
+     WHERE game_id=$1 AND user_id=$2 RETURNING score`,
+     [game_id, user_id]);
+  const q2 = t.none(`DELETE FROM hand_has_cards WHERE hand_id IN (
+    SELECT hand_id from game_has_hands WHERE game_id=$1)`, [game_id]);
+  const q3 = t.none(`DELETE FROM active_pile WHERE game_id=$1`, [game_id]);
+  const q4 = t.none(`UPDATE games
+    SET game_status = 'WAIT NEXT', top_card_id=NULL, top_card_color=NULL, turn_order=NULL, active_seat=NULL,skipped=NULL, has_drawn=Null
+    WHERE game_id=$1`, [game_id]);
+  return t.batch([q1, q2, q3, q4]); // all of the queries are to be resolved;
+});
+
 module.exports = {
     get,
     get_users,
@@ -211,5 +231,6 @@ module.exports = {
     check_skipable,
     skip_turn,
     mark_uno,
+    finish_game,
     get_card_active_pile
 };

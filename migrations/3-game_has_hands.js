@@ -29,6 +29,9 @@
         },
         uno_play: {
           type: Sequelize.BOOLEAN
+        },
+        score: {
+          type: Sequelize.INTEGER
         }
       }).then(function() {
         return queryInterface.sequelize.query(

@@ -129,7 +129,7 @@ var setButtonAttributes = function(is_current, skipped, has_drawn) {
     $("#skip").removeAttr("disabled");
     $("#skip").css({"opacity": 1});
   } else {
-    $("#skip, #cancel, #confirm, #play_uno").prop('disabled', true);;
+    $("#skip, #cancel, #confirm, #play_uno").prop('disabled', true);
     $("#skip, #cancel, #confirm, #play_uno").css({"opacity": 0.2});
   }
 
@@ -221,6 +221,10 @@ $("#confirm").click(function() {
         if (code == 2) {
           alert("Please select a color for the wild card!");
         }
+        if (code == 3) {
+          // Game finished, redirect to waiting room
+          window.location.href = "/room/" + game_id;
+        }
         setTimeout(worker, 100);
       }
   });
@@ -232,6 +236,9 @@ function worker() {
     url: '/game/' + game_id + '/details',
     success: function(game) {
       renderGame(game);
+    },
+    error: function(xhr, statusText) {
+      window.location.href = "/room/" + game_id;
     },
     complete: function() {
       // Schedule the next request when the current one's complete
