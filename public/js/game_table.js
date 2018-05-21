@@ -29,7 +29,7 @@ var renderGame = function(game) {
       if (value.user_id == current_user){
           user_seat = value.seat_number;
           $('#player_area .user_name').html(value.screen_name);
-          $('#player_area .avatar').attr('src','https://www.gravatar.com/avatar/' + "gravatar.com/michelangelo");
+          $('#player_area .avatar').attr('src','https://www.gravatar.com/avatar/' + md5(value.email));
       } else {
           $('#opponent' + value.seat_number + ' .user_name').html(value.screen_name);
       }
@@ -82,7 +82,7 @@ var renderUno = function () {
             alert("Invalid card!");
           }
           if (code == 2) {
-            alert("Please select a color for the wild card!");
+            $('#color_modal').modal('toggle');
           }
           setTimeout(worker, 100);
         }
@@ -93,7 +93,7 @@ var renderUno = function () {
 var renderTopCard = function (image_address, face, color) {
   $('#discard_pile').html('<img src="' + image_address + '" id="top_card">');
   if (face.includes('wild')) {
-    $('#top_card_color').html('<img src="/img/' + color + '_half_circle.png" id="top_card_color_image">');
+    $('#top_card_color').html('<img src="/img/' + color + '_dot.png" id="top_card_color_image" alt="Indicates that a player user a change color type card and chose' + color + '" title="Indicates that a player user a change color type card and chose ' + color + '" data-toggle="tooltip">');
   } else {
     $('#top_card_color').html('');
   }
@@ -224,7 +224,8 @@ $("#confirm").click(function() {
           alert("Invalid card!");
         }
         if (code == 2) {
-          alert("Please select a color for the wild card!");
+                $('#color_modal').modal('toggle');
+
         }
         if (code == 3) {
           // Game finished, redirect to waiting room

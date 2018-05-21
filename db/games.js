@@ -5,7 +5,7 @@ const get = game_id =>
     { game_id });
 
 const get_users = game_id =>
-  db.many(`SELECT u.user_id, screen_name, seat_number, score, uno_play
+  db.many(`SELECT u.user_id, email, screen_name, seat_number, score, uno_play
     FROM game_has_hands as g, users as u
     WHERE g.user_id = u.user_id AND game_id=$1
     ORDER BY seat_number`,
