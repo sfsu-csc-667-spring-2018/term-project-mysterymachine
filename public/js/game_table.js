@@ -249,7 +249,7 @@ function worker() {
     complete: function() {
       // Schedule the next request when the current one's complete
       if (!is_current) {
-        setTimeout(worker, 3000);
+        setTimeout(worker, 1500);
       }
     }
   });
