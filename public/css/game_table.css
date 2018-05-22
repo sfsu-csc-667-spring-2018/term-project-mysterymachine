@@ -78,6 +78,16 @@
     border-top: 5px solid blue;
 }
 
+#player_area {
+    position: absolute;
+    bottom: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 20%;
+    border-top: 5px solid blue;
+}
+
 #player_hand {
     position: absolute;
     left: 0;

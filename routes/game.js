@@ -14,12 +14,13 @@ router.get('/:game_id/', requireAuth, function(req, res, next) {
 // host/game/1/details
 router.get('/:game_id/details', requireAuth, function(req, res, next) {
   const user_id = req.user.user_id;
+Games.get_player(req.params.game_id, user_id).then (player => { 
   Games.get(req.params.game_id).then (game => {
-    Games.get_users(req.params.game_id).then (users => {
+    Games.get_users(req.params.game_id,user_id).then (users => {
       Games.get_user_cards(req.params.game_id, user_id).then ( cards => {
         res.status(200).json({active_seat : game.active_seat, turn_order: game.turn_order,
           skipped: game.skipped, has_drawn: game.has_drawn, face: game.face, color: game.top_card_color,
-          image_address: game.image_address, users: users, cards: cards});
+          image_address: game.image_address, users: users, cards: cards, player: player});
       }).catch( error => {
         console.log("Error in get_user_cards: ",error);
         res.status(500).json();
@@ -29,6 +30,10 @@ router.get('/:game_id/details', requireAuth, function(req, res, next) {
       res.status(500).json();
     });
   }).catch( error=> {
+    console.log("Error in Games.get: ",error);
+    res.status(500).json();
+  });
+}).catch( error=> {
     console.log("Error in Games.get: ",error);
     res.status(500).json();
   });
