@@ -36,6 +36,7 @@ var renderGame = function(game) {
       $('#opponent' + value.seat_number).css({"opacity": 1});
       if (value.seat_number == game.active_seat) {
           $('#opponent' + value.seat_number).attr('class', 'opponent_area current_player');
+          $('#opponent' + value.seat_number + ' .avatar').attr('src','https://www.gravatar.com/avatar/' + md5(value.email));
       } else {
           $('#opponent' + value.seat_number).attr('class', 'opponent_area');
       }

@@ -108,6 +108,19 @@
     top: 10%;
     max-height: 80%;
     max-width: 20%;
+    border-radius: 50%;
+}
+
+.opponent_area .avatar {
+    position: absolute;
+    right: 5%;
+    margin: 0;
+    padding: 0;
+    top: 10%;
+    max-height: 100%;
+    max-width: 100%;
+    border-radius: 50%;
+
 }
 
 
