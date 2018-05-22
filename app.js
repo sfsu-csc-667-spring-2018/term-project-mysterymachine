@@ -71,10 +71,10 @@ app.use('/game',	require('./routes/game'));
 app.use('/users',	require('./routes/users'));
 app.use('/chat', require('./routes/chat'));
 app.use('/message', require('./routes/message'));
-
+/*
 app.use(function(req, res, next) {
   console.log(req.method+req.url+" 404 error")
   res.redirect('/');
 });
-
+*/
 module.exports = app;

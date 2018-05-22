@@ -1,22 +1,3 @@
-/* Bordered form */
-
-form {
- border: 3px solid #f1f1f1;
- background-color: #F8F9FA;
-}
-
-/* Full-width inputs */
-
-input[type=text],
-input[type=password] {
- width: 100%;
- padding: 12px 20px;
- margin: 8px 0;
- display: inline-block;
- border: 1px solid #ccc;
- box-sizing: border-box;
-}
-
 /* Set a style for all buttons */
 
 button {
@@ -109,59 +90,4 @@ body {
 
 .player_list th{
  background-color: white;
-}
-
-
-#chat {
- position: absolute;
- right: 0;
- margin: 0;
- padding: 0;
- width: 30%;
- height: 80%;
- bottom: 10%;
- background-color: white;
- overflow: scroll;
-}
-
-#chat_input {
- position: absolute;
- right: 0;
- margin: 0;
- padding: 0;
- width: 30%;
- height: 10%;
- bottom: 0%;
-}
-
-#chat::-webkit-scrollbar {
- width: 12px;
-}
-
-#chat::-webkit-scrollbar-track {
- -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
- border-radius: 10px;
-}
-
-#chat::-webkit-scrollbar-thumb {
- border-radius: 10px;
- -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
-}
-
-.message_container {
- margin: 5%;
- width: 90%;
- padding: 0;
-}
-
-.user_name {}
-
-
-.message_body {
- background-color: #D9D9D9;
- margin: 0;
- width: 100%;
- height: 95%;
- padding: 0;
-
 }
