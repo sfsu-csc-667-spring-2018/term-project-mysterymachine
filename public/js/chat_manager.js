@@ -27,9 +27,9 @@ $("#chat_input").on('keypress', function (event) {
 socket.on('message', (user, message) =>{
   console.log('message recieved');
   if(user == document.querySelector('#screen_name').innerHTML ){
-    $('#chat').append('<div class="message_container" align="right"><div class="user_name">' + user + '</div><div class="message_body">' + message + '</div></div>');
+    $('#chat').append('<div class="message_container" align="right"><div class="user_name">' + user + '</div><div class="message_body sent">' + message + '</div></div>');
   }else{
-    $('#chat').append('<div class="message_container" ><div class="user_name">' + user + '</div><div class="message_body">' + message + '</div></div>');
+    $('#chat').append('<div class="message_container" ><div class="user_name">' + user + '</div><div class="message_body recived">' + message + '</div></div>');
   }
   
   document.querySelector('#chat').scrollTop +=500;

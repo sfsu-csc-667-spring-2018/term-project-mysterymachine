@@ -4,7 +4,14 @@ const get = game_id =>
   db.one('SELECT active_seat, skipped, has_drawn, turn_order, face, top_card_color, image_address FROM games, cards WHERE top_card_id = card_id AND game_id=${game_id}',
     { game_id });
 
-const get_users = (game_id,user_id) =>
+const get_users = (game_id) =>
+  db.many(`SELECT u.user_id, email, screen_name, seat_number, score, uno_play
+    FROM game_has_hands as g, users as u
+    WHERE g.user_id = u.user_id AND game_id=$1
+    ORDER BY seat_number`,
+    [game_id]);
+
+const get_users_2 = (game_id,user_id) =>
   db.many(`SELECT u.user_id, email, screen_name, seat_number, score, uno_play
     FROM game_has_hands as g, users as u
     WHERE g.user_id = u.user_id AND game_id=$1 AND g.user_id <> $2
@@ -230,6 +237,7 @@ module.exports = {
     get,
     get_player,
     get_users,
+    get_users_2,
     get_user_cards,
     get_game_state,
     check_playable,

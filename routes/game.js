@@ -16,7 +16,7 @@ router.get('/:game_id/details', requireAuth, function(req, res, next) {
   const user_id = req.user.user_id;
 Games.get_player(req.params.game_id, user_id).then (player => { 
   Games.get(req.params.game_id).then (game => {
-    Games.get_users(req.params.game_id,user_id).then (users => {
+    Games.get_users_2(req.params.game_id,user_id).then (users => {
       Games.get_user_cards(req.params.game_id, user_id).then ( cards => {
         res.status(200).json({active_seat : game.active_seat, turn_order: game.turn_order,
           skipped: game.skipped, has_drawn: game.has_drawn, face: game.face, color: game.top_card_color,
