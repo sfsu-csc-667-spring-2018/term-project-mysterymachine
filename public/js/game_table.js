@@ -32,26 +32,37 @@ var renderGame = function(game) {
    $('#player_area').css({"background": "none"})
   }
   var user_seat = user_seat = game.player.seat_number;
-  var incrementor = 1;
-  $.each(game.users, function (index, value) {
-      console.log(incrementor);
-      $('#opponent' + incrementor + ' .user_name').html(value.screen_name);
+  var num_players = Object.keys(game.users).length;
+  var seat;
+  for(i = 1; i <= num_players; i++ ){
+   seat = game.player.seat_number + i;
+   if(seat > num_players){
+    seat = seat - num_players;
+   }
+   $.each(game.users, function(key,value){
+      if(value.seat_number != game.player.seat_number && seat == value.seat_number){
+        $('#opponent' + i + ' .user_name').html(value.screen_name);
+
+        $('#opponent' + i).css({"opacity": 1});
+
+        if (value.seat_number == game.active_seat) {
+            $('#opponent' + i).attr('class', 'opponent_area current_player');
+            $('#opponent' + i + ' .avatar').attr('src','https://www.gravatar.com/avatar/' + md5(value.email));
+        } else {
+            $('#opponent' + i).attr('class', 'opponent_area');
+        }
+        //Reme
+        if (value.uno_play) {
+          $('#uno_opponent' + i).html('<img src="/img/uno.png" id="player_uno">');
+        } else {
+          $('#uno_opponent' + i).html('');
+        }
+     }
+   }); 
    
-      $('#opponent' + incrementor).css({"opacity": 1});
+  }
+      
    
-      if (value.seat_number == game.active_seat) {
-          $('#opponent' + incrementor).attr('class', 'opponent_area current_player');
-          $('#opponent' + incrementor + ' .avatar').attr('src','https://www.gravatar.com/avatar/' + md5(value.email));
-      } else {
-          $('#opponent' + incrementor).attr('class', 'opponent_area');
-      }
-      if (value.uno_play) {
-        $('#uno_opponent' + value.seat_number).html('<img src="/img/uno.png" id="player_uno">');
-      } else {
-        $('#uno_opponent' + value.seat_number).html('');
-      }
-   incrementor++;
-  });
   // Decide whether the user is the current player
   is_current = (user_seat == game.active_seat);
   renderPlayerCards(game.cards);
@@ -62,12 +73,14 @@ var renderPlayerCards = function (cards) {
   let starting_pos = 0;
   const sepperation_increments = cards.length <= 10 ? 9 : 100/cards.length;
   $("#player_hand").html('');
+  var incrementor = 0;
   $.each(cards, function (index, value) {
     const html_id = 'card' + value.card_id;
-    $("#player_hand").append('<img src="' + value.image_address + '" class="card" id="' + html_id + '">');
-    $('#' + html_id + '').css("zIndex", value.card_id);
+    $("#player_hand").append('<img src="' + value.image_address + '" class="card" id="' + html_id + '" data-card-id="' + value.card_id + '">');
+    $('#' + html_id + '').css("zIndex", incrementor);
     $('#' + html_id + '').css("left", starting_pos + '%');
     starting_pos = starting_pos + sepperation_increments;
+   incrementor++
   });
 }
 
@@ -75,7 +88,6 @@ var renderUno = function () {
   $("#uno_hit").html('<img src="/img/uno.png" id="play_uno" disabled>');
   $("#play_uno").css({"opacity": 0.2});
   $("#play_uno").click(function() {
-    console.log("Play uno");
     const game_id = $('#game_id').val();
     $.post('/game/'+ game_id + '/play_uno',
       {
@@ -88,6 +100,10 @@ var renderUno = function () {
           if (code == 1) {
             alert("Invalid card!");
           }
+          if (code == 2) {
+                $('#color_modal').modal('toggle');
+          }
+ 
           if (code == 3) {
           // Game finished, redirect to waiting room
           window.location.href = "/room/" + game_id;
@@ -127,8 +143,7 @@ var clickCard = function(card) {
   $("#player_hand .card").off();
   $("#cancel").removeAttr("disabled");
   $("#cancel").css({"opacity": 1});
-  selectedCard = $(card).css('z-index');
-  console.log(selectedCard);
+  selectedCard = $(card).attr('data-card-id');
 }
 
 var setButtonAttributes = function(is_current, skipped, has_drawn) {
@@ -206,12 +221,11 @@ $("#skip").click(function() {
 });
 
 $("#pick_blue").click(function() {
-  color = "blue";
   const game_id = $('#game_id').val();
   $.post('/game/'+ game_id + '/play',
     {
       card_id: selectedCard,
-      color: color
+      color: "blue"
     },
     function(code, status){
       // console.log(status);
@@ -232,12 +246,11 @@ $("#pick_blue").click(function() {
   });
 });
 $("#pick_green").click(function() {
-  color = "green";
   const game_id = $('#game_id').val();
   $.post('/game/'+ game_id + '/play',
     {
       card_id: selectedCard,
-      color: color
+      color: "green"
     },
     function(code, status){
       // console.log(status);
@@ -256,14 +269,14 @@ $("#pick_green").click(function() {
         setTimeout(worker, 100);
       }
   });
+ 
 });
 $("#pick_red").click(function() {
-  color = "red";
   const game_id = $('#game_id').val();
   $.post('/game/'+ game_id + '/play',
     {
       card_id: selectedCard,
-      color: color
+      color: "red"
     },
     function(code, status){
       // console.log(status);
@@ -284,12 +297,11 @@ $("#pick_red").click(function() {
   });
 });
 $("#pick_yellow").click(function() {
-  color = "yellow";
   const game_id = $('#game_id').val();
   $.post('/game/'+ game_id + '/play',
     {
       card_id: selectedCard,
-      color: color
+      color: "yellow"
     },
     function(code, status){
       // console.log(status);
@@ -382,7 +394,6 @@ $("document").ready( function() {
         revert: 'invalid',
         bottom: '0%'
       });
-      console.log("dzfsdfsdf");
     }
   });
 });

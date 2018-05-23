@@ -11,12 +11,12 @@ const get_users = (game_id) =>
     ORDER BY seat_number`,
     [game_id]);
 
-const get_users_2 = (game_id,user_id) =>
+const get_users_2 = (game_id) =>
   db.many(`SELECT u.user_id, email, screen_name, seat_number, score, uno_play
     FROM game_has_hands as g, users as u
-    WHERE g.user_id = u.user_id AND game_id=$1 AND g.user_id <> $2
+    WHERE g.user_id = u.user_id AND game_id=$1
     ORDER BY seat_number`,
-    [game_id,user_id]);
+    [game_id]);
 
 const get_player = (game_id,user_id) =>
   db.one(`SELECT u.user_id, email, screen_name, seat_number, score, uno_play

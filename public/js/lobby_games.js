@@ -31,14 +31,14 @@ var renderGames = function(games) {
       if (in_game > 0) {
         rowHtml += `
         <td class="td6">
-          <form id="join_form${index}" action="/game/${value.game_id}/join" method="POST">
+          <form id="join_form${index}" action="/game/${value.game_id}/join" method="POST" target="_blank">
             <button id="join_game${index}" type="submit" class="dataSub btn btn-success">Click to re-join </button>
           </form>
         </td>`
       } else if (can_join) {
         rowHtml += `
         <td class="td6">
-          <form id="join_form${index}" action="/game/${value.game_id}/join" method="POST">
+          <form id="join_form${index}" action="/game/${value.game_id}/join" method="POST" target="_blank">
             <button id="join_game${index}" type="submit" class="dataSub btn btn-success">Click to join </button>
           </form>
         </td>`
