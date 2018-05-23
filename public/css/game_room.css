@@ -136,12 +136,20 @@ body {
  padding: 0;
 }
 
-#chat .sent{
+.you{
  background-color: #4267B2;
+ color:white;
 }
 
-.user_name {}
+.them{
+ background-color: #c15757;
+ color:white;
+}
 
+#chat .sent{
+ background-color: #E9EBEE;
+ color:black;
+}
 
 .message_body {
  background-color: #E9EBEE;
@@ -149,6 +157,6 @@ body {
  width: 100%;
  height: 95%;
  padding: 0;
- color: white;
+ color: black;
  word-wrap: break-word; 
 }

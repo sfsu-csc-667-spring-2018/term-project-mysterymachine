@@ -1,220 +1,229 @@
 #turn_order_img {
-    position: absolute;
-    max-height: 10%;
-    max-width: 10%;
-    top: 23%;
-    left: 41%;
-    padding: 0;
-    margin: 0;
+ position: absolute;
+ max-height: 15%;
+ max-width: 15%;
+ top: 5%;
+ left: 5%;
+ padding: 0;
+ margin: 0;
 }
 
-.flipped{
-    -moz-transform: scaleX(-1);
-    -o-transform: scaleX(-1);
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
-    filter: FlipH;
-    -ms-filter: "FlipH";
+.flipped {
+ -moz-transform: scaleX(-1);
+ -o-transform: scaleX(-1);
+ -webkit-transform: scaleX(-1);
+ transform: scaleX(-1);
+ filter: FlipH;
+ -ms-filter: "FlipH";
 }
 
 
 
 .color_wheel_box {
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.0);
-    border: none;
-    padding: 0;
+ height: 100%;
+ background-color: rgba(0, 0, 0, 0.0);
+ border: none;
+ padding: 0;
 }
 
 
 #color_modal {
-    height: 78%;
+ height: 78%;
 }
 
 .color_picker {
-    max-height: 40%;
-    max-width: 40%;
-    position: absolute;
-    margin: 0;
-    padding: 0;
-    opacity: 1.0;
+ max-height: 40%;
+ max-width: 40%;
+ position: absolute;
+ margin: 0;
+ padding: 0;
+ opacity: 1.0;
 }
 
 #pick_blue {
-    left: 20%;
-    top: 9%;
+ left: 20%;
+ top: 9%;
 }
 
 #pick_green {
-    right: 20%;
-    top: 9%;
+ right: 20%;
+ top: 9%;
 }
 
 #pick_yellow {
-    right: 20%;
-    bottom: 9%;
+ right: 20%;
+ bottom: 9%;
 }
 
 #pick_red {
-    left: 20%;
-    bottom: 9%;
+ left: 20%;
+ bottom: 9%;
 }
 
 #game_table {
-    position: absolute;
-    width: 100%;
-    height: 92%;
-    margin: 0;
-    padding: 0;
+ position: absolute;
+ width: 100%;
+ height: 92%;
+ margin: 0;
+ padding: 0;
 }
 
 
 #player_area {
-    position: absolute;
-    bottom: 0;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 20%;
-    border-top: 5px solid blue;
-    background-color: black;
+ position: absolute;
+ bottom: 0;
+ margin: 0;
+ padding: 0;
+ width: 100%;
+ height: 20%;
+ border-top: 5px solid blue;
+ background-color: black;
 }
 
 #player_hand {
-    position: absolute;
-    left: 0;
-    height: 100%;
-    width: 60%;
-    margin: 0;
-    padding: 0;
+ position: absolute;
+ left: 0;
+ height: 100%;
+ width: 60%;
+ margin: 0;
+ padding: 0;
 }
 
 #player_area .user_name {
-    position: absolute;
-    right: 2.5%;
-    height: 25%;
-    width: 10%;
-    margin: 0;
-    padding: 0;
-    color: black;
-    bottom: 5%;
-    font-size: 150%;
-    font-weight: bolder;
+ position: absolute;
+ right: 2.5%;
+ height: 25%;
+ width: 10%;
+ margin: 0;
+ padding: 0;
+ color: black;
+ bottom: 5%;
+ font-size: 150%;
+ font-weight: bolder;
 }
 
 #player_area .avatar {
-    position: absolute;
-    right: 5%;
-    margin: 0;
-    padding: 0;
-    top: 10%;
-    max-height: 80%;
-    max-width: 20%;
-    border-radius: 50%;
+ position: absolute;
+ right: 5%;
+ margin: 0;
+ padding: 0;
+ top: 10%;
+ max-height: 80%;
+ max-width: 20%;
+ border-radius: 50%;
 }
 
 .opponent_area .avatar {
-    position: absolute;
-    right: 5%;
-    margin: 0;
-    padding: 0;
-    top: 10%;
-    max-height: 100%;
-    max-width: 100%;
-    border-radius: 50%;
+ position: absolute;
+ right: 5%;
+ margin: 0;
+ padding: 0;
+ top: 10%;
+ max-height: 100%;
+ max-width: 100%;
+ border-radius: 50%;
 
 }
 
 
 #player_area .card {
-    position: absolute;
-    bottom: 0;
-    max-height: 100%;
-    max-width: 10%;
+ position: absolute;
+ bottom: 0;
+ max-height: 100%;
+ max-width: 10%;
 }
 
 #skip {
-    position: absolute;
-    right: 20%;
-    bottom: 75%;
-    width: 10%;
-    height: 20%;
-    margin: 0;
-    padding: 0;
-    opacity: 0.2;
+ position: absolute;
+ right: 20%;
+ bottom: 75%;
+ width: 10%;
+ height: 20%;
+ margin: 0;
+ padding: 0;
+ opacity: 0.2;
 }
 
 #confirm {
-    position: absolute;
-    right: 20%;
-    bottom: 45%;
-    width: 10%;
-    height: 20%;
-    margin: 0;
-    padding: 0;
-    opacity: 0.2;
+ position: absolute;
+ right: 20%;
+ bottom: 45%;
+ width: 10%;
+ height: 20%;
+ margin: 0;
+ padding: 0;
+ opacity: 0.2;
 }
 
 #cancel {
-    position: absolute;
-    right: 20%;
-    bottom: 15%;
-    width: 10%;
-    height: 20%;
-    margin: 0;
-    padding: 0;
-    opacity: 0.2;
+ position: absolute;
+ right: 20%;
+ bottom: 15%;
+ width: 10%;
+ height: 20%;
+ margin: 0;
+ padding: 0;
+ opacity: 0.2;
 }
 
 #chat {
-    position: absolute;
-    right: 0;
-    margin: 0;
-    padding: 0;
-    width: 20%;
-    height: 65%;
-    bottom: 26%;
-    background-color: white;
-    overflow: scroll;
-    overflow-x: hidden;
+ position: absolute;
+ right: 0;
+ margin: 0;
+ padding: 0;
+ width: 20%;
+ height: 65%;
+ bottom: 26%;
+ background-color: white;
+ overflow: scroll;
+ overflow-x: hidden;
 
 }
 
 #chat_input {
-    position: absolute;
-    right: 0;
-    margin: 0;
-    padding: 0;
-    width: 20%;
-    height: 10%;
-    bottom: 16%;
+ position: absolute;
+ right: 0;
+ margin: 0;
+ padding: 0;
+ width: 20%;
+ height: 10%;
+ bottom: 16%;
 }
 
 #chat::-webkit-scrollbar {
-    width: 12px;
+ width: 12px;
 }
 
 #chat::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
+ -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+ border-radius: 10px;
 }
 
 #chat::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
-}
-
-#chat .sent{
- background-color: #4267B2;
+ border-radius: 10px;
+ -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
 }
 
 .message_container {
  margin: 5%;
  width: 90%;
  padding: 0;
-
 }
 
+.you{
+ background-color: #4267B2;
+ color:white;
+}
+
+.them{
+ background-color: #c15757;
+ color:white;
+}
+
+#chat .sent{
+ background-color: #E9EBEE;
+ color:black;
+}
 
 .message_body {
  background-color: #E9EBEE;
@@ -222,151 +231,152 @@
  width: 100%;
  height: 95%;
  padding: 0;
- color: white;
+ color: black;
  word-wrap: break-word; 
 }
 
 #opponent1 {
-    left: 25%;
-    bottom: 20%;
+ left: 25%;
+ bottom: 20%;
 }
 
 #opponent2 {
-    left: 15%;
-    bottom: 40%;
+ left: 15%;
+ bottom: 40%;
 }
 
 
 #opponent3 {
-    left: 28%;
-    bottom: 60%;
+ left: 28%;
+ bottom: 60%;
 }
 
 
 #opponent4 {
-    right: 25%;
-    bottom: 20%;
+ right: 42.5%;
+ bottom: 70%;
 }
 
 
 #opponent5 {
-    right: 20%;
-    bottom: 40%;
+ right: 28%;
+ bottom: 60%;
 }
 
 
 #opponent6 {
-    right: 28%;
-    bottom: 60%;
+ right: 20%;
+ bottom: 40%;
+
 }
 
 
 #opponent7 {
-    right: 42.5%;
-    bottom: 70%;
+ right: 25%;
+ bottom: 20%;
 }
 
 #player_uno {
-    position: absolute;
-    right: 75%;
-    bottom: 40%;
-    width: 25%;
-    height: 25%;
-    z-index: -1;
+ position: absolute;
+ right: 75%;
+ bottom: 40%;
+ width: 25%;
+ height: 25%;
+ z-index: -1;
 }
 
 .opponent_hand {
-    position: absolute;
-    width: 20%;
-    height: 60%;
-    margin: 0;
-    left: 5%;
-    bottom: 5%;
+ position: absolute;
+ width: 20%;
+ height: 60%;
+ margin: 0;
+ left: 5%;
+ bottom: 5%;
 }
 
 
 .opponent_area {
-    position: absolute;
-    height: 20%;
-    width: 15%;
-    margin: 0;
-    padding: 0;
-    opacity: 0.2;
+ position: absolute;
+ height: 20%;
+ width: 15%;
+ margin: 0;
+ padding: 0;
+ opacity: 0.2;
 }
 
 .opponent_area .user_name {
-    position: absolute;
-    height: 20%;
-    width: 50%;
-    margin: 0;
-    padding: 0;
-    color: black;
-    font-size: 150%;
-    font-weight: bolder;
-    left: 5%;
-    top: 0%;
+ position: absolute;
+ height: 20%;
+ width: 50%;
+ margin: 0;
+ padding: 0;
+ color: black;
+ font-size: 150%;
+ font-weight: bolder;
+ left: 5%;
+ top: 0%;
 }
 
 .current_player {
-    border-color: green;
-    border-style: solid;
-    border-width: thick;
-    border-radius: 25px;
+ border-color: green;
+ border-style: solid;
+ border-width: thick;
+ border-radius: 25px;
 
 }
 
 #active_pile {
-    position: absolute;
-    margin: 0;
-    padding: 0;
-    height: 20%;
-    width: 8%;
-    left: 35%;
-    top: 42%;
-    
+ position: absolute;
+ margin: 0;
+ padding: 0;
+ height: 20%;
+ width: 8%;
+ left: 35%;
+ top: 42%;
+
 }
 
 #discard_pile {
-    position: absolute;
-    margin: 0;
-    padding: 0;
-    height: 20%;
-    width: 8%;
-    left: 45%;
-    top: 42%;
-    
+ position: absolute;
+ margin: 0;
+ padding: 0;
+ height: 20%;
+ width: 8%;
+ left: 45%;
+ top: 42%;
+
 }
 
 #top_card_color {
-    position: absolute;
-    /* margin: 0;
+ position: absolute;
+ /* margin: 0;
     padding: 0; */
-    height: 12%;
-    width: 12%;
-    left: 46%;
-    top: 46%;
-    /* border: thick solid black; */
+ height: 12%;
+ width: 12%;
+ left: 46%;
+ top: 46%;
+ /* border: thick solid black; */
 }
 
 #uno_hit {
-    position: absolute;
-    /* margin: 0;
+ position: absolute;
+ /* margin: 0;
     padding: 0; */
-    height: 10%;
-    width: 10%;
-    left: 65%;
-    top: 15%;
-    /* border: thick solid black; */
+ height: 10%;
+ width: 10%;
+ left: 65%;
+ top: 15%;
+ /* border: thick solid black; */
 }
 
 #top_card_color_image {
-  max-width:100%;
-  max-height:100%;
+ max-width: 100%;
+ max-height: 100%;
 }
 
 #uno_image {
-  max-width:100%;
-  max-height:100%;
+ max-width: 100%;
+ max-height: 100%;
 }
 
 /* #discard_pile p {
@@ -380,10 +390,10 @@
 
 html,
 body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    position: relative;
+ margin: 0;
+ padding: 0;
+ height: 100%;
+ position: relative;
 }
 
 /*body {
