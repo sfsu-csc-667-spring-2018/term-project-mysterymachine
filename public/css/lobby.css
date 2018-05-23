@@ -1,8 +1,6 @@
 /* Bordered form */
 
-form {
- 
-}
+form {}
 
 /* Full-width inputs */
 
@@ -42,7 +40,7 @@ button:hover {
  background-color: #f44336;
 }
 
-.disabledBtn{
+.disabledBtn {
  opacity: 0.5;
 }
 
@@ -79,8 +77,7 @@ span.psw {
 }
 
 
-body {
-}
+body {}
 
 html,
 body {
@@ -113,9 +110,11 @@ body {
  overflow-x: hidden;
  background-color: #EFF0F1;
 }
+
 td {
-	background-color: white;
+ background-color: white;
 }
+
 .th1 {
  width: 6.6%;
 }
@@ -192,7 +191,7 @@ td {
  margin: 0;
  padding: 0;
  width: 30%;
- 
+
  bottom: 0%;
 }
 
@@ -216,19 +215,19 @@ td {
  padding: 0;
 }
 
-.you{
+.you {
  background-color: #4267B2;
- color:white;
+ color: white;
 }
 
-.them{
+.them {
  background-color: #c15757;
- color:white;
+ color: white;
 }
 
-#chat .sent{
+#chat .sent {
  background-color: #E9EBEE;
- color:black;
+ color: black;
 }
 
 .message_body {
@@ -238,5 +237,5 @@ td {
  height: 95%;
  padding: 0;
  color: black;
- word-wrap: break-word; 
+ word-wrap: break-word;
 }

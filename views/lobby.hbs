@@ -1,26 +1,26 @@
-	<div class="container games_list_header">
-		<table class="table table-bordered table-hover table-fixed">
-			<thead>
-				<tr>
-					<th class="th1">#</th>
-					<th class="th2">game_id</th>
-					<th class="th3">Host</th>
-          <th class="th4">Number of players</th>
-					<th class="th5">Status</th>
-          <th class="th6">
-            <form id="create_game" method="POST" action="/game/create">
-              <button id="create_game" type="submit" class="btn btn-primary">Create Game</button>
-            </form>
-          </th>
-        </tr>
-      </thead>
-    </table>
-  </div>
-  <div class="container games_list">
-		<!-- <div class="games_list_container"> -->
-			<table id="games" class="table table-bordered table-hover table-fixed">
-				<tbody>
-          <!-- <tr>
+<div class="container games_list_header">
+ <table class="table table-bordered table-hover table-fixed">
+  <thead>
+   <tr>
+    <th class="th1">#</th>
+    <th class="th2">game_id</th>
+    <th class="th3">Host</th>
+    <th class="th4">Number of players</th>
+    <th class="th5">Status</th>
+    <th class="th6">
+     <form id="create_game" method="POST" action="/game/create">
+      <button id="create_game" type="submit" class="btn btn-primary">Create Game</button>
+     </form>
+    </th>
+   </tr>
+  </thead>
+ </table>
+</div>
+<div class="container games_list">
+ <!-- <div class="games_list_container"> -->
+ <table id="games" class="table table-bordered table-hover table-fixed">
+  <tbody>
+   <!-- <tr>
 						<td class="td1">1</td>
 						<td class="td2">3</td>
 						<td class="td3">Kill</td>
@@ -30,23 +30,23 @@
             </td>
             <td class="td6"><button>Click to join</button> </td>
 					</tr> -->
-				</tbody>
-			</table>
-		<!-- </div> -->
-	</div>
+  </tbody>
+ </table>
+ <!-- </div> -->
+</div>
 
-    <!-- <tr>
+<!-- <tr>
       <th style="border:1px solid red">GAME NUMBER</th>
       <th style="border:1px solid red">HOST</th>
       <th style="border:1px solid red">NO PLAYERS</th>
       <th style="border:1px solid red">STATUS</th>
     </tr>
   </table> -->
-  <!-- <form id="create_game" method="POST" action="/game/create">
+<!-- <form id="create_game" method="POST" action="/game/create">
     <button id="create_game" style="width:auto;" type="submit" class="dataSub btn btn-success">Create Game</button>
   </form> -->
 </th>
-<th >
-<div id="chatBox">{{>chat}}</div>
+<th>
+ <div id="chatBox">{{>chat}}</div>
 </th>
 </table>

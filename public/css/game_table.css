@@ -210,19 +210,19 @@
  padding: 0;
 }
 
-.you{
+.you {
  background-color: #4267B2;
- color:white;
+ color: white;
 }
 
-.them{
+.them {
  background-color: #c15757;
- color:white;
+ color: white;
 }
 
-#chat .sent{
+#chat .sent {
  background-color: #E9EBEE;
- color:black;
+ color: black;
 }
 
 .message_body {
@@ -232,7 +232,7 @@
  height: 95%;
  padding: 0;
  color: black;
- word-wrap: break-word; 
+ word-wrap: break-word;
 }
 
 #opponent1 {

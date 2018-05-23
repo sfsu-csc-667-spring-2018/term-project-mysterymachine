@@ -4,29 +4,28 @@ const bcrypt = require('bcrypt');
 const User = require('../db/users');
 
 const lookup = (email, password, done) => {
-  User.find(email)
-    .then((user) => {
-      console.log(email);
-      console.log(password);
-      if (bcrypt.compareSync(password, user.password)) {
-        console.log("success!");
-        return done(null, user);
-      } else {
-        done('Please verify your email and password', false);
-      }
-    })
-    .catch(error => {
-      console.log(error);
-      done('Please verify your email and password', false);
-    });
+ User.find(email)
+  .then((user) => {
+   console.log(email);
+   console.log(password);
+   if (bcrypt.compareSync(password, user.password)) {
+    console.log("success!");
+    return done(null, user);
+   } else {
+    done('Please verify your email and password', false);
+   }
+  })
+  .catch(error => {
+   console.log(error);
+   done('Please verify your email and password', false);
+  });
 };
 
-const strategy = new LocalStrategy(
-  {
-    usernameField: 'email',
-    passwordField: 'password'
-  },
-  lookup
+const strategy = new LocalStrategy({
+  usernameField: 'email',
+  passwordField: 'password'
+ },
+ lookup
 );
 
 passport.serializeUser(User.serialize);

@@ -1,31 +1,21 @@
 <!doctype html>
 <html lang='en'>
-<head>
-	<title>
-        {{# if title}} {{title}} {{else}} UNO {{/if}}
-    </title>
-	{{>bootstraps}}
 
-    {{#if table}}
-        {{> tableHead }}
-    {{ else if room}}
-        {{> roomHead}}
-    {{ else if lobby }}
-        {{> lobbyHead}}
-    {{ else }}
-        <link rel="stylesheet" href="../css/main.css">
-    {{/if}}
+<head>
+ <title>
+  {{# if title}} {{title}} {{else}} UNO {{/if}}
+ </title>
+ {{>bootstraps}} {{#if table}} {{> tableHead }} {{ else if room}} {{> roomHead}} {{ else if lobby }} {{> lobbyHead}} {{ else }}
+ <link rel="stylesheet" href="../css/main.css"> {{/if}}
 
 </head>
+
 <body>
 
-	{{> navbar }}
-    {{{ body }}}
-    
+ {{> navbar }} {{{ body }}}
+
 </body>
 
-    {{#if table}}
-        {{> tableScript }}
-    {{/if}}
+{{#if table}} {{> tableScript }} {{/if}}
 
 </html>

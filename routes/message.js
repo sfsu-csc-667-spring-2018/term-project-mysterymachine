@@ -4,18 +4,18 @@ const requireAuth = require('../auth/requireAuth');
 
 const Messages = require('../db/messages');
 
-router.get('/', requireAuth, function(req, res, next) {
-  console.log(req.query);
-  Messages.get_all(req.query.game_id).then(result => {
-    res.status(200).json(result);
-  })
+router.get('/', requireAuth, function (req, res, next) {
+ console.log(req.query);
+ Messages.get_all(req.query.game_id).then(result => {
+  res.status(200).json(result);
+ })
 });
 
-router.get('/', requireAuth, function(req, res, next) {
-  console.log(req.body);
-  Messages.get_all(req.query.game_id).then(result => {
-    res.status(200).json(result);
-  })
+router.get('/', requireAuth, function (req, res, next) {
+ console.log(req.body);
+ Messages.get_all(req.query.game_id).then(result => {
+  res.status(200).json(result);
+ })
 });
 
 // router.get('/:id/players', function(req, res, next) {

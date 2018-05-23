@@ -30,7 +30,7 @@ socket.on('message', ({message}) => {
 })*/
 
 $(function () {
-  var chat_text = '';
+ var chat_text = '';
 
  var socket = io('/lobby');
  $("#chat_input").on('keypress', function (event) {
@@ -54,7 +54,7 @@ $(function () {
 
 
  socket.on('message', function (message, user_name) {
-$('#chat').append('<div class="message_container"><div class="user_name">' + message.user_name + '</div><div class="message_body">' + message.body + '</div></div>');
+  $('#chat').append('<div class="message_container"><div class="user_name">' + message.user_name + '</div><div class="message_body">' + message.body + '</div></div>');
  });
 
 

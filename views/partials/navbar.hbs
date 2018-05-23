@@ -1,35 +1,30 @@
 <!-- navbar -->
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light" >
-  <a class="navbar-brand" href="#">Mystery Machine - Uno</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+ <a class="navbar-brand" href="#">Mystery Machine - Uno</a>
+ <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="/lobby">Home</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="https://github.com/sfsu-csc-667-spring-2018/term-project-mysterymachine">About</a>
-      </li>
-    </ul>
-    <ul class="navbar-nav navbar-right"
-      <li class="nav-item">
-        {{#if user}}
-          <a class="nav-link active" href="#" id="screen_name">{{user.screen_name}}</a>
-        {{else}}
-          <a class="nav-link active" href="/">Login</a>
-        {{/if}}
-      </li>
-      <li class="nav-item">
-        {{#if user}}
-          <a class="nav-link active" href="/users/logout">Logout</a>
-        {{else}}
-          <a class="nav-link active" href="/">Register</a>
-        {{/if}}
-      </li>
-    </ul>
-  </div>
+ <div class="collapse navbar-collapse" id="navbarSupportedContent">
+  <ul class="navbar-nav mr-auto">
+   <li class="nav-item active">
+    <a class="nav-link" href="/lobby">Home</a>
+   </li>
+   <li class="nav-item">
+    <a class="nav-link" href="https://github.com/sfsu-csc-667-spring-2018/term-project-mysterymachine">About</a>
+   </li>
+  </ul>
+  <ul class="navbar-nav navbar-right" <li class="nav-item">
+   {{#if user}}
+   <a class="nav-link active" href="#" id="screen_name">{{user.screen_name}}</a> {{else}}
+   <a class="nav-link active" href="/">Login</a> {{/if}}
+   </li>
+   <li class="nav-item">
+    {{#if user}}
+    <a class="nav-link active" href="/users/logout">Logout</a> {{else}}
+    <a class="nav-link active" href="/">Register</a> {{/if}}
+   </li>
+  </ul>
+ </div>
 </nav>

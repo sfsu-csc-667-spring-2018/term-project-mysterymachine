@@ -1,99 +1,115 @@
 <!-- game lobby -->
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title>Main Lobby</title>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.js"></script>
+ <title>Main Lobby</title>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.js"></script>
 
 
 
 </head>
 
 <body id="page">
-<script id="gamesTableTemplate" type="text/x-handlebars-template">
+ <script id="gamesTableTemplate" type="text/x-handlebars-template">
   <div id="navBar">nav</div>
-    <div style="height:500px;border:5px solid yellowgreen;overflow:auto;">
-      <table >
-        <th style="width:50%;height:500px;">
-          <table >
-            <tr >
-            {{#each gameList}}
-            <tr >
-              <th style="border:1px solid red">{{number}}</th>
-              <th style="border:1px solid red">{{host}}</th>
-              <th style="border:1px solid red">{{players}}</th>
-              <th style="border:1px solid red">{{status}}</th>
-            </tr>
-            {{/each}}
-            </table>
-          </th>
-        <th >
-        <div id="chatBox" style="height:500px;border:5px solid cyan;overflow:auto;">chat</div>
-      </th>
+  <div style="height:500px;border:5px solid yellowgreen;overflow:auto;">
+   <table>
+    <th style="width:50%;height:500px;">
+     <table>
+      <tr>
+       {{#each gameList}}
+       <tr>
+        <th style="border:1px solid red">{{number}}</th>
+        <th style="border:1px solid red">{{host}}</th>
+        <th style="border:1px solid red">{{players}}</th>
+        <th style="border:1px solid red">{{status}}</th>
+       </tr>
+       {{/each}}
+     </table>
+    </th>
+    <th>
+     <div id="chatBox" style="height:500px;border:5px solid cyan;overflow:auto;">chat</div>
+    </th>
     </tr>
-  </table>
+   </table>
   </div>
-</script>  
+ </script>
 
-<script type="text/javascript">
+ <script type="text/javascript">
+  var gamesTableInfo = document.getElementById("gamesTableTemplate").innerHTML;
+  var gamesTabletemplate = Handlebars.compile(gamesTableInfo);
+  var gamesTableData = gamesTabletemplate({
+   name: "Games",
+   gameList: [{
+     number: "NUMBER",
+     host: "HOST",
+     players: "COUNT",
+     status: "STATUS"
+    },
 
-    var gamesTableInfo = document.getElementById("gamesTableTemplate").innerHTML;
-    var gamesTabletemplate = Handlebars.compile(gamesTableInfo);
-    var gamesTableData = gamesTabletemplate(
     {
-        name: "Games",
-        gameList: [
-            {number:"NUMBER",
-             host:"HOST",
-             players:"COUNT",
-             status:"STATUS"},
-              
-              {number:"1",
-               host:"xX_Slayer_Xx",
-               players:"1",
-               status:"Join"},
+     number: "1",
+     host: "xX_Slayer_Xx",
+     players: "1",
+     status: "Join"
+    },
 
-              {number:"2",
-               host:"Mr P",
-               players:"4",
-               status:"In Progress"},
+    {
+     number: "2",
+     host: "Mr P",
+     players: "4",
+     status: "In Progress"
+    },
 
-              {number:"5",
-              host:"BigE",
-              players:"8",
-              status:"In Progress"},
+    {
+     number: "5",
+     host: "BigE",
+     players: "8",
+     status: "In Progress"
+    },
 
-              {number:"5",
-              host:"BigE",
-              players:"8",
-              status:"In Progress"},
+    {
+     number: "5",
+     host: "BigE",
+     players: "8",
+     status: "In Progress"
+    },
 
-              {number:"5",
-              host:"BigE",
-              players:"8",
-              status:"In Progress"},
+    {
+     number: "5",
+     host: "BigE",
+     players: "8",
+     status: "In Progress"
+    },
 
-              {number:"5",
-              host:"BigE",
-              players:"8",
-              status:"In Progress"},
+    {
+     number: "5",
+     host: "BigE",
+     players: "8",
+     status: "In Progress"
+    },
 
-              {number:"5",
-              host:"BigE",
-              players:"8",
-              status:"In Progress"},
+    {
+     number: "5",
+     host: "BigE",
+     players: "8",
+     status: "In Progress"
+    },
 
-              {number:"5",
-              host:"BigE",
-              players:"8",
-              status:"In Progress"},
-        ]
-      }
-    );
+    {
+     number: "5",
+     host: "BigE",
+     players: "8",
+     status: "In Progress"
+    },
+   ]
+  });
 
-    document.getElementById('page').innerHTML = gamesTableData;
+  document.getElementById('page').innerHTML = gamesTableData;
 
-  </script>
-	
+ </script>
+
 </body>
+
 </html>

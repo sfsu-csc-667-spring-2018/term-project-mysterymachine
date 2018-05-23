@@ -1,7 +1,6 @@
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-  },
-  down: (queryInterface, Sequelize) => {
+ up: (queryInterface, Sequelize) => {},
+ down: (queryInterface, Sequelize) => {
 
-  }
+ }
 };

@@ -70,7 +70,7 @@ body {
 
 .player_list {
  position: absolute;
- bottom:0;
+ bottom: 0;
  left: 0%;
  height: 80%;
  width: 70%;
@@ -85,11 +85,12 @@ body {
  max-height: 50px;
  max-height: 50px;
 }
-.player_list td{
+
+.player_list td {
  background-color: white;
 }
 
-.player_list th{
+.player_list th {
  background-color: white;
 }
 
@@ -136,19 +137,19 @@ body {
  padding: 0;
 }
 
-.you{
+.you {
  background-color: #4267B2;
- color:white;
+ color: white;
 }
 
-.them{
+.them {
  background-color: #c15757;
- color:white;
+ color: white;
 }
 
-#chat .sent{
+#chat .sent {
  background-color: #E9EBEE;
- color:black;
+ color: black;
 }
 
 .message_body {
@@ -158,5 +159,5 @@ body {
  height: 95%;
  padding: 0;
  color: black;
- word-wrap: break-word; 
+ word-wrap: break-word;
 }

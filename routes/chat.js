@@ -4,13 +4,13 @@ const io = require('../socket');
 
 router.post('/', (req, res, next) => {
 
-    const room = req.body.url;
-    const user = req.user.screen_name;
-    const message = req.body.message;
+ const room = req.body.url;
+ const user = req.user.screen_name;
+ const message = req.body.message;
 
-	io.sockets.to(room).emit('message',user,message);
-    
-    res.sendStatus(200);
+ io.sockets.to(room).emit('message', user, message);
+
+ res.sendStatus(200);
 });
 
 module.exports = router;

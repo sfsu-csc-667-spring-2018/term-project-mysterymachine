@@ -1,65 +1,65 @@
 <div class="container center_div">
-    <form action="/users/login" method="POST">
+ <form action="/users/login" method="POST">
 
-        <div class="container">
-            <h2>Welcome to Uno!</h2>
-            <label for="uname"><b>E-Mail</b></label>
-            <input type="text" placeholder="Enter E-Mail" name="email" required>
+  <div class="container">
+   <h2>Welcome to Uno!</h2>
+   <label for="uname"><b>E-Mail</b></label>
+   <input type="text" placeholder="Enter E-Mail" name="email" required>
 
-            <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="password" required>
+   <label for="psw"><b>Password</b></label>
+   <input type="password" placeholder="Enter Password" name="password" required>
 
-            <button type="submit" class="btn btn-success">Login</button>
-            <button type="button" class="dataCheck btn btn-primary" data-toggle="modal" data-target="#myModal">Register new user</button>
+   <button type="submit" class="btn btn-success">Login</button>
+   <button type="button" class="dataCheck btn btn-primary" data-toggle="modal" data-target="#myModal">Register new user</button>
 
-            <label>
+   <label>
                 <input type="checkbox" checked="checked" name="remember"> Remember me
             </label>
-        </div>
-    </form>
+  </div>
+ </form>
 </div>
 <div id="myModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Register new user</h4>
-            </div>
-            <div class="modal-body">
-                <form id="register" action="/users/register" method="POST">
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="email" name="email" class="form-control" id="email" required>
-                    </div>
-                    <div id="email_error" class="form-group"></div>
-                    <div class="form-group">
-                        <label for="screenName">Screen name:</label>
-                        <input type="text" name="screen_name" class="form-control" id="screenName">
-                    </div>
-                    <div class="form-group">
-                        <label for="pwd">Password:</label>
-                        <input type="password" name="password" class="form-control" id="pwd">
-                    </div>
+ <div class="modal-dialog">
+  <div class="modal-content">
+   <div class="modal-header">
+    <h4 class="modal-title">Register new user</h4>
+   </div>
+   <div class="modal-body">
+    <form id="register" action="/users/register" method="POST">
+     <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" name="email" class="form-control" id="email" required>
+     </div>
+     <div id="email_error" class="form-group"></div>
+     <div class="form-group">
+      <label for="screenName">Screen name:</label>
+      <input type="text" name="screen_name" class="form-control" id="screenName">
+     </div>
+     <div class="form-group">
+      <label for="pwd">Password:</label>
+      <input type="password" name="password" class="form-control" id="pwd">
+     </div>
 
-                    <div class="form-group">
-                        <p id="pwd_error" class="text-danger center"> </p>
-                    </div>
-                    <div class="form-group">
+     <div class="form-group">
+      <p id="pwd_error" class="text-danger center"> </p>
+     </div>
+     <div class="form-group">
 
-                        <label for="confPwd">Confirm password:</label>
-                        <input type="password" class="form-control" id="confPwd">
-                    </div>
-                    <div class="form-group">
-                        <p id="conf_pwd_error" class="text-danger center"> </p>
-                    </div>
-                </form>
+      <label for="confPwd">Confirm password:</label>
+      <input type="password" class="form-control" id="confPwd">
+     </div>
+     <div class="form-group">
+      <p id="conf_pwd_error" class="text-danger center"> </p>
+     </div>
+    </form>
 
-            </div>
-            <div class="modal-footer">
-                <button id="createUser" type="submit" disabled="true" form="register" class="dataSub btn btn-success">Submit</button>
-                <button type="button" class="btn btn-danger emptyPreview" data-dismiss="modal">Cancel</button>
-            </div>
-        </div>
+   </div>
+   <div class="modal-footer">
+    <button id="createUser" type="submit" disabled="true" form="register" class="dataSub btn btn-success">Submit</button>
+    <button type="button" class="btn btn-danger emptyPreview" data-dismiss="modal">Cancel</button>
+   </div>
+  </div>
 
-    </div>
+ </div>
 </div>
 <script src="../js/register.js"></script>
