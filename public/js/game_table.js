@@ -44,7 +44,7 @@ var renderGame = function(game) {
         $('#opponent' + i + ' .user_name').html(value.screen_name);
 
         $('#opponent' + i).css({"opacity": 1});
-
+        $('#opponent' + i + ' .opponent_seat').attr('src', '/img/hand_back_' + value.seat_number + '.png');
         if (value.seat_number == game.active_seat) {
             $('#opponent' + i).attr('class', 'opponent_area current_player');
             $('#opponent' + i + ' .avatar').attr('src','https://www.gravatar.com/avatar/' + md5(value.email));
