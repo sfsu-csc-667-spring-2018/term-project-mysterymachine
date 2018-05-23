@@ -70,14 +70,15 @@ body {
 
 .player_list {
  position: absolute;
- top: 15%;
+ bottom:0;
  left: 0%;
- height: 90%;
- width: 50%;
+ height: 80%;
+ width: 70%;
  margin: 0;
  padding: 0;
  background-color: #EFF0F1;
  overflow: scroll;
+ overflow-x: hidden;
 }
 
 .player_list td img {
@@ -98,19 +99,20 @@ body {
  margin: 0;
  padding: 0;
  width: 30%;
- height: 80%;
- bottom: 10%;
+ height: 85%;
+ bottom: 40px;
  background-color: white;
  overflow: scroll;
+ overflow-x: hidden;
 }
 
-#chat_input {
+#chat_input_box {
  position: absolute;
  right: 0;
  margin: 0;
  padding: 0;
  width: 30%;
- height: 10%;
+ height: 40px;
  bottom: 0%;
 }
 

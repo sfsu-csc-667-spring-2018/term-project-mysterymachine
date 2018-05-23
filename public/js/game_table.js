@@ -29,7 +29,7 @@ var renderGame = function(game) {
   if (game.player.seat_number == game.active_seat) {
     $('#player_area').css({"background": "rgba(152, 251, 152, .5)"})
   }else{
-   $('#player_area').css({"background": "none"})
+   $('#player_area').css({"background": "rgb(251, 184, 157, .5)"})
   }
   var user_seat = user_seat = game.player.seat_number;
   var num_players = Object.keys(game.users).length;

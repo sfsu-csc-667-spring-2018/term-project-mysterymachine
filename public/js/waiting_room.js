@@ -15,7 +15,7 @@ var renderPlayers = function(players) {
    const game_id = $('#game_id').val();
    $.each(players, function( index, value) {
      console.log(value);
-     if (value.score > 100) {
+     if (value.score > 500) {
        $("#title").html('<h2> Game over! </h2>');
        // $("#start_game").prop('disabled', true);
        $("#submitArea").html(`
@@ -36,6 +36,11 @@ var renderPlayers = function(players) {
    const game_status = $('#game_status').val();
    if (game_status == 'DONE') {
      $("#submitArea").html('');
+   }
+   if (players.length < 2) {
+     $("#start_game").prop('disabled', true);
+   } else {
+     $("#start_game").removeAttr("disabled");
    }
 }
 
