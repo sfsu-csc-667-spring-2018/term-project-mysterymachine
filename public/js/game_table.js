@@ -76,7 +76,7 @@ var renderPlayerCards = function (cards) {
   var incrementor = 0;
   $.each(cards, function (index, value) {
     const html_id = 'card' + value.card_id;
-    $("#player_hand").append('<img src="' + value.image_address + '" class="card" id="' + html_id + '" data-card-id="' + value.card_id + '">');
+    $("#player_hand").append('<img src="' + value.image_address + '" class="card" id="' + html_id + '" data-card-id="' + value.card_id + '" tabindex = "1">');
     $('#' + html_id + '').css("zIndex", incrementor);
     $('#' + html_id + '').css("left", starting_pos + '%');
     starting_pos = starting_pos + sepperation_increments;
